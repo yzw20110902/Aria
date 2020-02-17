@@ -80,21 +80,21 @@ public class DownloadEntity extends AbsNormalEntity implements Parcelable {
 
   @Override public int getTaskType() {
     int type;
-    if (TextUtils.isEmpty(getUrl())) {
+    if (getUrl() == null){
       type = ITaskWrapper.ERROR;
     } else if (getUrl().startsWith("http")) {
-      type = ITaskWrapper.D_HTTP;
-    } else if (getUrl().startsWith("ftp")) {
-      type = ITaskWrapper.D_FTP;
-    } else if (getUrl().startsWith("sftp")) {
-      type = ITaskWrapper.D_SFTP;
-    } else {
       M3U8Entity temp = getM3U8Entity();
       if (temp == null) {
         type = ITaskWrapper.D_HTTP;
       } else {
         type = temp.isLive() ? ITaskWrapper.M3U8_LIVE : ITaskWrapper.M3U8_VOD;
       }
+    } else if (getUrl().startsWith("ftp")) {
+      type = ITaskWrapper.D_FTP;
+    } else if (getUrl().startsWith("sftp")) {
+      type = ITaskWrapper.D_SFTP;
+    } else {
+      type = ITaskWrapper.ERROR;
     }
     return type;
   }

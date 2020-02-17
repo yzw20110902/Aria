@@ -9,7 +9,7 @@
     <!--设置Aria的日志级别，{@link ALog#LOG_LEVEL_VERBOSE}-->
     <logLevel value="2"/>
     <!-- 是否检查网络 true: 检查网络，false: 不检查网络-->
-    <netCheck value="false"/>
+    <netCheck value="true"/>
     <!--除非无法使用注解，否则不建议使用广播来接受任务状态，true：使用广播接收任务状态，false：不适用广播接收状态 -->
     <!-- http://aria.laoyuyu.me/aria_doc/api/use_broadcast.html -->
     <useBroadcast value="false"/>

@@ -269,7 +269,7 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
 
   @Download.onTaskFail
   void taskFail(DownloadTask task, Exception e) {
-    if (task.getKey().equals(mUrl)) {
+    if (task != null && task.getKey().equals(mUrl)) {
       Toast.makeText(M3U8VodDLoadActivity.this, getString(R.string.download_fail),
           Toast.LENGTH_SHORT)
           .show();
@@ -330,7 +330,7 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
       //String parentUrl = "http://" + uri.getHost() + "/gear1/";
       int index = m3u8Url.lastIndexOf("/");
       //String parentUrl = m3u8Url.substring(0, index + 1);
-      String parentUrl = "https://cn7.kankia.com/";
+      String parentUrl = "https://135zyv5.xw0371.com/2018/10/29/X05c7CG3VB91gi1M/";
       //String parentUrl = "http://" + uri.getHost() + "/";
       List<String> newUrls = new ArrayList<>();
       for (String url : tsUrls) {
