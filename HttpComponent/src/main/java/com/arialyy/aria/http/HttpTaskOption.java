@@ -20,6 +20,8 @@ import android.text.TextUtils;
 import com.arialyy.aria.core.common.RequestEnum;
 import com.arialyy.aria.core.inf.ITaskOption;
 import com.arialyy.aria.core.processor.IHttpFileLenAdapter;
+import com.arialyy.aria.core.processor.IHttpFileNameAdapter;
+
 import java.lang.ref.SoftReference;
 import java.net.CookieManager;
 import java.net.Proxy;
@@ -81,17 +83,23 @@ public final class HttpTaskOption implements ITaskOption {
 
   private SoftReference<IHttpFileLenAdapter> fileLenAdapter;
 
+  private SoftReference<IHttpFileNameAdapter> fileNameAdapter;
+
   public IHttpFileLenAdapter getFileLenAdapter() {
     return fileLenAdapter == null ? null : fileLenAdapter.get();
   }
-
+  public IHttpFileNameAdapter getFileNameAdapter() {
+    return fileNameAdapter == null ? null : fileNameAdapter.get();
+  }
   /**
    * 如果是匿名内部类，完成后需要将adapter设置为空，否则会出现内存泄漏
    */
   public void setFileLenAdapter(IHttpFileLenAdapter fileLenAdapter) {
     this.fileLenAdapter = new SoftReference<>(fileLenAdapter);
   }
-
+  public void setFileNameAdapter(IHttpFileNameAdapter fileNameAdapter) {
+    this.fileNameAdapter = new SoftReference<>(fileNameAdapter);
+  }
   public Map<String, String> getFormFields() {
     return formFields;
   }
@@ -179,4 +187,5 @@ public final class HttpTaskOption implements ITaskOption {
   public void setParams(Map<String, String> params) {
     this.params = params;
   }
+
 }

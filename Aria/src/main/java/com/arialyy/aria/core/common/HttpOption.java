@@ -17,6 +17,7 @@ package com.arialyy.aria.core.common;
 
 import android.text.TextUtils;
 import com.arialyy.aria.core.processor.IHttpFileLenAdapter;
+import com.arialyy.aria.core.processor.IHttpFileNameAdapter;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CheckUtil;
 import java.net.Proxy;
@@ -35,6 +36,7 @@ public class HttpOption extends BaseOption {
   private Proxy proxy;
   private boolean useServerFileName = false;
   private IHttpFileLenAdapter fileLenAdapter;
+  private IHttpFileNameAdapter fileNameAdapter;
   private String attachment;
 
   public HttpOption() {
@@ -166,6 +168,14 @@ public class HttpOption extends BaseOption {
     }
     CheckUtil.checkMemberClass(fileLenAdapter.getClass());
     this.fileLenAdapter = fileLenAdapter;
+    return this;
+  }
+  public HttpOption setFilNameAdapter(IHttpFileNameAdapter fileNameAdapter) {
+    if (fileNameAdapter == null) {
+      throw new IllegalArgumentException("adapter为空");
+    }
+    CheckUtil.checkMemberClass(fileNameAdapter.getClass());
+    this.fileNameAdapter = fileNameAdapter;
     return this;
   }
 }
