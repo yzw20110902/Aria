@@ -91,7 +91,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       if (conn != null) {
         try {
           InputStream is = conn.getInputStream();
-          if (is != null){
+          if (is != null) {
             is.close();
           }
         } catch (IOException e) {
@@ -158,15 +158,16 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       if (!TextUtils.isEmpty(disposition)) {
         mEntity.setDisposition(CommonUtil.encryptBASE64(disposition));
         handleContentDisposition(disposition);
-      } else{
-        if(taskOption.getFileNameAdapter()!=null) {
-          String newName =taskOption.getFileNameAdapter().handleFileName(headers,mEntity.getKey());
+      } else {
+        if (taskOption.getFileNameAdapter() != null) {
+          String newName =
+              taskOption.getFileNameAdapter().handleFileName(headers, mEntity.getKey());
           mEntity.setServerFileName(newName);
           renameFile(newName);
-        }else if(conn.getHeaderField("Content-Type")!=null){
-          String contentType=conn.getHeaderField("Content-Type");
-          String type=contentType.substring(contentType.indexOf(File.separator)+1);
-          String newName =mEntity.getFileName()+File.separator+type;
+        } else if (conn.getHeaderField("Content-Type") != null) {
+          String contentType = conn.getHeaderField("Content-Type");
+          String type = contentType.substring(contentType.indexOf(File.separator) + 1);
+          String newName = String.format("%s.%s", mEntity.getFileName(), type);
           mEntity.setServerFileName(newName);
           renameFile(newName);
         }

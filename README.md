@@ -45,19 +45,19 @@ Aria有以下特点：
 
 ## 引入库
 [![license](http://img.shields.io/badge/license-Apache2.0-brightgreen.svg?style=flat)](https://github.com/AriaLyy/Aria/blob/master/LICENSE)
-[![Core](https://img.shields.io/badge/Core-3.8.5-blue)](https://github.com/AriaLyy/Aria)
-[![Compiler](https://img.shields.io/badge/Compiler-3.8.5-blue)](https://github.com/AriaLyy/Aria)
-[![FtpComponent](https://img.shields.io/badge/FtpComponent-3.8.5-orange)](https://github.com/AriaLyy/Aria)
-[![FtpComponent](https://img.shields.io/badge/SFtpComponent-3.8.5-orange)](https://github.com/AriaLyy/Aria)
-[![M3U8Component](https://img.shields.io/badge/M3U8Component-3.8.5-orange)](https://github.com/AriaLyy/Aria)
+[![Core](https://img.shields.io/badge/Core-3.8.6-blue)](https://github.com/AriaLyy/Aria)
+[![Compiler](https://img.shields.io/badge/Compiler-3.8.6-blue)](https://github.com/AriaLyy/Aria)
+[![FtpComponent](https://img.shields.io/badge/FtpComponent-3.8.6-orange)](https://github.com/AriaLyy/Aria)
+[![FtpComponent](https://img.shields.io/badge/SFtpComponent-3.8.6-orange)](https://github.com/AriaLyy/Aria)
+[![M3U8Component](https://img.shields.io/badge/M3U8Component-3.8.6-orange)](https://github.com/AriaLyy/Aria)
 
 
 ```java
-implementation 'com.arialyy.aria:core:3.8.5'
-annotationProcessor 'com.arialyy.aria:compiler:3.8.5'
-implementation 'com.arialyy.aria:ftpComponent:3.8.5' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:sftpComponent:3.8.5' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:m3u8Component:3.8.5' # 如果需要使用m3u8下载功能，请增加该组件
+implementation 'com.arialyy.aria:core:3.8.6'
+annotationProcessor 'com.arialyy.aria:compiler:3.8.6'
+implementation 'com.arialyy.aria:ftpComponent:3.8.6' # 如果需要使用ftp，请增加该组件
+implementation 'com.arialyy.aria:sftpComponent:3.8.6' # 如果需要使用ftp，请增加该组件
+implementation 'com.arialyy.aria:m3u8Component:3.8.6' # 如果需要使用m3u8下载功能，请增加该组件
 ```
 
 如果你使用的是kotlin，请使用kotlin官方提供的方法配置apt，[kotlin kapt官方配置传送门](https://www.kotlincn.net/docs/reference/kapt.html)
@@ -138,11 +138,13 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
 ### 版本日志
-+ v_3.8.5 (2020/1/18)
-    - fix bug https://github.com/AriaLyy/Aria/issues/599
-    - 增加密钥url转换器的参数 https://github.com/AriaLyy/Aria/issues/603
-    - 增加sftp，文件上传、下载功能，[sftp下载](https://aria.laoyuyu.me/aria_doc/download/sftp_normal.html)，[sftp上传](https://aria.laoyuyu.me/aria_doc/upload/sftp_normal.html)
-    - 使用零拷贝技术，优化了合并分块的效率
++ v_3.8.6 (2020/2/18)
+    - fix bug https://github.com/AriaLyy/Aria/issues/608
+    - fix bug https://github.com/AriaLyy/Aria/issues/579#issuecomment-586665035
+    - fix bug https://github.com/AriaLyy/Aria/issues/610
+    - fix bug https://github.com/AriaLyy/Aria/issues/614
+    - 增加文件名适配器（感谢小伙伴[DaveBoy](https://github.com/DaveBoy)的PR）
+    - 优化异常提示
     
 [更多版本记录](https://github.com/AriaLyy/Aria/blob/master/DEV_LOG.md)
 
@@ -160,6 +162,11 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 
 ```
+
+## 感谢
+感谢小伙伴们提供的PR ``^_^`
+[DaveBoy](https://github.com/DaveBoy)
+[liuxiaowei](https://github.com/liuxiaowei)
 
 ## 其他
  有任何问题，可以在[issues](https://github.com/AriaLyy/Aria/issues)给我留言反馈。</br>

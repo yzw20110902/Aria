@@ -4,6 +4,7 @@
     - fix bug https://github.com/AriaLyy/Aria/issues/579#issuecomment-586665035
     - fix bug https://github.com/AriaLyy/Aria/issues/610
     - fix bug https://github.com/AriaLyy/Aria/issues/614
+    - 增加文件名适配器（感谢小伙伴[DaveBoy](https://github.com/DaveBoy)的PR）
     - 优化异常提示
   + v_3.8.5 (2020/1/18)
     - fix bug https://github.com/AriaLyy/Aria/issues/599
