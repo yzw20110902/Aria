@@ -155,6 +155,11 @@ public final class HttpDGInfoTask implements IInfoTask {
 
     // 设置属性
     subOption.setFileLenAdapter(groupOption.getFileLenAdapter());
+    subOption.setFileNameAdapter(groupOption.getFileNameAdapter());
+    subOption.setUseServerFileName(groupOption.isUseServerFileName());
+
+
+    subOption.setFileNameAdapter(groupOption.getFileNameAdapter());
     subOption.setRequestEnum(groupOption.getRequestEnum());
     subOption.setHeaders(groupOption.getHeaders());
     subOption.setProxy(groupOption.getProxy());

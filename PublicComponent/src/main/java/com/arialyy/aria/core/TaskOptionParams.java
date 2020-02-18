@@ -22,6 +22,7 @@ import com.arialyy.aria.core.processor.FtpInterceptHandler;
 import com.arialyy.aria.core.processor.IBandWidthUrlConverter;
 import com.arialyy.aria.core.processor.IFtpUploadInterceptor;
 import com.arialyy.aria.core.processor.IHttpFileLenAdapter;
+import com.arialyy.aria.core.processor.IHttpFileNameAdapter;
 import com.arialyy.aria.core.processor.IKeyUrlConverter;
 import com.arialyy.aria.core.processor.ILiveTsUrlConverter;
 import com.arialyy.aria.core.processor.ITsMergeHandler;
@@ -59,6 +60,7 @@ public class TaskOptionParams {
     PROCESSORES.add(IBandWidthUrlConverter.class);
     PROCESSORES.add(IFtpUploadInterceptor.class);
     PROCESSORES.add(IHttpFileLenAdapter.class);
+    PROCESSORES.add(IHttpFileNameAdapter.class);
     PROCESSORES.add(ILiveTsUrlConverter.class);
     PROCESSORES.add(ITsMergeHandler.class);
     PROCESSORES.add(IVodTsUrlConverter.class);

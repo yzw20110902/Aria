@@ -158,10 +158,21 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       if (!TextUtils.isEmpty(disposition)) {
         mEntity.setDisposition(CommonUtil.encryptBASE64(disposition));
         handleContentDisposition(disposition);
-      } else {
-        ALog.w(TAG, "Content-Disposition对于端字段为空，使用服务器端文件名失败");
+      } else{
+        if(taskOption.getFileNameAdapter()!=null) {
+          String newName =taskOption.getFileNameAdapter().handleFileName(headers,mEntity.getKey());
+          mEntity.setServerFileName(newName);
+          renameFile(newName);
+        }else if(conn.getHeaderField("Content-Type")!=null){
+          String contentType=conn.getHeaderField("Content-Type");
+          String type=contentType.substring(contentType.indexOf(File.separator)+1);
+          String newName =mEntity.getFileName()+File.separator+type;
+          mEntity.setServerFileName(newName);
+          renameFile(newName);
+        }
       }
     }
+
     CookieManager msCookieManager = new CookieManager();
     List<String> cookiesHeader = headers.get("Set-Cookie");
 

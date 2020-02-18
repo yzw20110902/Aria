@@ -142,7 +142,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             T.showShort(MainActivity.this, "没有文件读写权限");
             finish();
           }
-        }, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE);
       }
     }
   }
