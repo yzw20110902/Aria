@@ -1,4 +1,7 @@
 ## 开发日志
+  + v_3.8.7
+    - 修复组合任务单个子任务失败后，重新恢复组合任务，组合任务状态变为完成的问题
+
   + v_3.8.6 (2020/2/17)
     - fix bug https://github.com/AriaLyy/Aria/issues/608
     - fix bug https://github.com/AriaLyy/Aria/issues/579#issuecomment-586665035

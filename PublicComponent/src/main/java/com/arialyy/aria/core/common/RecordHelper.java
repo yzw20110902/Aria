@@ -174,7 +174,7 @@ public class RecordHelper {
       tr.startLocation = 0;
       tr.isComplete = false;
       tr.endLocation = mWrapper.getEntity().getFileSize();
-    } else if (file.length() == mWrapper.getEntity().getFileSize()) {
+    } else if (file.length() != 0 && file.length() == mWrapper.getEntity().getFileSize()) {
       ALog.d(TAG, "文件长度一致，线程完成");
       tr.isComplete = true;
     } else {

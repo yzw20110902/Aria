@@ -163,8 +163,11 @@ public class DownloadGroupActivity extends BaseActivity<ActivityDownloadGroupBin
   }
 
   @DownloadGroup.onTaskFail() void taskFail(DownloadGroupTask task) {
-    ALog.d(TAG, "group task fail");
-    getBinding().pl.setInfo(task.getEntity());
+    if (task != null){
+
+      ALog.d(TAG, "group task fail");
+      getBinding().pl.setInfo(task.getEntity());
+    }
   }
 
   @DownloadGroup.onTaskComplete() void taskComplete(DownloadGroupTask task) {

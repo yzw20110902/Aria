@@ -30,6 +30,7 @@ import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.DbDataHelper;
 import com.arialyy.aria.util.FileUtil;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -84,6 +85,11 @@ public abstract class RecordHandler implements IRecordHandler {
       mTaskRecord = DbDataHelper.getTaskRecord(getFilePath(), mEntity.getTaskType());
       if (mTaskRecord == null) {
         initRecord(true);
+      }else if (mTaskRecord.threadRecords == null || mTaskRecord.threadRecords.size() == 0){
+        if (mTaskRecord.threadRecords == null){
+          mTaskRecord.threadRecords = new ArrayList<>();
+        }
+        initRecord(false);
       }
       handlerTaskRecord(mTaskRecord);
     }

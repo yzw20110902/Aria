@@ -34,8 +34,14 @@ public class GroupModule extends BaseModule {
     List<String> urls = new ArrayList<>();
     //urls.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574141924275&di=a7ea1497a4a2528a45ce7103bf61adf4&imgtype=0&src=http%3A%2F%2Fg.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Fc2cec3fdfc03924590b2a9b58d94a4c27d1e2500.jpg");
     //urls.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574141924272&di=7861479e7cb3cea98d585eaf108f056f&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F562c11dfa9ec8a13c0741f5afd03918fa0ecc01a.jpg");
-    String[] str = getContext().getResources().getStringArray(R.array.group_urls_1);
-    Collections.addAll(urls, str);
+    //String[] str = getContext().getResources().getStringArray(R.array.group_urls_1);
+    //Collections.addAll(urls, str);
+    urls.add("http://img2.imgtn.bdimg.com/it/u=3105600238,693167464&fm=26&gp=0.jpg");
+    urls.add("http://a4.att.hudong.com/22/59/19300001325156131228593878903.jpg");
+    urls.add("http://pic1.win4000.com/mobile/2019-12-16/5df71dc866a0c.jpg");
+    urls.add("http://pics4.baidu.com/feed/e824b899a9014c08545e5585620d360e7bf4f421.jpeg");
+    urls.add("http://img.blog.163.com/photo/iFUKcs6shB4PNlfxwH-yTw==/2542563464627686395.jpg");
+
     return urls;
   }
 
@@ -49,8 +55,13 @@ public class GroupModule extends BaseModule {
 
   List<String> getSubName() {
     List<String> names = new ArrayList<>();
-    String[] str = getContext().getResources().getStringArray(R.array.group_names);
-    Collections.addAll(names, str);
+    //String[] str = getContext().getResources().getStringArray(R.array.group_names);
+    //Collections.addAll(names, str);
+    names.add("1.png");
+    names.add("2.png");
+    names.add("3.png");
+    names.add("4.png");
+    names.add("5.png");
     return names;
   }
 
