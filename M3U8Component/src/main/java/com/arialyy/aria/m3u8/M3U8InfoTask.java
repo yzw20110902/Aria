@@ -208,8 +208,8 @@ final public class M3U8InfoTask implements IInfoTask {
         || code == HttpURLConnection.HTTP_CREATED // 201 跳转
         || code == 307) {
       handleUrlReTurn(conn, conn.getHeaderField("Location"));
-    } else if (code == HttpURLConnection.HTTP_NOT_FOUND) {
-      failDownload("404错误", false);
+    } else if (code >= HttpURLConnection.HTTP_BAD_REQUEST) {
+      failDownload("下载失败错误，错误码：" + code, false);
     } else {
       failDownload(String.format("不支持的响应，code: %s", code), true);
     }

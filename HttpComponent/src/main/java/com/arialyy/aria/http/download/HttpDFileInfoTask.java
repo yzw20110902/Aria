@@ -228,15 +228,15 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       mTaskWrapper.setNewTask(true);
       mTaskWrapper.setSupportBP(false);
       end = true;
-    } else if (code == HttpURLConnection.HTTP_NOT_FOUND) {
-      failDownload(new AriaHTTPException(TAG,
-          String.format("任务下载失败，errorCode：404, url: %s", mEntity.getUrl())), false);
-    } else if (code == HttpURLConnection.HTTP_MOVED_TEMP
+    }  else if (code == HttpURLConnection.HTTP_MOVED_TEMP
         || code == HttpURLConnection.HTTP_MOVED_PERM
         || code == HttpURLConnection.HTTP_SEE_OTHER
         || code == HttpURLConnection.HTTP_CREATED // 201 跳转
         || code == 307) {
       handleUrlReTurn(conn, conn.getHeaderField("Location"));
+    } else if (code >= HttpURLConnection.HTTP_BAD_REQUEST) {
+      failDownload(new AriaHTTPException(TAG,
+          String.format("任务下载失败，errorCode：%s, url: %s", code, mEntity.getUrl())), false);
     } else {
       failDownload(new AriaHTTPException(TAG,
           String.format("任务下载失败，errorCode：%s, errorMsg: %s, url: %s", code,

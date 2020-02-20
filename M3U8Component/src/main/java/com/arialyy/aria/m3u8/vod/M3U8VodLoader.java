@@ -135,10 +135,6 @@ final class M3U8VodLoader extends BaseM3U8Loader {
     }
   }
 
-  @Override public boolean isBreak() {
-    return super.isBreak() || isDestroy;
-  }
-
   @Override protected void handleTask(Looper looper) {
     if (isBreak()) {
       return;
