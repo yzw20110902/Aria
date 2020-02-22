@@ -28,6 +28,7 @@ import com.arialyy.aria.core.manager.ThreadTaskManager;
 import com.arialyy.aria.core.task.IThreadTask;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.exception.AriaException;
+import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.FileUtil;
 import java.io.File;
 
@@ -99,6 +100,9 @@ public class NormalLoader<T extends AbsTaskWrapper> extends AbsNormalLoader<T> {
   }
 
   protected void startThreadTask() {
+    if (isBreak()){
+      return;
+    }
 
     if (getListener() instanceof IDLoadListener) {
       ((IDLoadListener) getListener()).onPostPre(getEntity().getFileSize());

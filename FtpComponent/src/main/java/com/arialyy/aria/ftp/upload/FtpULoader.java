@@ -37,6 +37,9 @@ final class FtpULoader extends NormalLoader<UTaskWrapper> {
 
   @Override
   protected void startThreadTask() {
+    if (isBreak()) {
+      return;
+    }
     // 检查记录
     ((FtpURecordHandler) mRecordHandler).setFtpFile(ftpFile);
     if (mRecordHandler.checkTaskCompleted()) {

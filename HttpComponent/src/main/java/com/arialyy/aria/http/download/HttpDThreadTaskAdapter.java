@@ -43,7 +43,7 @@ import java.util.Set;
  * Created by lyy on 2017/1/18. 下载线程
  */
 final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
-  private final String TAG = "HttpThreadTask";
+  private final String TAG = "HttpDThreadTaskAdapter";
   private DTaskWrapper mTaskWrapper;
 
   HttpDThreadTaskAdapter(SubThreadConfig config) {

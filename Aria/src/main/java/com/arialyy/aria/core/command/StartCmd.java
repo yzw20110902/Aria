@@ -29,7 +29,7 @@ import com.arialyy.aria.util.NetUtils;
  */
 final public class StartCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T> {
 
-  private boolean newStart = false;
+  private boolean nowStart = false;
 
   StartCmd(T entity, int taskType) {
     super(entity, taskType);
@@ -38,10 +38,10 @@ final public class StartCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T> {
   /**
    * 立即执行任务
    *
-   * @param newStart true 立即执行任务，无论执行队列是否满了
+   * @param nowStart true 立即执行任务，无论执行队列是否满了
    */
-  public void setNewStart(boolean newStart) {
-    this.newStart = newStart;
+  public void setNowStart(boolean nowStart) {
+    this.nowStart = nowStart;
   }
 
   @Override public void executeCmd() {
@@ -82,7 +82,7 @@ final public class StartCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T> {
             startTask();
           }
         } else {
-          if (newStart) {
+          if (nowStart) {
             startTask();
           } else {
             sendWaitState(task);
@@ -92,7 +92,19 @@ final public class StartCmd<T extends AbsTaskWrapper> extends AbsNormalCmd<T> {
     } else {
       //任务没执行并且执行队列中没有该任务，才认为任务没有运行中
       if (!mQueue.taskIsRunning(task.getKey())) {
-        resumeTask();
+        if (mod.equals(QueueMod.NOW.getTag())) {
+          resumeTask();
+        } else {
+          if (mQueue.getCurrentExePoolNum() < maxTaskNum) {
+            resumeTask();
+          } else {
+            if (nowStart) {
+              resumeTask();
+            } else {
+              sendWaitState(task);
+            }
+          }
+        }
       } else {
         ALog.w(TAG, String.format("任务【%s】已经在运行", task.getTaskName()));
       }

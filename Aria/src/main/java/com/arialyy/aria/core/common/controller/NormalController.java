@@ -66,7 +66,7 @@ public final class NormalController extends FeatureController implements INormal
       StartCmd cmd =
           (StartCmd) CmdHelper.createNormalCmd(getTaskWrapper(), NormalCmdFactory.TASK_START,
               checkTaskType());
-      cmd.setNewStart(newStart);
+      cmd.setNowStart(newStart);
       EventMsgUtil.getDefault()
           .post(cmd);
     }

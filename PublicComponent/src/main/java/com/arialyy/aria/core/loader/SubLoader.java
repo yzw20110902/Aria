@@ -93,6 +93,10 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
   }
 
   private void handlerTask() {
+    if (isBreak()){
+      return;
+    }
+
     record = recordHandler.getRecord(wrapper.getEntity().getFileSize());
     if (record.threadRecords != null
         && !TextUtils.isEmpty(record.filePath)

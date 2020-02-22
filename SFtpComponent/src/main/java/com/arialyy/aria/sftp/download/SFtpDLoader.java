@@ -87,6 +87,9 @@ final class SFtpDLoader extends AbsNormalLoader<DTaskWrapper> {
   }
 
   private void startThreadTask() {
+    if (isBreak()) {
+      return;
+    }
 
     if (getListener() instanceof IDLoadListener) {
       ((IDLoadListener) getListener()).onPostPre(getEntity().getFileSize());

@@ -113,6 +113,10 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
       ALog.w(TAG, "resume task fail, task is null");
       return;
     }
+    if (mExecutePool.taskExits(task.getKey())) {
+      ALog.w(TAG, String.format("task【%s】running", task.getKey()));
+      return;
+    }
     if (mExecutePool.size() >= getMaxTaskNum()) {
       task.getTaskWrapper().getEntity().setState(IEntity.STATE_WAIT);
       mCachePool.putTaskToFirst(task);

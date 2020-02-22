@@ -86,6 +86,9 @@ final class SFtpULoader extends AbsNormalLoader<UTaskWrapper> {
   }
 
   private void startThreadTask(SftpATTRS attrs) {
+    if (isBreak()) {
+      return;
+    }
 
     if (getListener() instanceof IDLoadListener) {
       ((IDLoadListener) getListener()).onPostPre(getEntity().getFileSize());
