@@ -417,15 +417,7 @@ public class DownloadReceiver extends AbsReceiver {
    * @return 如果没有任务组列表，则返回null
    */
   public List<DownloadGroupEntity> getGroupTaskList() {
-    List<DGEntityWrapper> wrappers = DbEntity.findRelationData(DGEntityWrapper.class);
-    if (wrappers == null || wrappers.isEmpty()) {
-      return null;
-    }
-    List<DownloadGroupEntity> entities = new ArrayList<>();
-    for (DGEntityWrapper wrapper : wrappers) {
-      entities.add(wrapper.groupEntity);
-    }
-    return entities;
+    return getGroupTaskList(1,10);
   }
 
   /**
