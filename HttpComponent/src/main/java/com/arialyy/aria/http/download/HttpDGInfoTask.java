@@ -30,6 +30,7 @@ import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 组合任务文件信息，用于获取长度未知时，组合任务的长度
@@ -41,8 +42,8 @@ public final class HttpDGInfoTask implements IInfoTask {
   private final Object LOCK = new Object();
   private ExecutorService mPool = null;
   private boolean getLenComplete = false;
-  private int count;
-  private int failCount;
+  private AtomicInteger count = new AtomicInteger();
+  private AtomicInteger failCount = new AtomicInteger();
   private DownloadGroupListener listener;
 
   /**
@@ -50,18 +51,18 @@ public final class HttpDGInfoTask implements IInfoTask {
    */
   private Callback subCallback = new Callback() {
     @Override public void onSucceed(String url, CompleteInfo info) {
-      count++;
-      checkGetSizeComplete(count, failCount);
+      count.getAndIncrement();
+      checkGetSizeComplete(count.get(), failCount.get());
       ALog.d(TAG, "获取子任务信息完成");
     }
 
     @Override public void onFail(AbsEntity entity, AriaException e, boolean needRetry) {
       ALog.e(TAG, String.format("获取文件信息失败，url：%s", ((DownloadEntity) entity).getUrl()));
-      count++;
-      failCount++;
+      count.getAndIncrement();
+      failCount.getAndIncrement();
       listener.onSubFail((DownloadEntity) entity, new AriaHTTPException(TAG,
           String.format("子任务获取文件长度失败，url：%s", ((DownloadEntity) entity).getUrl())));
-      checkGetSizeComplete(count, failCount);
+      checkGetSizeComplete(count.get(), failCount.get());
     }
   };
 
@@ -79,7 +80,7 @@ public final class HttpDGInfoTask implements IInfoTask {
       return;
     }
     // 处理组合任务大小未知的情况
-    if (wrapper.isUnknownSize() && wrapper.getEntity().getFileSize() < 1) {
+    if (wrapper.isUnknownSize()) {
       mPool = Executors.newCachedThreadPool();
       getGroupSize();
       try {
@@ -89,7 +90,7 @@ public final class HttpDGInfoTask implements IInfoTask {
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
-      if (!mPool.isShutdown()){
+      if (!mPool.isShutdown()) {
         mPool.shutdown();
       }
     } else {
@@ -107,6 +108,10 @@ public final class HttpDGInfoTask implements IInfoTask {
     new Thread(new Runnable() {
       @Override public void run() {
         for (DTaskWrapper dTaskWrapper : wrapper.getSubTaskWrapper()) {
+          if (dTaskWrapper.getEntity().getFileSize() > 0) {
+            count.getAndIncrement();
+            continue;
+          }
           cloneHeader(dTaskWrapper);
           HttpDFileInfoTask infoTask = new HttpDFileInfoTask(dTaskWrapper);
           infoTask.setCallback(subCallback);
@@ -157,7 +162,6 @@ public final class HttpDGInfoTask implements IInfoTask {
     subOption.setFileLenAdapter(groupOption.getFileLenAdapter());
     subOption.setFileNameAdapter(groupOption.getFileNameAdapter());
     subOption.setUseServerFileName(groupOption.isUseServerFileName());
-
 
     subOption.setFileNameAdapter(groupOption.getFileNameAdapter());
     subOption.setRequestEnum(groupOption.getRequestEnum());

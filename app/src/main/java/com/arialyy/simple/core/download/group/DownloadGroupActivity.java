@@ -89,7 +89,9 @@ public class DownloadGroupActivity extends BaseActivity<ActivityDownloadGroupBin
       }
 
       @Override public void resume(View v, AbsEntity entity) {
-        Aria.download(this).loadGroup(mTaskId).resume();
+        Aria.download(this).loadGroup(mTaskId)
+            .unknownSize()
+            .resume(true);
       }
 
       @Override public void cancel(View v, AbsEntity entity) {

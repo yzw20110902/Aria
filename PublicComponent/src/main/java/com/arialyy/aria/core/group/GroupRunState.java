@@ -19,6 +19,8 @@ import com.arialyy.aria.core.listener.IDGroupListener;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 组合任务执行中的状态信息
@@ -32,17 +34,18 @@ public final class GroupRunState {
   /**
    * 已经完成的任务数
    */
-  private int mCompleteNum;
+  private AtomicInteger mCompleteNum = new AtomicInteger();
 
   /**
    * 失败的任务数
    */
-  private int mFailNum;
+  private AtomicInteger mFailNum = new AtomicInteger();
 
   /**
    * 停止的任务数
    */
-  private int mStopNum;
+  private AtomicInteger mStopNum = new AtomicInteger();
+  ;
 
   /**
    * 当前进度
@@ -62,7 +65,7 @@ public final class GroupRunState {
   /**
    * 是否在执行
    */
-  boolean isRunning = false;
+  AtomicBoolean isRunning = new AtomicBoolean(false);
 
   /**
    * 子任务失败、停止记录，用于当子任务失败重新被用户点击开始时，更新{@link #mStopNum}或{@link #mFailNum}
@@ -78,7 +81,7 @@ public final class GroupRunState {
     mGroupHash = groupHash;
   }
 
-  public void setSubSize(int subSize){
+  public void setSubSize(int subSize) {
     mSubSize = subSize;
   }
 
@@ -88,11 +91,11 @@ public final class GroupRunState {
    * @return {@code true}组合任务正在执行
    */
   public boolean isRunning() {
-    return isRunning;
+    return isRunning.get();
   }
 
   public void setRunning(boolean running) {
-    isRunning = running;
+    isRunning.set(running);
   }
 
   String getGroupHash() {
@@ -110,21 +113,21 @@ public final class GroupRunState {
    * 获取失败的数量
    */
   public int getFailNum() {
-    return mFailNum;
+    return mFailNum.get();
   }
 
   /**
    * 获取停止的数量
    */
   public int getStopNum() {
-    return mStopNum;
+    return mStopNum.get();
   }
 
   /**
    * 获取完成的数量
    */
   public int getCompleteNum() {
-    return mCompleteNum;
+    return mCompleteNum.get();
   }
 
   /**
@@ -138,7 +141,7 @@ public final class GroupRunState {
    * 更新完成的数量，mCompleteNum + 1
    */
   public void updateCompleteNum() {
-    mCompleteNum++;
+    mCompleteNum.getAndIncrement();
   }
 
   /**
@@ -156,10 +159,10 @@ public final class GroupRunState {
   public void updateCount(String key) {
     if (mFailTemp.contains(key)) {
       mFailTemp.remove(key);
-      mFailNum--;
+      mFailNum.getAndDecrement();
     } else if (mStopTemp.contains(key)) {
       mStopTemp.remove(key);
-      mStopNum--;
+      mStopNum.getAndDecrement();
     }
   }
 
@@ -170,7 +173,7 @@ public final class GroupRunState {
    */
   public void countStopNum(String key) {
     mStopTemp.add(key);
-    mStopNum++;
+    mStopNum.getAndIncrement();
   }
 
   /**
@@ -180,6 +183,6 @@ public final class GroupRunState {
    */
   public void countFailNum(String key) {
     mFailTemp.add(key);
-    mFailNum++;
+    mFailNum.getAndIncrement();
   }
 }

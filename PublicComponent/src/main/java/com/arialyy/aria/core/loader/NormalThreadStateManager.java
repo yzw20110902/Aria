@@ -24,26 +24,28 @@ import com.arialyy.aria.core.inf.IThreadStateManager;
 import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.exception.AriaException;
 import com.arialyy.aria.util.ALog;
+import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.FileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 线程任务管理器，用于处理多线程下载时任务的状态回调
  */
 public class NormalThreadStateManager implements IThreadStateManager {
-  private final String TAG = "ThreadTaskStateManager";
+  private final String TAG = CommonUtil.getClassName(this);
 
   /**
    * 任务状态回调
    */
   private IEventListener mListener;
   private int mThreadNum;    // 启动的线程总数
-  private int mCancelNum = 0; // 已经取消的线程的数
-  private int mStopNum = 0;  // 已经停止的线程数
-  private int mFailNum = 0;  // 失败的线程数
-  private int mCompleteNum = 0;  // 完成的线程数
+  private AtomicInteger mCancelNum = new AtomicInteger(0); // 已经取消的线程的数
+  private AtomicInteger mStopNum = new AtomicInteger(0);  // 已经停止的线程数
+  private AtomicInteger mFailNum = new AtomicInteger(0);  // 失败的线程数
+  private AtomicInteger mCompleteNum = new AtomicInteger(0);  // 完成的线程数
   private long mProgress; //当前总进度
   private TaskRecord mTaskRecord; // 任务记录
   private Looper mLooper;
@@ -75,19 +77,19 @@ public class NormalThreadStateManager implements IThreadStateManager {
       checkLooper();
       switch (msg.what) {
         case STATE_STOP:
-          mStopNum++;
+          mStopNum.getAndIncrement();
           if (isStop()) {
             quitLooper();
           }
           break;
         case STATE_CANCEL:
-          mCancelNum++;
+          mCancelNum.getAndIncrement();
           if (isCancel()) {
             quitLooper();
           }
           break;
         case STATE_FAIL:
-          mFailNum++;
+          mFailNum.getAndIncrement();
           if (isFail()) {
             Bundle b = msg.getData();
             mListener.onFail(b.getBoolean(DATA_RETRY, false),
@@ -96,7 +98,7 @@ public class NormalThreadStateManager implements IThreadStateManager {
           }
           break;
         case STATE_COMPLETE:
-          mCompleteNum++;
+          mCompleteNum.getAndIncrement();
           if (isComplete()) {
             ALog.d(TAG, "isComplete, completeNum = " + mCompleteNum);
             //if (mTaskRecord.taskType == ITaskWrapper.D_SFTP) {
@@ -168,7 +170,7 @@ public class NormalThreadStateManager implements IThreadStateManager {
     //ALog.d(TAG,
     //    String.format("isStop; stopNum: %s, cancelNum: %s, failNum: %s, completeNum: %s", mStopNum,
     //        mCancelNum, mFailNum, mCompleteNum));
-    return mStopNum == mThreadNum || mStopNum + mCompleteNum == mThreadNum;
+    return mStopNum.get() == mThreadNum || mStopNum.get() + mCompleteNum.get() == mThreadNum;
   }
 
   /**
@@ -179,8 +181,8 @@ public class NormalThreadStateManager implements IThreadStateManager {
     //ALog.d(TAG,
     //    String.format("isFail; stopNum: %s, cancelNum: %s, failNum: %s, completeNum: %s", mStopNum,
     //        mCancelNum, mFailNum, mCompleteNum));
-    return mCompleteNum != mThreadNum
-        && (mFailNum == mThreadNum || mFailNum + mCompleteNum == mThreadNum);
+    return mCompleteNum.get() != mThreadNum
+        && (mFailNum.get() == mThreadNum || mFailNum.get() + mCompleteNum.get() == mThreadNum);
   }
 
   /**
@@ -192,7 +194,7 @@ public class NormalThreadStateManager implements IThreadStateManager {
     //    String.format("isComplete; stopNum: %s, cancelNum: %s, failNum: %s, completeNum: %s",
     //        mStopNum,
     //        mCancelNum, mFailNum, mCompleteNum));
-    return mCompleteNum == mThreadNum;
+    return mCompleteNum.get() == mThreadNum;
   }
 
   /**
@@ -202,7 +204,7 @@ public class NormalThreadStateManager implements IThreadStateManager {
     //ALog.d(TAG, String.format("isCancel; stopNum: %s, cancelNum: %s, failNum: %s, completeNum: %s",
     //    mStopNum,
     //    mCancelNum, mFailNum, mCompleteNum));
-    return mCancelNum == mThreadNum;
+    return mCancelNum.get() == mThreadNum;
   }
 
   /**

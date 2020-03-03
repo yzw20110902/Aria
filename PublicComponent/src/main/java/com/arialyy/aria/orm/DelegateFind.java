@@ -98,7 +98,7 @@ class DelegateFind extends AbsDelegate {
    */
   <T extends AbsDbWrapper> List<T> findRelationData(SQLiteDatabase db, Class<T> clazz,
       String... expression) {
-    return exeRelationSql(db, clazz, 1, 10, expression);
+    return exeRelationSql(db, clazz, 1, Integer.MAX_VALUE, expression);
   }
 
   /**

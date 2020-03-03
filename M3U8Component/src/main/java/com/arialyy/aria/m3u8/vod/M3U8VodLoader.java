@@ -51,6 +51,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -75,10 +76,11 @@ final class M3U8VodLoader extends BaseM3U8Loader {
   private SparseArray<ThreadRecord> mAfterPeer = new SparseArray<>();
   private PeerIndexEvent mCurrentEvent;
   private String mCacheDir;
-  private int aIndex = 0, bIndex = 0;
-  private int mCurrentFlagSize;
+  private AtomicInteger afterPeerIndex = new AtomicInteger();
+  private AtomicInteger beforePeerIndex = new AtomicInteger();
+  private AtomicInteger mCompleteNum = new AtomicInteger();
+  private AtomicInteger mCurrentFlagSize = new AtomicInteger();
   private boolean isJump = false, isDestroy = false;
-  private int mCompleteNum = 0;
   private ExecutorService mJumpThreadPool;
   private Thread jumpThread = null;
   private M3U8TaskOption mM3U8Option;
@@ -102,20 +104,20 @@ final class M3U8VodLoader extends BaseM3U8Loader {
   }
 
   int getCompleteNum() {
-    return mCompleteNum;
+    return mCompleteNum.get();
   }
 
-  void setCompleteNum(int mCompleteNum) {
-    this.mCompleteNum = mCompleteNum;
+  void setCompleteNum(int completeNum) {
+    mCompleteNum.set(completeNum);
   }
 
   int getCurrentFlagSize() {
-    mCurrentFlagSize = mFlagQueue.size();
-    return mCurrentFlagSize;
+    mCurrentFlagSize.set(mFlagQueue.size());
+    return mCurrentFlagSize.get();
   }
 
   void setCurrentFlagSize(int currentFlagSize) {
-    mCurrentFlagSize = currentFlagSize;
+    mCurrentFlagSize.set(currentFlagSize);
   }
 
   boolean isJump() {
@@ -178,7 +180,7 @@ final class M3U8VodLoader extends BaseM3U8Loader {
           try {
             LOCK.lock();
             while (mFlagQueue.size() < EXEC_MAX_NUM && !isBreak()) {
-              if (mCompleteNum == mRecord.threadRecords.size()) {
+              if (mCompleteNum.get() == mRecord.threadRecords.size()) {
                 break;
               }
 
@@ -214,16 +216,18 @@ final class M3U8VodLoader extends BaseM3U8Loader {
     ThreadRecord tr = null;
     try {
       // 优先下载peer指针之后的数据
-      if (bIndex == 0 && aIndex < mAfterPeer.size()) {
+      if (beforePeerIndex.get() == 0 && afterPeerIndex.get() < mAfterPeer.size()) {
         //ALog.d(TAG, String.format("afterArray size:%s, index:%s", mAfterPeer.size(), aIndex));
-        tr = mAfterPeer.valueAt(aIndex);
-        aIndex++;
+        tr = mAfterPeer.valueAt(afterPeerIndex.get());
+        afterPeerIndex.getAndIncrement();
       }
 
       // 如果指针之后的数组没有切片了，则重新初始化指针位置，并获取指针之前的数组获取切片进行下载
-      if (mBeforePeer.size() > 0 && (tr == null || bIndex != 0) && bIndex < mBeforePeer.size()) {
-        tr = mBeforePeer.valueAt(bIndex);
-        bIndex++;
+      if (mBeforePeer.size() > 0
+          && (tr == null || beforePeerIndex.get() != 0)
+          && beforePeerIndex.get() < mBeforePeer.size()) {
+        tr = mBeforePeer.valueAt(beforePeerIndex.get());
+        beforePeerIndex.getAndIncrement();
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -256,19 +260,19 @@ final class M3U8VodLoader extends BaseM3U8Loader {
       return;
     }
     // 设置需要下载的切片
-    mCompleteNum = 0;
+    mCompleteNum.set(0);
     for (ThreadRecord tr : mRecord.threadRecords) {
       if (!tr.isComplete) {
         mAfterPeer.put(tr.threadId, tr);
       } else {
-        mCompleteNum++;
+        mCompleteNum.getAndIncrement();
       }
     }
     getStateManager().updateStateCount();
-    if (mCompleteNum <= 0) {
+    if (mCompleteNum.get() <= 0) {
       getListener().onStart(0);
     } else {
-      int percent = mCompleteNum * 100 / mRecord.threadRecords.size();
+      int percent = mCompleteNum.get() * 100 / mRecord.threadRecords.size();
       getListener().onResume(percent);
     }
   }
@@ -329,7 +333,7 @@ final class M3U8VodLoader extends BaseM3U8Loader {
 
     isJump = true;
     notifyWaitLock(false);
-    mCurrentFlagSize = mFlagQueue.size();
+    mCurrentFlagSize.set(mFlagQueue.size());
     // 停止所有正在执行的线程任务
     try {
       TempFlag flag;
@@ -403,12 +407,12 @@ final class M3U8VodLoader extends BaseM3U8Loader {
     mBeforePeer.clear();
     mAfterPeer.clear();
     mFlagQueue.clear();
-    aIndex = 0;
-    bIndex = 0;
-    mCompleteNum = 0;
+    afterPeerIndex.set(0);
+    beforePeerIndex.set(0);
+    mCompleteNum.set(0);
     for (ThreadRecord tr : mRecord.threadRecords) {
       if (tr.isComplete) {
-        mCompleteNum++;
+        mCompleteNum.getAndIncrement();
         continue;
       }
       if (tr.threadId < mCurrentEvent.peerIndex) {

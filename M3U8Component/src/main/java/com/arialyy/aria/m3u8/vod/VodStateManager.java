@@ -29,8 +29,8 @@ import com.arialyy.aria.core.loader.ILoaderVisitor;
 import com.arialyy.aria.core.manager.ThreadTaskManager;
 import com.arialyy.aria.core.processor.ITsMergeHandler;
 import com.arialyy.aria.core.task.ThreadTask;
-import com.arialyy.aria.exception.AriaM3U8Exception;
 import com.arialyy.aria.exception.AriaException;
+import com.arialyy.aria.exception.AriaM3U8Exception;
 import com.arialyy.aria.m3u8.BaseM3U8Loader;
 import com.arialyy.aria.m3u8.M3U8Listener;
 import com.arialyy.aria.m3u8.M3U8TaskOption;
@@ -40,6 +40,7 @@ import com.arialyy.aria.util.FileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * m3u8 点播下载状态管理器
@@ -49,9 +50,9 @@ public final class VodStateManager implements IThreadStateManager {
 
   private M3U8Listener listener;
   private int startThreadNum;    // 启动的线程总数
-  private int cancelNum = 0; // 已经取消的线程的数
-  private int stopNum = 0;  // 已经停止的线程数
-  private int failNum = 0;  // 失败的线程数
+  private AtomicInteger cancelNum = new AtomicInteger(0); // 已经取消的线程的数
+  private AtomicInteger stopNum = new AtomicInteger(0);  // 已经停止的线程数
+  private AtomicInteger failNum = new AtomicInteger(0);  // 失败的线程数
   private long progress;
   private TaskRecord taskRecord; // 任务记录
   private Looper looper;
@@ -74,11 +75,11 @@ public final class VodStateManager implements IThreadStateManager {
       int peerIndex = msg.getData().getInt(ISchedulers.DATA_M3U8_PEER_INDEX);
       switch (msg.what) {
         case STATE_STOP:
-          stopNum++;
+          stopNum.getAndIncrement();
           removeSignThread((ThreadTask) msg.obj);
           // 处理跳转位置后，恢复任务
           if (loader.isJump()
-              && (stopNum == loader.getCurrentFlagSize() || loader.getCurrentFlagSize() == 0)
+              && (stopNum.get() == loader.getCurrentFlagSize() || loader.getCurrentFlagSize() == 0)
               && !loader.isBreak()) {
             loader.resumeTask();
             return true;
@@ -90,7 +91,7 @@ public final class VodStateManager implements IThreadStateManager {
           }
           break;
         case STATE_CANCEL:
-          cancelNum++;
+          cancelNum.getAndIncrement();
           removeSignThread((ThreadTask) msg.obj);
 
           if (loader.isBreak()) {
@@ -99,7 +100,7 @@ public final class VodStateManager implements IThreadStateManager {
           }
           break;
         case STATE_FAIL:
-          failNum++;
+          failNum.getAndIncrement();
           for (ThreadRecord tr : taskRecord.threadRecords) {
             if (tr.threadId == peerIndex) {
               loader.getBeforePeer().put(peerIndex, tr);
@@ -175,9 +176,9 @@ public final class VodStateManager implements IThreadStateManager {
   };
 
   void updateStateCount() {
-    cancelNum = 0;
-    stopNum = 0;
-    failNum = 0;
+    cancelNum.set(0);
+    stopNum.set(0);
+    failNum.set(0);
   }
 
   @Override public void setLooper(TaskRecord taskRecord, Looper looper) {
@@ -233,12 +234,12 @@ public final class VodStateManager implements IThreadStateManager {
 
   @Override public boolean isFail() {
     printInfo("isFail");
-    return failNum != 0 && failNum == loader.getCurrentFlagSize() && !loader.isJump();
+    return failNum.get() != 0 && failNum.get() == loader.getCurrentFlagSize() && !loader.isJump();
   }
 
   @Override public boolean isComplete() {
     if (m3U8Option.isIgnoreFailureTs()) {
-      return loader.getCompleteNum() + failNum >= taskRecord.threadRecords.size()
+      return loader.getCompleteNum() + failNum.get() >= taskRecord.threadRecords.size()
           && !loader.isJump();
     } else {
       return loader.getCompleteNum() == taskRecord.threadRecords.size() && !loader.isJump();

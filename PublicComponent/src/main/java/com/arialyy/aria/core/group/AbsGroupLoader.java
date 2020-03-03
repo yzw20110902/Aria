@@ -153,7 +153,7 @@ public abstract class AbsGroupLoader implements ILoaderVisitor, ILoader {
     if (!checkSubTask(url, "开始")) {
       return;
     }
-    if (!mState.isRunning) {
+    if (!mState.isRunning.get()) {
       startTimer();
     }
     AbsSubDLoadUtil d = getDownloader(url, false);
@@ -212,7 +212,7 @@ public abstract class AbsGroupLoader implements ILoaderVisitor, ILoader {
   }
 
   @Override public boolean isRunning() {
-    return mState != null && mState.isRunning;
+    return mState != null && mState.isRunning.get();
   }
 
   @Override public void cancel() {
@@ -275,11 +275,11 @@ public abstract class AbsGroupLoader implements ILoaderVisitor, ILoader {
   }
 
   private synchronized void startTimer() {
-    mState.isRunning = true;
+    mState.isRunning.set(true);
     mTimer = new ScheduledThreadPoolExecutor(1);
     mTimer.scheduleWithFixedDelay(new Runnable() {
       @Override public void run() {
-        if (!mState.isRunning) {
+        if (!mState.isRunning.get()) {
           closeTimer();
         } else if (mCurrentLocation >= 0) {
           long t = 0;
@@ -321,7 +321,7 @@ public abstract class AbsGroupLoader implements ILoaderVisitor, ILoader {
     }
   }
 
-  protected void fail(AriaException e, boolean needRetry){
+  protected void fail(AriaException e, boolean needRetry) {
     closeTimer();
     getListener().onFail(needRetry, e);
   }

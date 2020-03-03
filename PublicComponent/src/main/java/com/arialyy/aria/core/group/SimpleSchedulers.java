@@ -121,9 +121,14 @@ final class SimpleSchedulers implements Handler.Callback {
           || mGState.getStopNum() + mGState.getFailNum() + mGState.getCompleteNum()
           == mGState.getSubSize()) {
         mQueue.clear();
-        mGState.isRunning = false;
-        mGState.listener.onFail(false, new AriaException(TAG,
-            String.format("任务组【%s】下载失败", mGState.getGroupHash())));
+        mGState.isRunning.set(false);
+        if (mGState.getCompleteNum() > 0) {
+          ALog.e(TAG, String.format("任务组【%s】停止", mGState.getGroupHash()));
+          mGState.listener.onStop(mGState.getProgress());
+        } else {
+          mGState.listener.onFail(false, new AriaException(TAG,
+              String.format("任务组【%s】下载失败", mGState.getGroupHash())));
+        }
       } else {
         startNext();
       }
@@ -147,7 +152,7 @@ final class SimpleSchedulers implements Handler.Callback {
         + mQueue.getCacheSize()
         == mGState.getSubSize()) {
       mQueue.clear();
-      mGState.isRunning = false;
+      mGState.isRunning.set(false);
       mGState.listener.onStop(mGState.getProgress());
     } else {
       startNext();
@@ -183,7 +188,7 @@ final class SimpleSchedulers implements Handler.Callback {
         mGState.listener.onStop(mGState.getProgress());
       }
       mQueue.clear();
-      mGState.isRunning = false;
+      mGState.isRunning.set(false);
     } else {
       startNext();
     }

@@ -36,11 +36,11 @@ public class GroupModule extends BaseModule {
     //urls.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574141924272&di=7861479e7cb3cea98d585eaf108f056f&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F562c11dfa9ec8a13c0741f5afd03918fa0ecc01a.jpg");
     //String[] str = getContext().getResources().getStringArray(R.array.group_urls_1);
     //Collections.addAll(urls, str);
-    urls.add("http://img2.imgtn.bdimg.com/it/u=3105600238,693167464&fm=26&gp=0.jpg");
-    urls.add("http://a4.att.hudong.com/22/59/19300001325156131228593878903.jpg");
-    urls.add("http://pic1.win4000.com/mobile/2019-12-16/5df71dc866a0c.jpg");
-    urls.add("http://pics4.baidu.com/feed/e824b899a9014c08545e5585620d360e7bf4f421.jpeg");
-    urls.add("http://img.blog.163.com/photo/iFUKcs6shB4PNlfxwH-yTw==/2542563464627686395.jpg");
+    urls.add("https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-9/fr/cp0/e15/q65/85148967_168821394550033_6164348723502514176_n.jpg?_nc_cat=105&_nc_sid=110474&efg=eyJpIjoidCJ9&_nc_oc=AQni9wIDOcxkQGfqH7jFwLuRWV3cIi0We11MXp1V0_vfrQ3-SBV4Ue034aJXzzIzdNI&_nc_ht=scontent-hkt1-1.xx&_nc_tp=14&oh=37829bbfd4f7179fcc3527a7a7971f53&oe=5F00FC35");
+    urls.add("https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-0/cp0/e15/q65/p480x480/84206444_168821471216692_7979166053252988928_n.jpg?_nc_cat=106&_nc_sid=110474&efg=eyJpIjoidCJ9&_nc_oc=AQny1ZTkxw-sq4mSH2TThaQNRJB89uKG2cW9e3DgcI78qXE7b8Jlyox749lXkcngYBs&_nc_ht=scontent-hkt1-1.xx&_nc_tp=3&oh=6714e2c9b3d76e12eff960b6aa22cdfb&oe=5EEE640F");
+    urls.add("https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-0/cp0/e15/q65/p480x480/86702402_168821534550019_6064732312896012288_n.jpg?_nc_cat=101&_nc_sid=110474&efg=eyJpIjoidCJ9&_nc_oc=AQnfJfW55cqVfs0lzZOjEa8kGoxvrA--\\brjaelZgcf8MzqQUhjH3moqGoekMQlATXRM&_nc_ht=scontent-hkt1-1.xx&_nc_tp=3&oh=96f4f776c05b2c200cfb720fa36f938b&oe=5EFA310D");
+    urls.add("https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-0/cp0/e15/q65/p480x480/85236032_168821577883348_2800973234302877696_n.jpg?_nc_cat=106&_nc_sid=110474&efg=eyJpIjoidCJ9&_nc_oc=AQlNvaTlYUspquMWBLnkgVOHdzG4pX2XW3NSHYxvVYsaJF8Ehy9tGn6R6Ned5UwcwAM&_nc_ht=scontent-hkt1-1.xx&_nc_tp=3&oh=6fd5e6442712e4da111d09e8902c68c5&oe=5EFE1528");
+    urls.add("https://scontent-hkt1-1.xx.fbcdn.net/v/t1.0-1/cp0/e15/q65/p120x120/80398195_141232180642288_3692820603451998208_n.jpg?_nc_cat=109&_nc_sid=dbb9e7&efg=eyJpIjoidCJ9&_nc_oc=AQmsZxgvLgoObkqHbcKS8qIZ3w_QhssRwLSF5o-8P6q_kf962w32kmjLqcg6lH9qxWI&_nc_ht=scontent-hkt1-1.xx&_nc_tp=3&oh=269e655e7b901e8d07d9362142a0fdda&oe=5EF43734");
 
     return urls;
   }

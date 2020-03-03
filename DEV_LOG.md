@@ -4,6 +4,7 @@
     - 修复40x错误，会继续重试并且无法重试成功的问题 https://github.com/AriaLyy/Aria/issues/619
     - 修复wait模式下，resume(true)无效问题
     - 修复now模式下的一些问题 https://github.com/AriaLyy/Aria/issues/620
+    - 修复组任务，其中一个子任务在获取文件长度失败后，重新恢复组合任务，组合任务状态变为完成的问题 https://github.com/AriaLyy/Aria/issues/628
   + v_3.8.6 (2020/2/17)
     - fix bug https://github.com/AriaLyy/Aria/issues/608
     - fix bug https://github.com/AriaLyy/Aria/issues/579#issuecomment-586665035

@@ -137,7 +137,7 @@ public class RecordHelper {
           } else if (tr.startLocation != realLocation) { // 处理记录小于分块文件长度的情况
             ALog.i(TAG, String.format("修正分块【%s】的进度记录为：%s", temp.getPath(), realLocation));
             tr.startLocation = realLocation;
-          }else {
+          } else {
             ALog.i(TAG, String.format("修正分块【%s】的进度记录为：%s", temp.getPath(), realLocation));
             tr.startLocation = realLocation;
             tr.isComplete = false;
@@ -163,8 +163,10 @@ public class RecordHelper {
       // 目标文件
       File targetFile = new File(mTaskRecord.filePath);
       // 处理组合任务其中一个子任务完成的情况
-      if (tr.isComplete && targetFile.exists() && targetFile.length() == mWrapper.getEntity()
-          .getFileSize()) {
+      if (tr.isComplete
+          && targetFile.exists()
+          && targetFile.length() != 0
+          && targetFile.length() == mWrapper.getEntity().getFileSize()) {
         tr.isComplete = true;
       } else {
         ALog.w(TAG, String.format("文件【%s】不存在，任务将重新开始", file.getPath()));
