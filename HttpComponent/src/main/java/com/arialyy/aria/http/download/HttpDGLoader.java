@@ -54,13 +54,8 @@ final class HttpDGLoader extends AbsGroupLoader {
     }
     onPostStart();
     for (DTaskWrapper wrapper : getWrapper().getSubTaskWrapper()) {
-      File subFile = new File(wrapper.getEntity().getFilePath());
-      if (wrapper.getEntity().getFileSize() > 0
-          && subFile.exists()
-          && subFile.length() == wrapper.getEntity().getFileSize()) {
-        continue;
-      }
       DownloadEntity dEntity = wrapper.getEntity();
+
       startSubLoader(createSubLoader(wrapper, dEntity.getFileSize() < 0));
     }
   }

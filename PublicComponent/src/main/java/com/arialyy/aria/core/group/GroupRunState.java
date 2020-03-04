@@ -17,6 +17,7 @@ package com.arialyy.aria.core.group;
 
 import com.arialyy.aria.core.listener.IDGroupListener;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
+import com.arialyy.aria.util.ALog;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -26,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 组合任务执行中的状态信息
  */
 public final class GroupRunState {
+  private String TAG = "GroupRunState";
   /**
    * 子任务数
    */

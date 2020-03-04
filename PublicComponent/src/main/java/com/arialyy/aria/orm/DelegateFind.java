@@ -216,14 +216,16 @@ class DelegateFind extends AbsDelegate {
         } else {
           sql = sb.toString();
         }
-        boolean paged=false;
+        boolean paged = false;
         if (page != -1 && num != -1) {
-          paged=true;
-          sql = sql.concat(String.format(" Group by %s LIMIT %s,%s", pTableName.concat(".").concat(m.parentColumn()), (page - 1) * num, num));
+          paged = true;
+          sql = sql.concat(String.format(" Group by %s LIMIT %s,%s",
+              pTableName.concat(".").concat(m.parentColumn()), (page - 1) * num, num));
         }
         Cursor cursor = db.rawQuery(sql, null);
         List<T> data =
-                newInstanceEntity(wrapperClazz, parentClazz, childClazz, cursor, pColumn, cColumn,paged, db,m.entityColumn(),m.parentColumn());
+            newInstanceEntity(wrapperClazz, parentClazz, childClazz, cursor, pColumn, cColumn,
+                paged, db, m.entityColumn(), m.parentColumn());
 
         closeCursor(cursor);
         return data;
@@ -247,7 +249,8 @@ class DelegateFind extends AbsDelegate {
       Class<T> wrapperClazz, Class<P> parentClazz,
       Class<C> childClazz,
       Cursor cursor,
-      List<Field> pColumn, List<Field> cColumn,boolean paged,SQLiteDatabase db,String entityColumn,String parentColumn) {
+      List<Field> pColumn, List<Field> cColumn, boolean paged, SQLiteDatabase db,
+      String entityColumn, String parentColumn) {
     List<T> wrappers = new ArrayList<>();
     SparseArray<List<DbEntity>> childs = new SparseArray<>(); // 所有子表数据
     SparseArray<DbEntity> parents = new SparseArray<>(); // 所有父表数据
@@ -259,12 +262,13 @@ class DelegateFind extends AbsDelegate {
           childs.put(pRowId, new ArrayList<DbEntity>());
           parents.put(pRowId, createParent(pRowId, parentClazz, pColumn, cursor));
         }
-        if(paged){
-          List<C> list = createChildren(db, childClazz, pColumn, entityColumn, parentColumn, parents.get(pRowId));
-          if(list!=null)
+        if (paged) {
+          List<C> list = createChildren(db, childClazz, pColumn, entityColumn, parentColumn,
+              parents.get(pRowId));
+          if (list != null) {
             childs.get(pRowId).addAll(list);
-        }
-        else {
+          }
+        } else {
           childs.get(pRowId).add(createChild(childClazz, cColumn, cursor));
         }
       }
@@ -296,25 +300,28 @@ class DelegateFind extends AbsDelegate {
 
     return wrappers;
   }
+
   /**
    * 创建子对象集合
    */
-  private <T extends DbEntity> List<T> createChildren(SQLiteDatabase db,Class<T> childClazz, List<Field> pColumn,
-                                                   String entityColumn,String parentColumn,DbEntity parents)
-          throws IllegalAccessException {
+  private <T extends DbEntity> List<T> createChildren(SQLiteDatabase db, Class<T> childClazz,
+      List<Field> pColumn,
+      String entityColumn, String parentColumn, DbEntity parents)
+      throws IllegalAccessException {
 
     for (Field field : pColumn) {
       field.setAccessible(true);
-      if(field.getName().equals(parentColumn)){
+      if (field.getName().equals(parentColumn)) {
         Object o = field.get(parents);
-        if(o instanceof String) {
+        if (o instanceof String) {
           o = URLEncoder.encode((String) o);
         }
-        return findData(db,childClazz,entityColumn+"='"+o+"'");
+        return findData(db, childClazz, entityColumn + "='" + o + "'");
       }
     }
     return new ArrayList<T>();
   }
+
   /**
    * 创建子对象
    */

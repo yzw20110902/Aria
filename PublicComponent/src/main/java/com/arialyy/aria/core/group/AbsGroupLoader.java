@@ -101,12 +101,12 @@ public abstract class AbsGroupLoader implements ILoaderVisitor, ILoader {
     for (DTaskWrapper wrapper : mGTWrapper.getSubTaskWrapper()) {
       long fileLen = checkFileExists(wrapper.getEntity().getFilePath());
       if (wrapper.getEntity().getState() == IEntity.STATE_COMPLETE
-          && fileLen != -1
+          && fileLen > 0
           && fileLen == wrapper.getEntity().getFileSize()) {
-        mState.updateCompleteNum();
+        //mState.updateCompleteNum();
         mCurrentLocation += wrapper.getEntity().getFileSize();
       } else {
-        if (fileLen == -1) {
+        if (fileLen <= 0) {
           wrapper.getEntity().setCurrentProgress(0);
         }
         wrapper.getEntity().setState(IEntity.STATE_POST_PRE);

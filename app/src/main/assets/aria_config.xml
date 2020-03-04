@@ -22,7 +22,7 @@
   <download>
 
     <!--设置任务最大下载速度，0表示不限速，单位为：kb-->
-    <maxSpeed value="200"/>
+    <maxSpeed value="0"/>
 
     <!--
       多线程下载是否使用块下载模式，{@code true}使用，{@code false}不使用
@@ -32,7 +32,7 @@
         3、只对新的多线程下载任务有效
         4、只对多线程的任务有效
     -->
-    <useBlock value="false"/>
+    <useBlock value="true"/>
 
     <!--设置下载线程数，下载线程数不能小于1
       注意：

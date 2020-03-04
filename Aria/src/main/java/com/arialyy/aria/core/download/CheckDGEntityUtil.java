@@ -15,7 +15,9 @@
  */
 package com.arialyy.aria.core.download;
 
+import android.text.LoginFilter;
 import android.text.TextUtils;
+import android.util.Log;
 import com.arialyy.aria.core.common.RequestEnum;
 import com.arialyy.aria.core.common.controller.FeatureController;
 import com.arialyy.aria.core.inf.ICheckEntityUtil;
@@ -240,9 +242,6 @@ public class CheckDGEntityUtil implements ICheckEntityUtil {
         mWrapper.getSubNameTemp().remove(index);
       }
     }
-
-    mEntity.setGroupHash(CommonUtil.getMd5Code(mEntity.getUrls()));
-
     return true;
   }
 

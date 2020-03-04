@@ -108,8 +108,14 @@ public final class HttpDGInfoTask implements IInfoTask {
     new Thread(new Runnable() {
       @Override public void run() {
         for (DTaskWrapper dTaskWrapper : wrapper.getSubTaskWrapper()) {
-          if (dTaskWrapper.getEntity().getFileSize() > 0) {
+          DownloadEntity subEntity = dTaskWrapper.getEntity();
+          if (subEntity.getFileSize() > 0) {
             count.getAndIncrement();
+            if (subEntity.getCurrentProgress() < subEntity.getFileSize()){
+              // 如果没有完成需要拷贝一份数据
+              cloneHeader(dTaskWrapper);
+            }
+            checkGetSizeComplete(count.get(), failCount.get());
             continue;
           }
           cloneHeader(dTaskWrapper);
