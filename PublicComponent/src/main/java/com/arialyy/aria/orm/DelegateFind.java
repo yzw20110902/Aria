@@ -26,6 +26,7 @@ import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -259,7 +260,9 @@ class DelegateFind extends AbsDelegate {
           parents.put(pRowId, createParent(pRowId, parentClazz, pColumn, cursor));
         }
         if(paged){
-          childs.get(pRowId).addAll(createChildren(db,childClazz,pColumn,entityColumn,parentColumn,parents.get(pRowId)));
+          List<C> list = createChildren(db, childClazz, pColumn, entityColumn, parentColumn, parents.get(pRowId));
+          if(list!=null)
+            childs.get(pRowId).addAll(list);
         }
         else {
           childs.get(pRowId).add(createChild(childClazz, cColumn, cursor));
@@ -304,6 +307,9 @@ class DelegateFind extends AbsDelegate {
       field.setAccessible(true);
       if(field.getName().equals(parentColumn)){
         Object o = field.get(parents);
+        if(o instanceof String) {
+          o = URLEncoder.encode((String) o);
+        }
         return findData(db,childClazz,entityColumn+"='"+o+"'");
       }
     }
