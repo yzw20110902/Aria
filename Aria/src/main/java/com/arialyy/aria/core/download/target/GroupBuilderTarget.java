@@ -17,6 +17,7 @@ package com.arialyy.aria.core.download.target;
 
 import com.arialyy.aria.core.common.AbsBuilderTarget;
 import com.arialyy.aria.core.common.HttpOption;
+import com.arialyy.aria.core.download.AbsGroupTaskWrapper;
 import com.arialyy.aria.core.download.DGTaskWrapper;
 import com.arialyy.aria.core.manager.SubTaskManager;
 import com.arialyy.aria.core.wrapper.ITaskWrapper;
@@ -102,6 +103,14 @@ public class GroupBuilderTarget extends AbsBuilderTarget<GroupBuilderTarget> {
    */
   public GroupBuilderTarget setGroupAlias(String alias) {
     mConfigHandler.setGroupAlias(alias);
+    return this;
+  }
+
+  /**
+   * {@code true} 忽略任务冲突，不考虑组任务hash冲突的情况
+   */
+  public GroupBuilderTarget ignoreTaskOccupy() {
+    ((AbsGroupTaskWrapper) getTaskWrapper()).setIgnoreTaskOccupy(true);
     return this;
   }
 

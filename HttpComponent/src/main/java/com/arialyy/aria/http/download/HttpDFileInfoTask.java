@@ -57,7 +57,7 @@ import java.util.UUID;
  * 下载文件信息获取
  */
 final class HttpDFileInfoTask implements IInfoTask, Runnable {
-  private static final String TAG = "HttpFileInfoThread";
+  private static final String TAG = "HttpDFileInfoTask";
   private DownloadEntity mEntity;
   private DTaskWrapper mTaskWrapper;
   private int mConnectTimeOut;
@@ -164,12 +164,6 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
               taskOption.getFileNameAdapter().handleFileName(headers, mEntity.getKey());
           mEntity.setServerFileName(newName);
           renameFile(newName);
-        } else if (conn.getHeaderField("Content-Type") != null) {
-          String contentType = conn.getHeaderField("Content-Type");
-          String type = contentType.substring(contentType.indexOf(File.separator) + 1);
-          String newName = String.format("%s.%s", mEntity.getFileName(), type);
-          mEntity.setServerFileName(newName);
-          renameFile(newName);
         }
       }
     }
@@ -228,7 +222,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       mTaskWrapper.setNewTask(true);
       mTaskWrapper.setSupportBP(false);
       end = true;
-    }  else if (code == HttpURLConnection.HTTP_MOVED_TEMP
+    } else if (code == HttpURLConnection.HTTP_MOVED_TEMP
         || code == HttpURLConnection.HTTP_MOVED_PERM
         || code == HttpURLConnection.HTTP_SEE_OTHER
         || code == HttpURLConnection.HTTP_CREATED // 201 跳转

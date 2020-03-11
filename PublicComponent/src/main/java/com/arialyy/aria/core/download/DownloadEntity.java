@@ -74,13 +74,16 @@ public class DownloadEntity extends AbsNormalEntity implements Parcelable {
     return m3U8Entity;
   }
 
+  /**
+   * 如果是30x，则是30x后的地址
+   */
   @Override public String getKey() {
-    return getUrl();
+    return isRedirect() ? getRedirectUrl() : getUrl();
   }
 
   @Override public int getTaskType() {
     int type;
-    if (getUrl() == null){
+    if (getUrl() == null) {
       type = ITaskWrapper.ERROR;
     } else if (getUrl().startsWith("http")) {
       M3U8Entity temp = getM3U8Entity();

@@ -73,7 +73,7 @@ public class DownloadGroupActivity extends BaseActivity<ActivityDownloadGroupBin
         mTaskId = Aria.download(this)
             .loadGroup(mUrls)
             .setDirPath(
-                Environment.getExternalStorageDirectory().getPath() + "/Download/group_imgs")
+                Environment.getExternalStorageDirectory().getPath() + "/Download/group_imgs1")
             //.setSubFileName(getModule(GroupModule.class).getSubName2())
             .setSubFileName(getModule(GroupModule.class).getSubName())
             .unknownSize()

@@ -71,7 +71,7 @@ final class SimpleSchedulers implements Handler.Callback {
         mGState.listener.onSubRunning(loaderUtil.getEntity(), range);
         break;
       case IThreadStateManager.STATE_PRE:
-        mGState.listener.onSubPre(loaderUtil.getEntity());
+        mGState.listener.onSubPre(loaderUtil.getEntity( ));
         mGState.updateCount(loaderUtil.getKey());
         break;
       case IThreadStateManager.STATE_START:

@@ -22,8 +22,8 @@ import android.os.Message;
 import android.os.Process;
 import com.arialyy.aria.core.AriaConfig;
 import com.arialyy.aria.core.ThreadRecord;
+import com.arialyy.aria.core.common.AbsEntity;
 import com.arialyy.aria.core.common.SubThreadConfig;
-import com.arialyy.aria.core.inf.IEntity;
 import com.arialyy.aria.core.inf.IThreadStateManager;
 import com.arialyy.aria.core.listener.ISchedulers;
 import com.arialyy.aria.core.manager.ThreadTaskManager;
@@ -50,7 +50,7 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
    */
   private final int RETRY_NUM = 2;
   private final String TAG = CommonUtil.getClassName(getClass());
-  private IEntity mEntity;
+  private AbsEntity mEntity;
   protected AbsTaskWrapper mTaskWrapper;
   private int mFailTimes = 0;
   private long mLastSaveTime, mLastSendProgressTime;
@@ -147,7 +147,7 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
   /**
    * 获取实体
    */
-  protected IEntity getEntity() {
+  protected AbsEntity getEntity() {
     return mEntity;
   }
 
@@ -244,7 +244,7 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
 
   @Override public String getThreadName() {
     return mThreadName == null ? (mThreadName =
-        CommonUtil.getThreadName(getConfig().url, getThreadId())) : mThreadName;
+        CommonUtil.getThreadName(getEntity().getKey(), getThreadId())) : mThreadName;
   }
 
   /**

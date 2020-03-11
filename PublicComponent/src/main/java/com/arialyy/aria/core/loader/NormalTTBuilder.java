@@ -115,7 +115,7 @@ public final class NormalTTBuilder implements IThreadTaskBuilder {
           b = new Bundle();
         }
         b.putString(IThreadStateManager.DATA_THREAD_NAME,
-            CommonUtil.getThreadName(getEntity().getUrl(), tr.threadId));
+            CommonUtil.getThreadName(getEntity().getKey(), tr.threadId));
         msg.setData(b);
         msg.sendToTarget();
         continue;

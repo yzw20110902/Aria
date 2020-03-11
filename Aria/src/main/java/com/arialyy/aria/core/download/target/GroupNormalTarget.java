@@ -17,6 +17,7 @@ package com.arialyy.aria.core.download.target;
 
 import com.arialyy.aria.core.common.AbsNormalTarget;
 import com.arialyy.aria.core.common.HttpOption;
+import com.arialyy.aria.core.download.AbsGroupTaskWrapper;
 import com.arialyy.aria.core.download.DGTaskWrapper;
 import com.arialyy.aria.core.manager.SubTaskManager;
 import com.arialyy.aria.core.wrapper.ITaskWrapper;
@@ -71,6 +72,14 @@ public class GroupNormalTarget extends AbsNormalTarget<GroupNormalTarget> {
    */
   public GroupNormalTarget updateUrls(List<String> urls) {
     return mConfigHandler.updateUrls(urls);
+  }
+
+  /**
+   * {@code true} 忽略任务冲突，不考虑组任务hash冲突的情况
+   */
+  public GroupNormalTarget ignoreTaskOccupy() {
+    ((AbsGroupTaskWrapper) getTaskWrapper()).setIgnoreTaskOccupy(true);
+    return this;
   }
 
   /**

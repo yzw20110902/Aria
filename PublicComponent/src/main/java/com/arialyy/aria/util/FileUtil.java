@@ -61,6 +61,18 @@ public class FileUtil {
       Environment.getExternalStorageDirectory().getPath();
 
   /**
+   * 获取文件后缀名
+   * @return 获取不到文件名后缀，返回null
+   */
+  public static String getFileExtensionName(String fileName) {
+    if (TextUtils.isEmpty(fileName)) {
+      return null;
+    }
+    int endP = fileName.lastIndexOf(".");
+    return endP > -1 ? fileName.substring(endP + 1) : null;
+  }
+
+  /**
    * 通过流创建文件
    *
    * @param dest 输出路径

@@ -36,6 +36,7 @@ public class SubThreadConfig {
   public boolean isBlock = false;
   // 启动的线程
   public int startThreadNum;
+  // 真正的下载地址，如果是30x，则是30x后的地址
   public String url;
   public File tempFile;
   // 线程记录

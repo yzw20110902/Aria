@@ -58,9 +58,10 @@ public class HttpDownloadModule extends BaseViewModule {
     //String url = "https://imtt.dd.qq.com/16891/apk/70BFFDB05AB8686F2A4CF3E07588A377.apk?fsname=com.tencent.tmgp.speedmobile_1.16.0.33877_1160033877.apk&csr=1bbd";
     //String url = "https://ss1.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=a9e671b9a551f3dedcb2bf64a4eff0ec/4610b912c8fcc3cef70d70409845d688d53f20f7.jpg";
     //String filePath = AppUtil.getConfigValue(context, HTTP_PATH_KEY, defFilePath);
-    String url = "https://y.qq.com/download/import/QQMusic-import-1.2.1.zip";
+    //String url = "https://y.qq.com/download/import/QQMusic-import-1.2.1.zip";
+    String url = "https://video-hkt1-1.xx.fbcdn.net/v/t42.9040-2/89465702_658301101378505_5469280744218034176_n.mp4?_nc_cat=107&_nc_sid=985c63&efg=eyJ2ZW5jb2RlX3RhZyI6ImxlZ2FjeV9zZCJ9&_nc_oc=AQmzYwQG9vccyqr7S44-cfHc4wJ9010O1nvspG2DPV4cTct1pLrjKl1e1UmOJV99bJw&_nc_ht=video-hkt1-1.xx&oh=49bd04435aaa8b4459b8d5cb7d1e7c79&oe=5E672E37";
     //String url = "http://donuts.aigauss.com/doc_fPhW2DBGj3_1578932414.png";
-    String filePath = "/mnt/sdcard/update.zip";
+    String filePath = "/mnt/sdcard/update.mp4";
     //String url = "https://dhfspace.360drm.com/1_12809_1543904946_VID_20180808_212829.vep?e=1578554567&token=gUBmfZgZS5wy4wdQIDZG8UVxlNCyVSjvksIb13K5:WYSZRgmLbH1_9hjgqOAGmqR27JM=";
     //String filePath = "/mnt/sdcard/sssss.zip";
 

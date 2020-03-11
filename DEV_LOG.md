@@ -5,6 +5,8 @@
     - 修复wait模式下，resume(true)无效问题
     - 修复now模式下的一些问题 https://github.com/AriaLyy/Aria/issues/620
     - 修复组任务，其中一个子任务在获取文件长度失败后，重新恢复组合任务，组合任务状态变为完成的问题 https://github.com/AriaLyy/Aria/issues/628
+    - 修复组任务中，其中一个子任务是30x地址，导致调度器无法出现该子任务状态的问题
+    - 增加组任务groupHash冲突检查 https://github.com/AriaLyy/Aria/issues/635
   + v_3.8.6 (2020/2/17)
     - fix bug https://github.com/AriaLyy/Aria/issues/608
     - fix bug https://github.com/AriaLyy/Aria/issues/579#issuecomment-586665035

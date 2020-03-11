@@ -15,9 +15,7 @@
  */
 package com.arialyy.aria.core.download;
 
-import android.text.LoginFilter;
 import android.text.TextUtils;
-import android.util.Log;
 import com.arialyy.aria.core.common.RequestEnum;
 import com.arialyy.aria.core.common.controller.FeatureController;
 import com.arialyy.aria.core.inf.ICheckEntityUtil;
@@ -25,7 +23,6 @@ import com.arialyy.aria.core.inf.IOptionConstant;
 import com.arialyy.aria.orm.DbEntity;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CheckUtil;
-import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.RecordUtil;
 import java.io.File;
 import java.util.ArrayList;
@@ -46,6 +43,9 @@ public class CheckDGEntityUtil implements ICheckEntityUtil {
   private boolean needModifyPath = false;
   private int action;
 
+  /**
+   * @param action {@link FeatureController#ACTION_CREATE}
+   */
   public static CheckDGEntityUtil newInstance(DGTaskWrapper wrapper, int action) {
     return new CheckDGEntityUtil(wrapper, action);
   }
@@ -115,10 +115,36 @@ public class CheckDGEntityUtil implements ICheckEntityUtil {
     }
   }
 
+  /**
+   * 检查和处理组合任务的路径冲突
+   *
+   * @param isIgnoreTaskOccupy true，如果hash冲突，将删除其它任务的记录的
+   * @param groupHash 组任务hash
+   * @return false 任务不再执行，true 任务继续执行
+   */
+  private boolean checkGroupHash(boolean isIgnoreTaskOccupy, String groupHash) {
+    if (DbEntity.checkDataExist(DownloadGroupEntity.class, "groupHash=?", groupHash)) {
+      if (!isIgnoreTaskOccupy) {
+        ALog.e(TAG, String.format("下载失败，数据库中已存在相同的url的组任务，groupHash = %s", groupHash));
+        return false;
+      } else {
+        ALog.w(TAG, String.format("数据库中已存在相同的url的组任务，将删除groupHash = %s 的旧任务", groupHash));
+        RecordUtil.delGroupTaskRecordByHash(groupHash, true);
+        return true;
+      }
+    }
+    return true;
+  }
+
   @Override
   public boolean checkEntity() {
     if (mWrapper.getErrorEvent() != null) {
       ALog.e(TAG, String.format("任务操作失败，%s", mWrapper.getErrorEvent().errorMsg));
+      return false;
+    }
+
+    if ((action == FeatureController.ACTION_CREATE || action == FeatureController.ACTION_ADD)
+        && !checkGroupHash(mWrapper.isIgnoreTaskOccupy(), mEntity.getGroupHash())) {
       return false;
     }
 

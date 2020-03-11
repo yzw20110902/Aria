@@ -32,4 +32,17 @@ public abstract class AbsGroupTaskWrapper<ENTITY extends AbsEntity, SUB extends 
   public abstract List<SUB> getSubTaskWrapper();
 
   public abstract void setSubTaskWrapper(List<SUB> subTaskWrapper);
+
+  /**
+   * {@code true} 忽略任务冲突，不考虑组任务hash冲突的情况
+   */
+  private boolean ignoreTaskOccupy = false;
+
+  public boolean isIgnoreTaskOccupy() {
+    return ignoreTaskOccupy;
+  }
+
+  public void setIgnoreTaskOccupy(boolean ignoreTaskOccupy) {
+    this.ignoreTaskOccupy = ignoreTaskOccupy;
+  }
 }
