@@ -30,6 +30,8 @@ import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.ErrorHelp;
 import com.arialyy.aria.util.RecordUtil;
 
+import static com.arialyy.aria.core.task.AbsTask.ERROR_INFO_KEY;
+
 /**
  * Created by Aria.Lao on 2017/7/20. 任务组下载事件
  */
@@ -85,6 +87,7 @@ public class DownloadGroupListener
     handleSubSpeed(subEntity, 0);
     saveSubState(IEntity.STATE_FAIL, subEntity);
     saveCurrentLocation();
+    mSeedEntity.groupTask.putExpand(ERROR_INFO_KEY,e);
     sendInState2Target(ISchedulers.SUB_FAIL, subEntity);
     if (e != null) {
       e.printStackTrace();

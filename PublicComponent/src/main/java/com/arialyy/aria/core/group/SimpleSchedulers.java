@@ -184,6 +184,9 @@ final class SimpleSchedulers implements Handler.Callback {
         == mGState.getSubSize()) {
       if (mGState.getStopNum() == 0 && mGState.getFailNum() == 0) {
         mGState.listener.onComplete();
+      } else if(mGState.getStopNum() == 0&&!Configuration.getInstance().dGroupCfg.isSubFailAsStop() ){
+        mGState.listener.onFail(false, new AriaException(TAG,
+                String.format("任务组【%s】下载失败", mGState.getGroupHash())));
       } else {
         mGState.listener.onStop(mGState.getProgress());
       }
