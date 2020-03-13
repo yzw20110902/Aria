@@ -107,8 +107,8 @@ public class DbDataHelper {
       int lastIndex = url.lastIndexOf(File.separator);
       //去除url末尾携带的的参数
       int endIndex = url.lastIndexOf("?");
-      if(endIndex<0)endIndex=url.length();
 
+      if(endIndex<0||endIndex<lastIndex)endIndex=url.length();
       entity.setFileName(url.substring(lastIndex + 1,endIndex));
       entity.setGroupHash(groupHash);
       entity.setGroupChild(true);
