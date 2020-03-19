@@ -122,7 +122,7 @@ final class SimpleSchedulers implements Handler.Callback {
           == mGState.getSubSize()) {
         mQueue.clear();
         mGState.isRunning.set(false);
-        if (mGState.getCompleteNum() > 0) {
+        if (mGState.getCompleteNum() > 0&&Configuration.getInstance().dGroupCfg.isSubFailAsStop()) {
           ALog.e(TAG, String.format("任务组【%s】停止", mGState.getGroupHash()));
           mGState.listener.onStop(mGState.getProgress());
         } else {
