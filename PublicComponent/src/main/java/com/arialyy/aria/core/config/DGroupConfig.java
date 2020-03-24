@@ -32,6 +32,11 @@ public class DGroupConfig extends BaseTaskConfig implements Serializable {
   int subMaxTaskNum = 3;
 
   /**
+   * 子任务失败时回调stop，默认true
+   */
+  private boolean subFailAsStop = true;
+
+  /**
    * 子任务重试次数，默认为5
    */
   int subReTryNum = 5;
@@ -115,6 +120,16 @@ public class DGroupConfig extends BaseTaskConfig implements Serializable {
   public DGroupConfig setSubReTryInterval(int subReTryInterval) {
     this.subReTryInterval = subReTryInterval;
     subConfig.reTryInterval = subReTryInterval;
+    save();
+    return this;
+  }
+
+  public boolean isSubFailAsStop() {
+    return subFailAsStop;
+  }
+
+  public DGroupConfig setSubFailAsStop(boolean subFailAsStop) {
+    this.subFailAsStop = subFailAsStop;
     save();
     return this;
   }

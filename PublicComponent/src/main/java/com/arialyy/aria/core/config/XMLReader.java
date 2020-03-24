@@ -144,6 +144,10 @@ public class XMLReader extends DefaultHandler {
           int subMaxTaskNum = checkInt(value) ? Integer.parseInt(value) : 3;
           setField("subMaxTaskNum", subMaxTaskNum, ConfigType.D_GROUP);
           break;
+        case "subFailAsStop": // 子任务失败时回调stop
+          setField("subFailAsStop", checkBoolean(value) ? Boolean.valueOf(value) : false,
+                  ConfigType.D_GROUP);
+          break;
         case "subReTryNum": // 子任务重试次数
           int subReTryNum = checkInt(value) ? Integer.parseInt(value) : 5;
           setField("subReTryNum", subReTryNum, ConfigType.D_GROUP);
