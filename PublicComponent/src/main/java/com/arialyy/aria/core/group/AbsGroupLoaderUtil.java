@@ -97,6 +97,7 @@ public abstract class AbsGroupLoaderUtil implements IUtil {
       ALog.w(TAG, "启动组合任务失败，任务已停止或已取消");
       return;
     }
+    mListener.onPre();
 
     buildLoaderStructure();
     new Thread(mLoader).start();
