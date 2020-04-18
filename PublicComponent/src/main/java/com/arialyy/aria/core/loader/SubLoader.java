@@ -17,10 +17,12 @@ package com.arialyy.aria.core.loader;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.common.AbsEntity;
+import com.arialyy.aria.core.common.AbsNormalEntity;
 import com.arialyy.aria.core.common.CompleteInfo;
 import com.arialyy.aria.core.inf.IThreadStateManager;
 import com.arialyy.aria.core.manager.ThreadTaskManager;
@@ -31,6 +33,7 @@ import com.arialyy.aria.exception.AriaException;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,9 +49,10 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
   private IInfoTask infoTask;
   private IThreadTaskBuilder ttBuild;
   private IRecordHandler recordHandler;
-  private IThreadTask threadTask;
+  private List<IThreadTask> mTask = new ArrayList<>();
   private String parentKey;
   private TaskRecord record;
+  protected IThreadStateManager mStateManager;
 
   public SubLoader(AbsTaskWrapper wrapper, Handler schedulers) {
     this.wrapper = wrapper;
@@ -96,18 +100,24 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
     if (isBreak()){
       return;
     }
+    Looper looper=Looper.myLooper();
+    if(looper==null) {
+      Looper.prepare();
+      looper=Looper.myLooper();
+    }
 
     record = recordHandler.getRecord(wrapper.getEntity().getFileSize());
     if (record.threadRecords != null
-        && !TextUtils.isEmpty(record.filePath)
-        && new File(record.filePath).exists()
-        && !record.threadRecords.isEmpty()
-        && record.threadRecords.get(0).isComplete) {
+            && !TextUtils.isEmpty(record.filePath)
+            && new File(record.filePath).exists()
+            && !record.threadRecords.isEmpty()
+            && record.threadRecords.get(0).isComplete) {
       ALog.d(TAG, "子任务已完成，key：" + wrapper.getKey());
       sendNormalState(IThreadStateManager.STATE_COMPLETE);
       return;
     }
-    List<IThreadTask> task = ttBuild.buildThreadTask(record, schedulers);
+    List<IThreadTask> task = ttBuild.buildThreadTask(record, new Handler(looper, mStateManager.getHandlerCallback()));
+    mStateManager.setLooper(record, looper);
     if (task == null || task.isEmpty()) {
       ALog.e(TAG, "创建子任务的线程任务失败，key：" + wrapper.getKey());
       sendFailState(false);
@@ -118,14 +128,22 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
       sendFailState(false);
       return;
     }
+
+
     sendNormalState(IThreadStateManager.STATE_PRE);
-    threadTask = task.get(0);
+    mTask .addAll( task);
     try {
-      ThreadTaskManager.getInstance().startThread(parentKey, threadTask);
+      for (IThreadTask iThreadTask : mTask) {
+        ThreadTaskManager.getInstance().startThread(parentKey, iThreadTask);
+      }
+
       sendNormalState(IThreadStateManager.STATE_START);
+
+      mStateManager.updateCurrentProgress(getWrapper().getEntity().getCurrentProgress());
     } catch (Exception e) {
       e.printStackTrace();
     }
+    Looper.loop();
   }
 
   public TaskRecord getRecord(){
@@ -142,8 +160,10 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
 
   public void retryTask() {
     try {
-      if (threadTask != null) {
-        threadTask.call();
+      if (!mTask.isEmpty() ) {
+        for (IThreadTask iThreadTask : mTask) {
+          iThreadTask.call();
+        }
       } else {
         ALog.e(TAG, "子任务的线程任务为空");
       }
@@ -158,11 +178,19 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
       return;
     }
     isStop = true;
-    threadTask.stop();
+    for (IThreadTask iThreadTask : mTask) {
+      iThreadTask.stop();
+    }
+
   }
 
   @Override public boolean isRunning() {
-    return threadTask != null && !threadTask.isBreak();
+    if(mTask.isEmpty())
+      return false;
+    for (IThreadTask iThreadTask : mTask) {
+      if(!iThreadTask.isBreak()) return true;
+    }
+    return false;
   }
 
   @Override public void cancel() {
@@ -171,7 +199,9 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
       return;
     }
     isCancel = true;
-    threadTask.cancel();
+    for (IThreadTask iThreadTask : mTask) {
+      iThreadTask.cancel();
+    }
   }
 
   @Override public boolean isBreak() {
@@ -192,12 +222,8 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
     return CommonUtil.getThreadName(wrapper.getKey(), 0);
   }
 
-  /**
-   * @deprecated 子任务不需要实现这个
-   */
-  @Deprecated
   @Override public long getCurrentProgress() {
-    return 0;
+    return isRunning() ? mStateManager.getCurrentProgress() :  getWrapper().getEntity().getCurrentProgress();
   }
 
   @Override public void addComponent(IRecordHandler recordHandler) {
@@ -217,11 +243,8 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
     });
   }
 
-  /**
-   * @deprecated 子任务不需要实现这个
-   */
   @Override public void addComponent(IThreadStateManager threadState) {
-    // 子任务不需要实现这个
+    mStateManager = threadState;
   }
 
   @Override public void addComponent(IThreadTaskBuilder builder) {
