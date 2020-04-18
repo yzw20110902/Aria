@@ -15,14 +15,20 @@
  */
 package com.arialyy.aria.core.group;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+
 import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.download.DTaskWrapper;
 import com.arialyy.aria.core.download.DownloadEntity;
+import com.arialyy.aria.core.inf.IThreadStateManager;
 import com.arialyy.aria.core.inf.IUtil;
+import com.arialyy.aria.core.listener.IDLoadListener;
 import com.arialyy.aria.core.listener.ISchedulers;
 import com.arialyy.aria.core.loader.LoaderStructure;
 import com.arialyy.aria.core.loader.SubLoader;
+import com.arialyy.aria.exception.AriaException;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
 
@@ -91,7 +97,7 @@ public abstract class AbsSubDLoadUtil implements IUtil, Runnable {
       return;
     }
     buildLoaderStructure();
-    mDLoader.run();
+    new Thread(mDLoader).start();
   }
 
   /**

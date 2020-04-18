@@ -19,8 +19,13 @@ import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.ThreadRecord;
 import com.arialyy.aria.core.common.RecordHandler;
 import com.arialyy.aria.core.common.RecordHelper;
+import com.arialyy.aria.core.config.Configuration;
 import com.arialyy.aria.core.download.DownloadEntity;
+import com.arialyy.aria.core.loader.IRecordHandler;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
+import com.arialyy.aria.core.wrapper.ITaskWrapper;
+import com.arialyy.aria.util.RecordUtil;
+
 import java.util.ArrayList;
 
 /**
@@ -33,7 +38,17 @@ public class SubRecordHandler extends RecordHandler {
 
   @Override public void handlerTaskRecord(TaskRecord record) {
     RecordHelper helper = new RecordHelper(getWrapper(), record);
-    helper.handleSingleThreadRecord();
+    if (getWrapper().isSupportBP() && record.threadNum > 1) {
+      if (record.isBlock) {
+        helper.handleBlockRecord();
+      } else {
+        helper.handleMultiRecord();
+      }
+    } else if (!getWrapper().isSupportBP()) {
+      helper.handleNoSupportBPRecord();
+    } else {
+      helper.handleSingleThreadRecord();
+    }
   }
 
   @Override
@@ -44,9 +59,14 @@ public class SubRecordHandler extends RecordHandler {
     tr.threadId = threadId;
     tr.startLocation = startL;
     tr.isComplete = false;
-    tr.threadType = getEntity().getTaskType();
-    tr.endLocation = getFileSize();
-    tr.blockLen = getFileSize();
+
+    tr.threadType = record.taskType;
+    //最后一个线程的结束位置即为文件的总长度
+    if (threadId == (record.threadNum - 1)) {
+      endL = getFileSize();
+    }
+    tr.endLocation = endL;
+    tr.blockLen = RecordUtil.getBlockLen(getFileSize(), threadId, record.threadNum);
     return tr;
   }
 
@@ -54,20 +74,36 @@ public class SubRecordHandler extends RecordHandler {
     TaskRecord record = new TaskRecord();
     record.fileName = getEntity().getFileName();
     record.filePath = getEntity().getFilePath();
-    record.fileLength = getFileSize();
     record.threadRecords = new ArrayList<>();
     record.threadNum = threadNum;
-    record.isBlock = false;
-    record.taskType = getWrapper().getRequestType();
-    record.isGroupRecord = true;
-    if (getEntity() instanceof DownloadEntity) {
-      record.dGroupHash = ((DownloadEntity) getEntity()).getGroupHash();
+
+    int requestType = getWrapper().getRequestType();
+    if (requestType == ITaskWrapper.D_HTTP || requestType == ITaskWrapper.DG_HTTP) {
+      record.isBlock = Configuration.getInstance().downloadCfg.isUseBlock();
+    } else {
+      record.isBlock = false;
+    }
+    record.taskType = requestType;
+    record.isGroupRecord = getEntity().isGroupChild();
+    if (record.isGroupRecord) {
+      if (getEntity() instanceof DownloadEntity) {
+        record.dGroupHash = ((DownloadEntity) getEntity()).getGroupHash();
+      }
     }
 
     return record;
   }
 
   @Override public int initTaskThreadNum() {
-    return 1;
+    int requestTpe = getWrapper().getRequestType();
+    if (requestTpe == ITaskWrapper.U_HTTP
+            || (requestTpe == ITaskWrapper.D_HTTP && (!getWrapper().isSupportBP())
+    )) {
+      return 1;
+    }
+    int threadNum = Configuration.getInstance().downloadCfg.getThreadNum();
+    return getFileSize() <= IRecordHandler.SUB_LEN
+            ? 1
+            : threadNum;
   }
 }
