@@ -14,7 +14,7 @@
     <!-- http://aria.laoyuyu.me/aria_doc/api/use_broadcast.html -->
     <useBroadcast value="false"/>
     <!--断网的时候是否重试，true：断网也重试；false：断网不重试，直接走失败的回调-->
-    <notNetRetry value="false"/>
+    <notNetRetry value="true"/>
   </app>
 
 

@@ -23,6 +23,7 @@ import com.arialyy.aria.core.loader.IRecordHandler;
 import com.arialyy.aria.core.inf.TaskSchedulerType;
 import com.arialyy.aria.core.task.AbsTask;
 import com.arialyy.aria.util.CommonUtil;
+import com.arialyy.aria.util.DeleteDRecord;
 import com.arialyy.aria.util.RecordUtil;
 
 /**
@@ -55,11 +56,15 @@ public class BaseDListener extends BaseListener<DownloadEntity, DTaskWrapper, Ab
     if (sType == TaskSchedulerType.TYPE_CANCEL_AND_NOT_NOTIFY) {
       mEntity.setComplete(false);
       mEntity.setState(IEntity.STATE_WAIT);
-      RecordUtil.delTaskRecord(mEntity.getFilePath(), IRecordHandler.TYPE_DOWNLOAD,
-          mTaskWrapper.isRemoveFile(), false);
+
+      DeleteDRecord.getInstance().deleteRecord(mEntity, mTaskWrapper.isRemoveFile(), false);
+      //RecordUtil.delTaskRecord(mEntity.getFilePath(), IRecordHandler.TYPE_DOWNLOAD,
+      //    mTaskWrapper.isRemoveFile(), false);
     } else {
-      RecordUtil.delTaskRecord(mEntity.getFilePath(), IRecordHandler.TYPE_DOWNLOAD,
-          mTaskWrapper.isRemoveFile(), true);
+      //RecordUtil.delTaskRecord(mEntity.getFilePath(), IRecordHandler.TYPE_DOWNLOAD,
+      //    mTaskWrapper.isRemoveFile(), true);
+
+      DeleteDRecord.getInstance().deleteRecord(mEntity, mTaskWrapper.isRemoveFile(), true);
     }
   }
 }

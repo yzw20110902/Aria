@@ -17,6 +17,7 @@
 package com.arialyy.aria.core.queue;
 
 import android.text.TextUtils;
+import android.util.Log;
 import com.arialyy.aria.core.common.AbsEntity;
 import com.arialyy.aria.core.inf.IEntity;
 import com.arialyy.aria.core.inf.TaskSchedulerType;
@@ -233,6 +234,7 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
     if (task == null) {
       task = mCachePool.getTask(key);
     }
+    ALog.i(TAG, "获取任务，key：" + key);
     return task;
   }
 
@@ -263,6 +265,7 @@ public abstract class AbsTaskQueue<TASK extends AbsTask, TASK_WRAPPER extends Ab
       ALog.w(TAG, String.format("任务【%s】执行中", task.getKey()));
       return;
     }
+    ALog.i(TAG, "添加任务，key：" + task.getKey());
     mCachePool.removeTask(task);
     mExecutePool.putTask(task);
     task.getTaskWrapper().getEntity().setFailNum(0);

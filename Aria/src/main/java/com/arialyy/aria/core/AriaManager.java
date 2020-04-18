@@ -43,6 +43,8 @@ import com.arialyy.aria.orm.DbEntity;
 import com.arialyy.aria.orm.DelegateWrapper;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.AriaCrashHandler;
+import com.arialyy.aria.util.DeleteDGRecord;
+import com.arialyy.aria.util.DeleteURecord;
 import com.arialyy.aria.util.RecordUtil;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -285,7 +287,7 @@ import java.util.concurrent.ConcurrentHashMap;
         RecordUtil.delGroupTaskRecordByHash(key, removeFile);
         break;
       case 3:
-        RecordUtil.delTaskRecord(key, IRecordHandler.TYPE_UPLOAD);
+        DeleteURecord.getInstance().deleteRecord(key, removeFile, true);
         break;
     }
   }

@@ -176,7 +176,7 @@ final public class M3U8InfoTask implements IInfoTask {
           } else if (bandWidth == setBand) {
             handleBandWidth(conn, reader.readLine());
           } else {
-            failDownload(String.format("【%s】码率不存在", bandWidth), false);
+            failDownload(String.format("【%s】码率不存在", setBand), false);
           }
           return;
         } else if (line.startsWith("#EXT-X-KEY")) {

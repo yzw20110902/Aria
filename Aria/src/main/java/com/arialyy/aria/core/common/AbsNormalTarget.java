@@ -23,6 +23,7 @@ import com.arialyy.aria.core.inf.IEntity;
 import com.arialyy.aria.core.manager.TaskWrapperManager;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
+import com.arialyy.aria.util.DeleteDGRecord;
 import com.arialyy.aria.util.RecordUtil;
 
 /**
@@ -82,11 +83,10 @@ public abstract class AbsNormalTarget<TARGET extends AbsNormalTarget> extends Ab
       cancel();
     } else {
       if (getEntity() instanceof AbsNormalEntity) {
-        RecordUtil.delTaskRecord((AbsNormalEntity) getEntity(), getTaskWrapper().isRemoveFile());
+        RecordUtil.delNormalTaskRecord((AbsNormalEntity) getEntity(), getTaskWrapper().isRemoveFile());
       } else if (getEntity() instanceof DownloadGroupEntity) {
-        RecordUtil.delGroupTaskRecord(((DownloadGroupEntity) getEntity()),
-            getTaskWrapper().isRemoveFile(),
-            true);
+        DeleteDGRecord.getInstance()
+            .deleteRecord(getEntity(), getTaskWrapper().isRemoveFile(), true);
       }
       TaskWrapperManager.getInstance().removeTaskWrapper(getTaskWrapper());
     }

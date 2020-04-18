@@ -27,8 +27,8 @@ import com.arialyy.aria.core.task.DownloadGroupTask;
 import com.arialyy.aria.exception.AriaException;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
+import com.arialyy.aria.util.DeleteDGRecord;
 import com.arialyy.aria.util.ErrorHelp;
-import com.arialyy.aria.util.RecordUtil;
 
 import static com.arialyy.aria.core.task.AbsTask.ERROR_INFO_KEY;
 
@@ -87,7 +87,7 @@ public class DownloadGroupListener
     handleSubSpeed(subEntity, 0);
     saveSubState(IEntity.STATE_FAIL, subEntity);
     saveCurrentLocation();
-    mSeedEntity.groupTask.putExpand(ERROR_INFO_KEY,e);
+    mSeedEntity.groupTask.putExpand(ERROR_INFO_KEY, e);
     sendInState2Target(ISchedulers.SUB_FAIL, subEntity);
     if (e != null) {
       e.printStackTrace();
@@ -197,9 +197,9 @@ public class DownloadGroupListener
     if (sType == TaskSchedulerType.TYPE_CANCEL_AND_NOT_NOTIFY) {
       mEntity.setComplete(false);
       mEntity.setState(IEntity.STATE_WAIT);
-      RecordUtil.delGroupTaskRecord(mEntity, mTaskWrapper.isRemoveFile(), false);
+      DeleteDGRecord.getInstance().deleteRecord(mEntity, mTaskWrapper.isRemoveFile(), false);
     } else {
-      RecordUtil.delGroupTaskRecord(mEntity, mTaskWrapper.isRemoveFile(), true);
+      DeleteDGRecord.getInstance().deleteRecord(mEntity, mTaskWrapper.isRemoveFile(), true);
     }
   }
 }

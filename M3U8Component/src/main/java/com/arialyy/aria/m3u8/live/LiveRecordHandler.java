@@ -22,6 +22,7 @@ import com.arialyy.aria.core.loader.IRecordHandler;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.core.wrapper.ITaskWrapper;
 import com.arialyy.aria.m3u8.M3U8TaskOption;
+import com.arialyy.aria.util.DeleteM3u8Record;
 import com.arialyy.aria.util.RecordUtil;
 import java.util.ArrayList;
 
@@ -41,7 +42,7 @@ final class LiveRecordHandler extends RecordHandler {
 
   @Override public void onPre() {
     super.onPre();
-    RecordUtil.delTaskRecord(getEntity().getFilePath(), IRecordHandler.TYPE_DOWNLOAD);
+    DeleteM3u8Record.getInstance().deleteRecord(getEntity().getFilePath(), true, true);
   }
 
   /**

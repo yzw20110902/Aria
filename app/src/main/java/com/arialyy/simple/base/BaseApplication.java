@@ -34,7 +34,7 @@ public class BaseApplication extends Application {
     super.onCreate();
     INSTANCE = this;
     AbsFrame.init(this);
-    //Aria.init(this);
+    Aria.init(this);
     if (BuildConfig.DEBUG) {
       //StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
       //    .detectAll()

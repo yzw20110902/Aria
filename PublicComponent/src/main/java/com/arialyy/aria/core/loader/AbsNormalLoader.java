@@ -16,6 +16,7 @@
 package com.arialyy.aria.core.loader;
 
 import android.os.Looper;
+import android.util.Log;
 import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.inf.IThreadStateManager;
 import com.arialyy.aria.core.listener.IEventListener;
@@ -154,33 +155,43 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
     if (isBreak()) {
       return;
     }
-    ALog.d(TAG, "启动定时器");
-    mTimer = new ScheduledThreadPoolExecutor(1);
-    mTimer.scheduleWithFixedDelay(new Runnable() {
-      @Override public void run() {
-        // 线程池中是不抛异常的，没有日志，很难定位问题，需要手动try-catch
-        try {
-          if (mStateManager == null) {
-            ALog.e(TAG, "stateManager is null");
-          } else if (mStateManager.isComplete()
-              || mStateManager.isFail()
-              || !isRunning()
-              || isBreak()) {
-            //ALog.d(TAG, "isComplete = " + mStateManager.isComplete()
-            //    + "; isFail = " + mStateManager.isFail()
-            //    + "; isRunning = " + isRunning()
-            //    + "; isBreak = " + isBreak());
-            ThreadTaskManager.getInstance().removeTaskThread(mTaskWrapper.getKey());
-            closeTimer();
-            onDestroy();
-          } else if (mStateManager.getCurrentProgress() >= 0) {
-            mListener.onProgress(mStateManager.getCurrentProgress());
+    ALog.d(TAG, String.format("启动定时器，delayTimer = %s, updateInterval = %s", delayTimer(),
+        mUpdateInterval));
+    closeTimer();
+    try {
+      mTimer = new ScheduledThreadPoolExecutor(1);
+      mTimer.scheduleWithFixedDelay(new Runnable() {
+        @Override public void run() {
+          // 线程池中是不抛异常的，没有日志，很难定位问题，需要手动try-catch
+          try {
+            if (mStateManager == null) {
+              ALog.e(TAG, "stateManager is null");
+            } else if (mStateManager.isComplete()
+                || mStateManager.isFail()
+                || !isRunning()
+                || isBreak()) {
+              //ALog.d(TAG, "isComplete = " + mStateManager.isComplete()
+              //    + "; isFail = " + mStateManager.isFail()
+              //    + "; isRunning = " + isRunning()
+              //    + "; isBreak = " + isBreak());
+              ThreadTaskManager.getInstance().removeTaskThread(mTaskWrapper.getKey());
+              closeTimer();
+              onDestroy();
+            } else if (mStateManager.getCurrentProgress() >= 0) {
+              Log.d(TAG, "running...");
+              mListener.onProgress(mStateManager.getCurrentProgress());
+            } else {
+              Log.d(TAG, "未知状态");
+            }
+          } catch (Exception e) {
+            e.printStackTrace();
           }
-        } catch (Exception e) {
-          e.printStackTrace();
         }
-      }
-    }, delayTimer(), mUpdateInterval, TimeUnit.MILLISECONDS);
+      }, delayTimer(), mUpdateInterval, TimeUnit.MILLISECONDS);
+    } catch (Exception e) {
+      ALog.e(TAG, "启动定时器失败");
+      e.printStackTrace();
+    }
   }
 
   private synchronized void closeTimer() {

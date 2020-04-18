@@ -45,7 +45,7 @@ task clean(type: Delete) {
 
 ext {
   versionCode = 387
-  versionName = '3.8.7-beta-8'
+  versionName = '3.8.7-beta-11'
   userOrg = 'arialyy'
   groupId = 'com.arialyy.aria'
   publishVersion = versionName

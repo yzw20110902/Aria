@@ -19,8 +19,8 @@ package com.arialyy.aria.util;
 import android.text.TextUtils;
 import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.download.DownloadGroupEntity;
-import com.arialyy.aria.core.loader.IRecordHandler;
 import com.arialyy.aria.core.upload.UploadEntity;
+import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.orm.DbEntity;
 import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
@@ -78,16 +78,17 @@ public class CheckUtil {
    *
    * @param isForceDownload true，如果路径冲突，将删除其它任务的记录的
    * @param filePath 文件保存路径
+   * @param type {@link AbsTaskWrapper#getRequestType()}
    * @return false 任务不再执行，true 任务继续执行
    */
-  public static boolean checkDPathConflicts(boolean isForceDownload, String filePath) {
+  public static boolean checkDPathConflicts(boolean isForceDownload, String filePath, int type) {
     if (DbEntity.checkDataExist(DownloadEntity.class, "downloadPath=?", filePath)) {
       if (!isForceDownload) {
         ALog.e(TAG, String.format("下载失败，保存路径【%s】已经被其它任务占用，请设置其它保存路径", filePath));
         return false;
       } else {
         ALog.w(TAG, String.format("保存路径【%s】已经被其它任务占用，当前任务将覆盖该路径的文件", filePath));
-        RecordUtil.delTaskRecord(filePath, IRecordHandler.TYPE_DOWNLOAD);
+        RecordUtil.delTaskRecord(filePath, type, false, true);
         return true;
       }
     }
@@ -99,16 +100,17 @@ public class CheckUtil {
    *
    * @param isForceUpload true，如果路径冲突，将删除其它任务的记录的
    * @param filePath 文件保存路径
+   * @param type {@link AbsTaskWrapper#getRequestType()}
    * @return false 任务不再执行，true 任务继续执行
    */
-  public static boolean checkUPathConflicts(boolean isForceUpload, String filePath) {
+  public static boolean checkUPathConflicts(boolean isForceUpload, String filePath, int type) {
     if (DbEntity.checkDataExist(UploadEntity.class, "filePath=?", filePath)) {
       if (!isForceUpload) {
         ALog.e(TAG, String.format("上传失败，文件路径【%s】已经被其它任务占用，请设置其它文件路径", filePath));
         return false;
       } else {
         ALog.w(TAG, String.format("文件路径【%s】已经被其它任务占用，当前任务将覆盖该路径的文件", filePath));
-        RecordUtil.delTaskRecord(filePath, IRecordHandler.TYPE_UPLOAD);
+        RecordUtil.delTaskRecord(filePath, type, false, true);
         return true;
       }
     }
@@ -129,7 +131,7 @@ public class CheckUtil {
         return false;
       } else {
         ALog.w(TAG, String.format("文件夹路径【%s】已经被其它任务占用，当前任务将覆盖该路径", dirPath));
-        RecordUtil.delGroupTaskRecordByPath(dirPath, false);
+        DeleteDGRecord.getInstance().deleteRecord(dirPath, false, true);
         return true;
       }
     }

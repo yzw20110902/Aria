@@ -39,7 +39,7 @@ public class UploadTask extends AbsTask<UTaskWrapper> {
   }
 
   @Override public String getKey() {
-    return mTaskWrapper.getEntity().getFilePath();
+    return mTaskWrapper.getEntity().getKey();
   }
 
   public UploadEntity getEntity() {

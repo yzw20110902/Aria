@@ -311,7 +311,7 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
         .setVodTsUrlConvert(new VodTsUrlConverter());
     //.setMergeHandler(new TsMergeHandler());
     option.setKeyUrlConverter(new KeyUrlConverter());
-    //option.setBandWidthUrlConverter(new BandWidthUrlConverter(mUrl));
+    option.setBandWidthUrlConverter(new BandWidthUrlConverter(mUrl));
     return option;
   }
 
@@ -327,10 +327,11 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
   static class VodTsUrlConverter implements IVodTsUrlConverter {
     @Override public List<String> convert(String m3u8Url, List<String> tsUrls) {
       Uri uri = Uri.parse(m3u8Url);
+      String parentUrl = "http://devimages.apple.com/iphone/samples/bipbop/gear1/";
       //String parentUrl = "http://" + uri.getHost() + "/gear1/";
-      int index = m3u8Url.lastIndexOf("/");
+      //int index = m3u8Url.lastIndexOf("/");
       //String parentUrl = m3u8Url.substring(0, index + 1);
-      String parentUrl = "https://135zyv5.xw0371.com/2018/10/29/X05c7CG3VB91gi1M/";
+      //String parentUrl = "https://v1.szjal.cn/20190819/Ql6UD1od/";
       //String parentUrl = "http://" + uri.getHost() + "/";
       List<String> newUrls = new ArrayList<>();
       for (String url : tsUrls) {

@@ -19,7 +19,9 @@
   <string name="completed">已完成</string>
   <string name="code_simple">代码示例：</string>
   <string name="download_success">下载完成</string>
+  <string name="upload_success">上传完成</string>
   <string name="download_fail">下载失败</string>
+  <string name="upload_fail">上传失败</string>
   <string name="re_start">重新开始</string>
   <string name="choose_current_dir">选择当前文件夹</string>
   <string name="choose_dir">选择文件夹</string>

@@ -75,9 +75,13 @@ public class DownloadEntity extends AbsNormalEntity implements Parcelable {
   }
 
   /**
-   * 如果是30x，则是30x后的地址
+   * 设置进来的地址，如果需要获取真实的下载地址，请使用{@link #getRealUrl()}
    */
   @Override public String getKey() {
+    return getUrl();
+  }
+
+  public String getRealUrl(){
     return isRedirect() ? getRedirectUrl() : getUrl();
   }
 

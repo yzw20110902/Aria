@@ -94,7 +94,7 @@ public class FtpUploadActivity extends BaseActivity<ActivitySingleBinding> {
       }
 
       @Override public void cancel(View v, AbsEntity entity) {
-        Aria.upload(this).loadFtp(mTaskId).cancel(false);
+        Aria.upload(this).loadFtp(mTaskId).cancel(true);
         mTaskId = -1;
       }
     });
@@ -135,7 +135,7 @@ public class FtpUploadActivity extends BaseActivity<ActivitySingleBinding> {
 
   @Upload.onWait
   void onWait(UploadTask task) {
-    if (task.getKey().equals(mUrl)) {
+    if (task.getEntity().getUrl().equals(mUrl)) {
       Log.d(TAG, "wait ==> " + task.getEntity().getFileName());
       getBinding().pl.setInfo(task.getEntity());
     }
@@ -143,14 +143,14 @@ public class FtpUploadActivity extends BaseActivity<ActivitySingleBinding> {
 
   @Upload.onPre
   protected void onPre(UploadTask task) {
-    if (task.getKey().equals(mUrl)) {
+    if (task.getEntity().getUrl().equals(mUrl)) {
       getBinding().pl.setInfo(task.getEntity());
     }
   }
 
   @Upload.onTaskStart
   void taskStart(UploadTask task) {
-    if (task.getKey().equals(mUrl)) {
+    if (task.getEntity().getUrl().equals(mUrl)) {
       getBinding().pl.setInfo(task.getEntity());
       ALog.d(TAG, "isComplete = " + task.isComplete() + ", state = " + task.getState());
     }
@@ -158,7 +158,7 @@ public class FtpUploadActivity extends BaseActivity<ActivitySingleBinding> {
 
   @Upload.onTaskRunning
   protected void running(UploadTask task) {
-    if (task.getKey().equals(mUrl)) {
+    if (task.getEntity().getUrl().equals(mUrl)) {
       ALog.d(TAG, "isRunning" + "; state = " + task.getEntity().getState());
       getBinding().pl.setInfo(task.getEntity());
     }
@@ -166,7 +166,8 @@ public class FtpUploadActivity extends BaseActivity<ActivitySingleBinding> {
 
   @Upload.onTaskResume
   void taskResume(UploadTask task) {
-    if (task.getKey().equals(mUrl)) {
+    if (task.getEntity().getUrl().equals(mUrl)) {
+      getBinding().pl.setInfo(task.getEntity());
       ALog.d(TAG, "resume");
       getBinding().pl.setInfo(task.getEntity());
     }
@@ -174,7 +175,7 @@ public class FtpUploadActivity extends BaseActivity<ActivitySingleBinding> {
 
   @Upload.onTaskStop
   void taskStop(UploadTask task) {
-    if (task.getKey().equals(mUrl)) {
+    if (task.getEntity().getUrl().equals(mUrl)) {
       ALog.d(TAG, "stop");
       getBinding().pl.setInfo(task.getEntity());
     }
@@ -182,7 +183,7 @@ public class FtpUploadActivity extends BaseActivity<ActivitySingleBinding> {
 
   @Upload.onTaskCancel
   void taskCancel(UploadTask task) {
-    if (task.getKey().equals(mUrl)) {
+    if (task.getEntity().getUrl().equals(mUrl)) {
       mTaskId = -1;
       Log.d(TAG, "cancel");
       getBinding().pl.setInfo(task.getEntity());
@@ -192,17 +193,17 @@ public class FtpUploadActivity extends BaseActivity<ActivitySingleBinding> {
   @Upload.onTaskFail
   void taskFail(UploadTask task, Exception e) {
     ALog.d(TAG, "fail");
-    Toast.makeText(this, getString(R.string.download_fail), Toast.LENGTH_SHORT)
+    Toast.makeText(this, getString(R.string.upload_fail), Toast.LENGTH_SHORT)
         .show();
-    if (task != null && task.getKey().equals(mUrl)) {
+    if (task != null && task.getEntity().getUrl().equals(mUrl)) {
       getBinding().pl.setInfo(task.getEntity());
     }
   }
 
   @Upload.onTaskComplete
   void taskComplete(UploadTask task) {
-    if (task.getKey().equals(mUrl)) {
-      Toast.makeText(this, getString(R.string.download_success),
+    if (task.getEntity().getUrl().equals(mUrl)) {
+      Toast.makeText(this, getString(R.string.upload_success),
           Toast.LENGTH_SHORT).show();
       ALog.d(TAG, "md5: " + CommonUtil.getFileMD5(new File(task.getEntity().getFilePath())));
       getBinding().pl.setInfo(task.getEntity());

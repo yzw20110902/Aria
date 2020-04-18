@@ -25,12 +25,14 @@ import com.arialyy.aria.core.inf.IThreadStateManager;
 import com.arialyy.aria.core.listener.IDLoadListener;
 import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.manager.ThreadTaskManager;
+import com.arialyy.aria.core.task.AbsTask;
 import com.arialyy.aria.core.task.IThreadTask;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.exception.AriaException;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.FileUtil;
 import java.io.File;
+import java.util.List;
 
 /**
  * 单文件
@@ -129,6 +131,8 @@ public class NormalLoader<T extends AbsTaskWrapper> extends AbsNormalLoader<T> {
     for (IThreadTask threadTask : getTaskList()) {
       ThreadTaskManager.getInstance().startThread(mTaskWrapper.getKey(), threadTask);
     }
+
+    List<IThreadTask> list = getTaskList();
 
     // 启动定时器
     startTimer();

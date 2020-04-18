@@ -58,7 +58,11 @@ final class FtpUThreadTaskAdapter extends BaseFtpThreadTaskAdapter {
         return;
       }
       initPath();
-      client.makeDirectory(dir);
+      boolean b = client.makeDirectory(dir);
+      if (!b) {
+        ALog.w(TAG, String.format("创建目录失败，错误码为：%s, msg：%s", client.getReplyCode(),
+            client.getReplyString()));
+      }
       client.changeWorkingDirectory(dir);
       client.setRestartOffset(getThreadRecord().startLocation);
       int reply = client.getReplyCode();

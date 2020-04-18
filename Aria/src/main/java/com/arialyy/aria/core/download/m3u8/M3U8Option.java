@@ -76,7 +76,7 @@ public class M3U8Option<OP extends M3U8Option> extends BaseOption {
   }
 
   /**
-   * 是否合并ts文件，默认合并ts
+   * 下载完成后，将所有的切片合并为一个文件
    *
    * @param mergeFile {@code true}合并所有ts文件为一个
    */

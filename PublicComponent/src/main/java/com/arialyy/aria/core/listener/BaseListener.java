@@ -180,7 +180,6 @@ public abstract class BaseListener<ENTITY extends AbsEntity, TASK_WRAPPER extend
 
   protected void saveData(int state, long location) {
     mEntity.setState(state);
-    mEntity.setComplete(false);
 
     if (state == IEntity.STATE_CANCEL) {
       handleCancel();

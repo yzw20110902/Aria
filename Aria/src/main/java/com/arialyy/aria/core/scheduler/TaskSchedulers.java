@@ -18,6 +18,7 @@ package com.arialyy.aria.core.scheduler;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import com.arialyy.annotations.TaskEnum;
 import com.arialyy.aria.core.AriaConfig;
 import com.arialyy.aria.core.common.AbsEntity;

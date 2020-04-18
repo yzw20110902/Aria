@@ -17,12 +17,11 @@ package com.arialyy.aria.core.listener;
 
 import android.os.Handler;
 import com.arialyy.aria.core.inf.IEntity;
-import com.arialyy.aria.core.loader.IRecordHandler;
 import com.arialyy.aria.core.inf.TaskSchedulerType;
 import com.arialyy.aria.core.task.AbsTask;
 import com.arialyy.aria.core.upload.UTaskWrapper;
 import com.arialyy.aria.core.upload.UploadEntity;
-import com.arialyy.aria.util.RecordUtil;
+import com.arialyy.aria.util.DeleteURecord;
 
 /**
  * 下载监听类
@@ -39,11 +38,9 @@ public class BaseUListener extends BaseListener<UploadEntity, UTaskWrapper, AbsT
     if (sType == TaskSchedulerType.TYPE_CANCEL_AND_NOT_NOTIFY) {
       mEntity.setComplete(false);
       mEntity.setState(IEntity.STATE_WAIT);
-      RecordUtil.delTaskRecord(mEntity.getFilePath(), IRecordHandler.TYPE_UPLOAD,
-          mTaskWrapper.isRemoveFile(), false);
+      DeleteURecord.getInstance().deleteRecord(mEntity, mTaskWrapper.isRemoveFile(), false);
     } else {
-      RecordUtil.delTaskRecord(mEntity.getFilePath(), IRecordHandler.TYPE_UPLOAD,
-          mTaskWrapper.isRemoveFile(), true);
+      DeleteURecord.getInstance().deleteRecord(mEntity, mTaskWrapper.isRemoveFile(), true);
     }
   }
 }

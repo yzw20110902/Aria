@@ -144,20 +144,20 @@ public class AriaConfig {
 
         @Override public void onLost(Network network) {
           super.onLost(network);
-          isConnectedNet = false;
-          ALog.d(TAG, "onLost");
+          isConnectedNet = isNetworkAvailable();
+          ALog.d(TAG, "onLost, isConnectNet = " + isConnectedNet);
         }
 
         @Override public void onAvailable(Network network) {
           super.onAvailable(network);
-          ALog.d(TAG, "onAvailable");
           isConnectedNet = true;
+          ALog.d(TAG, "onAvailable, isConnectNet = true");
         }
       });
     }
   }
 
-  public boolean isNetworkAvailable() {
+  private boolean isNetworkAvailable() {
     // 获取手机所有连接管理对象（包括对wi-fi,net等连接的管理）
     ConnectivityManager connectivityManager =
         (ConnectivityManager) getAPP().getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -32,7 +32,7 @@ import com.arialyy.aria.ftp.FtpTaskOption;
 import com.arialyy.aria.orm.DbEntity;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
-import com.arialyy.aria.util.RecordUtil;
+import com.arialyy.aria.util.DeleteDGRecord;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -236,6 +236,6 @@ final class FtpDGInfoTask extends AbsFtpInfoTask<DownloadGroupEntity, DGTaskWrap
   @Override
   protected void failDownload(FTPClient client, String msg, Exception e, boolean needRetry) {
     super.failDownload(client, msg, e, needRetry);
-    RecordUtil.delGroupTaskRecord(mTaskWrapper.getEntity(), true, true);
+    DeleteDGRecord.getInstance().deleteRecord(mTaskWrapper.getEntity(), true, true);
   }
 }

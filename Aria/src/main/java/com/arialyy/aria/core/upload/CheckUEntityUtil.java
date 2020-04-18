@@ -61,8 +61,9 @@ public class CheckUEntityUtil implements ICheckEntityUtil {
       return false;
     }
     // 任务是新任务，并且路径冲突就不会继续执行
-    if (mWrapper.isNewTask() && !CheckUtil.checkUPathConflicts(
-        mWrapper.isIgnoreFilePathOccupy(), filePath)) {
+    if (mWrapper.isNewTask()
+        && !CheckUtil.checkUPathConflicts(mWrapper.isIgnoreFilePathOccupy(), filePath,
+        mWrapper.getRequestType())) {
       return false;
     }
 

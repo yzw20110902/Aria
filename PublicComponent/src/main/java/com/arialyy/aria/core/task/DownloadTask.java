@@ -63,7 +63,7 @@ public class DownloadTask extends AbsTask<DTaskWrapper> {
   }
 
   @Override public String getKey() {
-    return mTaskWrapper.getEntity().getUrl();
+    return mTaskWrapper.getEntity().getKey();
   }
 
   public DownloadEntity getDownloadEntity() {

@@ -19,17 +19,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import com.arialyy.aria.core.download.DTaskWrapper;
+import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.inf.IEntity;
-import com.arialyy.aria.core.listener.BaseDListener;
+import com.arialyy.aria.core.inf.TaskSchedulerType;
+import com.arialyy.aria.core.listener.BaseListener;
 import com.arialyy.aria.core.listener.IDLoadListener;
 import com.arialyy.aria.core.listener.ISchedulers;
 import com.arialyy.aria.core.task.AbsTask;
 import com.arialyy.aria.util.CommonUtil;
+import com.arialyy.aria.util.DeleteM3u8Record;
 
 /**
  * 下载监听类
  */
-public final class M3U8Listener extends BaseDListener implements IDLoadListener {
+public final class M3U8Listener
+    extends BaseListener<DownloadEntity, DTaskWrapper, AbsTask<DTaskWrapper>>
+    implements IDLoadListener {
 
   public M3U8Listener(AbsTask<DTaskWrapper> task, Handler outHandler) {
     super(task, outHandler);
@@ -41,6 +46,12 @@ public final class M3U8Listener extends BaseDListener implements IDLoadListener 
     mEntity.setConvertFileSize(CommonUtil.formatFileSize(fileSize));
     saveData(IEntity.STATE_POST_PRE, -1);
     sendInState2Target(ISchedulers.POST_PRE);
+  }
+
+  @Override public void supportBreakpoint(boolean support) {
+    if (!support) {
+      sendInState2Target(ISchedulers.NO_SUPPORT_BREAK_POINT);
+    }
   }
 
   /**
@@ -74,5 +85,16 @@ public final class M3U8Listener extends BaseDListener implements IDLoadListener 
     msg.what = state;
     msg.arg1 = ISchedulers.IS_M3U8_PEER;
     msg.sendToTarget();
+  }
+
+  @Override protected void handleCancel() {
+    int sType = getTask().getSchedulerType();
+    if (sType == TaskSchedulerType.TYPE_CANCEL_AND_NOT_NOTIFY) {
+      mEntity.setComplete(false);
+      mEntity.setState(IEntity.STATE_WAIT);
+      DeleteM3u8Record.getInstance().deleteRecord(mEntity, mTaskWrapper.isRemoveFile(), false);
+    } else {
+      DeleteM3u8Record.getInstance().deleteRecord(mEntity, mTaskWrapper.isRemoveFile(), true);
+    }
   }
 }

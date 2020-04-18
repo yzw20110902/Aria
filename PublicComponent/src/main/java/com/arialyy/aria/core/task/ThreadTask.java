@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
+import android.util.Log;
 import com.arialyy.aria.core.AriaConfig;
 import com.arialyy.aria.core.ThreadRecord;
 import com.arialyy.aria.core.common.AbsEntity;
@@ -457,7 +458,7 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
       ThreadTaskManager.getInstance().retryThread(this);
     } else {
       ALog.e(TAG, String.format("任务【%s】执行失败", getFileName()));
-      sendFailMsg(null, false);
+      sendFailMsg(null, needRetry);
     }
   }
 

@@ -118,7 +118,7 @@ public class SingleTaskActivity extends BaseActivity<ActivitySingleBinding> {
       }
 
       @Override public void cancel(View v, AbsEntity entity) {
-        Aria.download(this).load(mTaskId).cancel();
+        Aria.download(this).load(mTaskId).cancel(true);
       }
     });
   }
