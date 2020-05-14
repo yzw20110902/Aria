@@ -49,7 +49,7 @@ final class SqlUtil {
   /**
    * 检查表是否存在，不存在则创建表
    */
-  static void checkTable(SQLiteDatabase db, Class<? extends DbEntity> clazz) {
+  static void checkOrCreateTable(SQLiteDatabase db, Class<? extends DbEntity> clazz) {
     if (!tableExists(db, clazz)) {
       createTable(db, clazz);
     }

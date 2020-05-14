@@ -132,8 +132,6 @@ public class NormalLoader<T extends AbsTaskWrapper> extends AbsNormalLoader<T> {
       ThreadTaskManager.getInstance().startThread(mTaskWrapper.getKey(), threadTask);
     }
 
-    List<IThreadTask> list = getTaskList();
-
     // 启动定时器
     startTimer();
   }

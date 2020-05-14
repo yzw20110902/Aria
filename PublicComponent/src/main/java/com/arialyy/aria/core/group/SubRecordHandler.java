@@ -25,7 +25,6 @@ import com.arialyy.aria.core.loader.IRecordHandler;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.core.wrapper.ITaskWrapper;
 import com.arialyy.aria.util.RecordUtil;
-
 import java.util.ArrayList;
 
 /**
@@ -97,13 +96,13 @@ public class SubRecordHandler extends RecordHandler {
   @Override public int initTaskThreadNum() {
     int requestTpe = getWrapper().getRequestType();
     if (requestTpe == ITaskWrapper.U_HTTP
-            || (requestTpe == ITaskWrapper.D_HTTP && (!getWrapper().isSupportBP())
+        || (requestTpe == ITaskWrapper.D_HTTP && (!getWrapper().isSupportBP())
     )) {
       return 1;
     }
     int threadNum = Configuration.getInstance().downloadCfg.getThreadNum();
     return getFileSize() <= IRecordHandler.SUB_LEN
-            ? 1
-            : threadNum;
+        ? 1
+        : threadNum;
   }
 }

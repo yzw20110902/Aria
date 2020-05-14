@@ -38,7 +38,7 @@ class DelegateUpdate extends AbsDelegate {
    */
   synchronized <T extends DbEntity> void delData(SQLiteDatabase db, Class<T> clazz,
       String... expression) {
-    SqlUtil.checkTable(db, clazz);
+    SqlUtil.checkOrCreateTable(db, clazz);
     db = checkDb(db);
     if (!CommonUtil.checkSqlExpression(expression)) {
       return;
@@ -58,7 +58,7 @@ class DelegateUpdate extends AbsDelegate {
    * 修改某行数据
    */
   synchronized void updateData(SQLiteDatabase db, DbEntity dbEntity) {
-    SqlUtil.checkTable(db, dbEntity.getClass());
+    SqlUtil.checkOrCreateTable(db, dbEntity.getClass());
     db = checkDb(db);
     ContentValues values = createValues(dbEntity);
     if (values != null) {
@@ -111,7 +111,7 @@ class DelegateUpdate extends AbsDelegate {
         if (oldClazz == null || oldClazz != entity.getClass() || table == null) {
           oldClazz = entity.getClass();
           table = CommonUtil.getClassName(oldClazz);
-          SqlUtil.checkTable(db, oldClazz);
+          SqlUtil.checkOrCreateTable(db, oldClazz);
         }
 
         ContentValues value = createValues(entity);
@@ -133,7 +133,7 @@ class DelegateUpdate extends AbsDelegate {
    * 插入数据
    */
   synchronized void insertData(SQLiteDatabase db, DbEntity dbEntity) {
-    SqlUtil.checkTable(db, dbEntity.getClass());
+    SqlUtil.checkOrCreateTable(db, dbEntity.getClass());
     db = checkDb(db);
     ContentValues values = createValues(dbEntity);
     if (values != null) {

@@ -22,7 +22,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.text.TextUtils;
+import com.arialyy.aria.core.TaskRecord;
+import com.arialyy.aria.core.ThreadRecord;
+import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.download.M3U8Entity;
+import com.arialyy.aria.core.upload.UploadEntity;
 import com.arialyy.aria.core.wrapper.ITaskWrapper;
 import com.arialyy.aria.util.ALog;
 import java.io.File;
@@ -308,6 +312,11 @@ final class SqlHelper extends SQLiteOpenHelper {
    */
   private void addTaskRecordType(SQLiteDatabase db) {
     try {
+      SqlUtil.checkOrCreateTable(db, ThreadRecord.class);
+      SqlUtil.checkOrCreateTable(db, TaskRecord.class);
+      SqlUtil.checkOrCreateTable(db, UploadEntity.class);
+      SqlUtil.checkOrCreateTable(db, DownloadEntity.class);
+
       db.beginTransaction();
       /*
        * 增加下载实体的类型
@@ -380,6 +389,7 @@ final class SqlHelper extends SQLiteOpenHelper {
    * 删除重复的repeat数据
    */
   private void delRepeatThreadRecord(SQLiteDatabase db) {
+    SqlUtil.checkOrCreateTable(db, ThreadRecord.class);
     String repeatSql = "DELETE FROM ThreadRecord WHERE (rowid) "
         + "IN (SELECT rowid FROM ThreadRecord GROUP BY taskKey, threadId, endLocation HAVING COUNT(*) > 1) "
         + "AND rowid NOT IN (SELECT MIN(rowid) FROM ThreadRecord GROUP BY taskKey, threadId, endLocation HAVING COUNT(*)> 1)";
@@ -406,6 +416,7 @@ final class SqlHelper extends SQLiteOpenHelper {
    * 处理365版本以下的升级
    */
   private void handle365Update(SQLiteDatabase db) {
+    SqlUtil.checkOrCreateTable(db, ThreadRecord.class);
     db.execSQL("UPDATE ThreadRecord SET threadId=0 WHERE threadId=-1");
 
     Map<String, Map<String, String>> modifyMap = new HashMap<>();

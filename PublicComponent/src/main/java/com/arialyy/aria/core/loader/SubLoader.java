@@ -22,7 +22,6 @@ import android.os.Message;
 import android.text.TextUtils;
 import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.common.AbsEntity;
-import com.arialyy.aria.core.common.AbsNormalEntity;
 import com.arialyy.aria.core.common.CompleteInfo;
 import com.arialyy.aria.core.inf.IThreadStateManager;
 import com.arialyy.aria.core.manager.ThreadTaskManager;
@@ -97,26 +96,27 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
   }
 
   private void handlerTask() {
-    if (isBreak()){
+    if (isBreak()) {
       return;
     }
-    Looper looper=Looper.myLooper();
-    if(looper==null) {
+    Looper looper = Looper.myLooper();
+    if (looper == null) {
       Looper.prepare();
-      looper=Looper.myLooper();
+      looper = Looper.myLooper();
     }
 
     record = recordHandler.getRecord(wrapper.getEntity().getFileSize());
     if (record.threadRecords != null
-            && !TextUtils.isEmpty(record.filePath)
-            && new File(record.filePath).exists()
-            && !record.threadRecords.isEmpty()
-            && record.threadRecords.get(0).isComplete) {
+        && !TextUtils.isEmpty(record.filePath)
+        && new File(record.filePath).exists()
+        && !record.threadRecords.isEmpty()
+        && record.threadRecords.get(0).isComplete) {
       ALog.d(TAG, "子任务已完成，key：" + wrapper.getKey());
       sendNormalState(IThreadStateManager.STATE_COMPLETE);
       return;
     }
-    List<IThreadTask> task = ttBuild.buildThreadTask(record, new Handler(looper, mStateManager.getHandlerCallback()));
+    List<IThreadTask> task =
+        ttBuild.buildThreadTask(record, new Handler(looper, mStateManager.getHandlerCallback()));
     mStateManager.setLooper(record, looper);
     if (task == null || task.isEmpty()) {
       ALog.e(TAG, "创建子任务的线程任务失败，key：" + wrapper.getKey());
@@ -129,9 +129,8 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
       return;
     }
 
-
     sendNormalState(IThreadStateManager.STATE_PRE);
-    mTask .addAll( task);
+    mTask.addAll(task);
     try {
       for (IThreadTask iThreadTask : mTask) {
         ThreadTaskManager.getInstance().startThread(parentKey, iThreadTask);
@@ -146,7 +145,7 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
     Looper.loop();
   }
 
-  public TaskRecord getRecord(){
+  public TaskRecord getRecord() {
     return record;
   }
 
@@ -160,7 +159,7 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
 
   public void retryTask() {
     try {
-      if (!mTask.isEmpty() ) {
+      if (!mTask.isEmpty()) {
         for (IThreadTask iThreadTask : mTask) {
           iThreadTask.call();
         }
@@ -181,14 +180,14 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
     for (IThreadTask iThreadTask : mTask) {
       iThreadTask.stop();
     }
-
   }
 
   @Override public boolean isRunning() {
-    if(mTask.isEmpty())
+    if (mTask.isEmpty()) {
       return false;
+    }
     for (IThreadTask iThreadTask : mTask) {
-      if(!iThreadTask.isBreak()) return true;
+      if (!iThreadTask.isBreak()) return true;
     }
     return false;
   }
@@ -223,7 +222,8 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
   }
 
   @Override public long getCurrentProgress() {
-    return isRunning() ? mStateManager.getCurrentProgress() :  getWrapper().getEntity().getCurrentProgress();
+    return isRunning() ? mStateManager.getCurrentProgress()
+        : getWrapper().getEntity().getCurrentProgress();
   }
 
   @Override public void addComponent(IRecordHandler recordHandler) {

@@ -8,6 +8,7 @@
     - 修复组任务中，其中一个子任务是30x地址，导致调度器无法出现该子任务状态的问题
     - 增加组任务groupHash冲突检查 https://github.com/AriaLyy/Aria/issues/635
     - 修复task.cancel(false)还是把本地文件删除的问题 https://github.com/AriaLyy/Aria/issues/646
+    - fix bug https://github.com/AriaLyy/Aria/issues/670
   + v_3.8.6 (2020/2/17)
     - fix bug https://github.com/AriaLyy/Aria/issues/608
     - fix bug https://github.com/AriaLyy/Aria/issues/579#issuecomment-586665035
