@@ -22,6 +22,8 @@ import android.os.Message;
 
 import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.inf.IThreadStateManager;
+import com.arialyy.aria.core.listener.IEventListener;
+import com.arialyy.aria.exception.AriaException;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.FileUtil;
@@ -53,7 +55,7 @@ public class GroupSubThreadStateManager implements IThreadStateManager {
   /**
    * @param handler 任务事件
    */
-  public GroupSubThreadStateManager(Handler handler, String key) {
+  public GroupSubThreadStateManager(Handler handler,String key) {
     mHandler = handler;
     mKey = key;
   }
@@ -101,7 +103,7 @@ public class GroupSubThreadStateManager implements IThreadStateManager {
                 (AriaException) b.getSerializable(DATA_ERROR_INFO));*/
             quitLooper();
           }
-          sendMessageFromMsg(msg);
+          //sendMessageFromMsg(msg);
           break;
         case STATE_COMPLETE:
           mCompleteNum.getAndIncrement();
@@ -130,6 +132,9 @@ public class GroupSubThreadStateManager implements IThreadStateManager {
               sendMessageFromMsg(msg);
               //mListener.onComplete();
             }
+            quitLooper();
+          }else if (isFail()) {
+            sendMessageFromMsg(msg);
             quitLooper();
           }
           break;
@@ -210,7 +215,7 @@ public class GroupSubThreadStateManager implements IThreadStateManager {
     //    String.format("isFail; stopNum: %s, cancelNum: %s, failNum: %s, completeNum: %s", mStopNum,
     //        mCancelNum, mFailNum, mCompleteNum));
     return mCompleteNum.get() != mThreadNum
-        && (mFailNum.get() == mThreadNum || mFailNum.get() + mCompleteNum.get() == mThreadNum);
+            && (mFailNum.get() == mThreadNum || mFailNum.get() + mCompleteNum.get() == mThreadNum);
   }
 
   /**
@@ -292,7 +297,7 @@ public class GroupSubThreadStateManager implements IThreadStateManager {
       File targetFile = new File(mTaskRecord.filePath);
       if (targetFile.exists() && targetFile.length() > mTaskRecord.fileLength) {
         ALog.e(TAG, String.format("任务【%s】分块文件合并失败，下载长度超出文件真实长度，downloadLen: %s，fileSize: %s",
-            targetFile.getName(), targetFile.length(), mTaskRecord.fileLength));
+                targetFile.getName(), targetFile.length(), mTaskRecord.fileLength));
         return false;
       }
       return true;
