@@ -44,6 +44,7 @@ import java.util.Set;
 final class SqlHelper extends SQLiteOpenHelper {
   private static final String TAG = "SqlHelper";
   private static volatile SqlHelper INSTANCE = null;
+  private static boolean mainTmpDirSet = false;
   private Context mContext;
 
   synchronized static SqlHelper init(Context context) {
@@ -145,6 +146,24 @@ final class SqlHelper extends SQLiteOpenHelper {
     }
     db.enableWriteAheadLogging();
     return db;
+  }
+
+  /**
+   * 用于修复 Too many open files 的问题
+   * https://github.com/AriaLyy/Aria/issues/664
+   */
+  @Override
+  public SQLiteDatabase getReadableDatabase() {
+    if (!mainTmpDirSet) {
+      String cacheDir = mContext.getCacheDir().getPath() + "/AriaDbCacheDir";
+      boolean rs = new File(cacheDir).mkdir();
+      ALog.d(TAG, rs + "");
+      super.getReadableDatabase()
+          .execSQL("PRAGMA temp_store_directory = '" + cacheDir + "'");
+      mainTmpDirSet = true;
+      return super.getReadableDatabase();
+    }
+    return super.getReadableDatabase();
   }
 
   /**
