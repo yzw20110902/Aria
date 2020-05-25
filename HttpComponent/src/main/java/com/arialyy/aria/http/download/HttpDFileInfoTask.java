@@ -291,6 +291,10 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
     ALog.d(TAG, String.format("文件重命名为：%s", newName));
     File oldFile = new File(mEntity.getFilePath());
     String newPath = oldFile.getParent() + "/" + newName;
+    if (!CheckUtil.checkDPathConflicts(false, newPath, mTaskWrapper.getRequestType())) {
+      ALog.e(TAG, "文件重命名失败");
+      return;
+    }
     if (oldFile.exists()) {
       boolean b = oldFile.renameTo(new File(newPath));
       ALog.d(TAG, String.format("文件重命名%s", b ? "成功" : "失败"));

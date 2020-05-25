@@ -150,7 +150,7 @@ class DelegateUpdate extends AbsDelegate {
    */
   private ContentValues createValues(DbEntity dbEntity) {
     List<Field> fields = CommonUtil.getAllFields(dbEntity.getClass());
-    if (fields != null && fields.size() > 0) {
+    if (fields.size() > 0) {
       ContentValues values = new ContentValues();
       try {
         for (Field field : fields) {

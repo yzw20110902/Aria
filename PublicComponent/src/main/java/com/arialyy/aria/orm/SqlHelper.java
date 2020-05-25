@@ -148,6 +148,14 @@ final class SqlHelper extends SQLiteOpenHelper {
     return db;
   }
 
+  @Override public SQLiteDatabase getWritableDatabase() {
+    if (!mainTmpDirSet) {
+      createDbCacheDir();
+      return super.getWritableDatabase();
+    }
+    return super.getWritableDatabase();
+  }
+
   /**
    * 用于修复 Too many open files 的问题
    * https://github.com/AriaLyy/Aria/issues/664
@@ -155,15 +163,19 @@ final class SqlHelper extends SQLiteOpenHelper {
   @Override
   public SQLiteDatabase getReadableDatabase() {
     if (!mainTmpDirSet) {
-      String cacheDir = mContext.getCacheDir().getPath() + "/AriaDbCacheDir";
-      boolean rs = new File(cacheDir).mkdir();
-      ALog.d(TAG, rs + "");
-      super.getReadableDatabase()
-          .execSQL("PRAGMA temp_store_directory = '" + cacheDir + "'");
-      mainTmpDirSet = true;
+      createDbCacheDir();
       return super.getReadableDatabase();
     }
     return super.getReadableDatabase();
+  }
+
+  private void createDbCacheDir() {
+    String cacheDir = mContext.getCacheDir().getPath() + "/AriaDbCacheDir";
+    boolean rs = new File(cacheDir).mkdir();
+    ALog.d(TAG, rs + "");
+    super.getReadableDatabase()
+        .execSQL("PRAGMA temp_store_directory = '" + cacheDir + "'");
+    mainTmpDirSet = true;
   }
 
   /**
