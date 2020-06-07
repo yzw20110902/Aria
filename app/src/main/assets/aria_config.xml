@@ -22,7 +22,7 @@
   <download>
 
     <!--设置任务最大下载速度，0表示不限速，单位为：kb-->
-    <maxSpeed value="0"/>
+    <maxSpeed value="128"/>
 
     <!--
       多线程下载是否使用块下载模式，{@code true}使用，{@code false}不使用
@@ -44,7 +44,7 @@
     <threadNum value="3"/>
 
     <!--设置下载队列最大任务数， 默认为2-->
-    <maxTaskNum value="2"/>
+    <maxTaskNum value="1"/>
 
     <!--设置下载失败，重试次数，默认为10-->
     <reTryNum value="5"/>
@@ -68,7 +68,7 @@
     <convertSpeed value="true"/>
 
     <!--执行队列类型，见com.arialyy.aria.core.QueueMod，默认类型为wait-->
-    <queueMod value="now"/>
+    <queueMod value="wait"/>
 
     <!--进度更新更新间隔，默认1000毫秒-->
     <updateInterval value="1000"/>

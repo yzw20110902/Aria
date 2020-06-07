@@ -17,6 +17,7 @@ package com.arialyy.aria.util;
 
 import android.text.TextUtils;
 import com.arialyy.aria.core.TaskRecord;
+import com.arialyy.aria.core.ThreadRecord;
 import com.arialyy.aria.core.common.AbsEntity;
 import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.download.M3U8Entity;
@@ -82,6 +83,11 @@ public class DeleteM3u8Record implements IDeleteRecord {
     }
     final String filePath = entity.getFilePath();
 
+    // 删除下载的线程记录和任务记录
+    DbEntity.deleteData(ThreadRecord.class, "taskKey=? AND threadType=?", filePath,
+        String.valueOf(entity.getTaskType()));
+    DbEntity.deleteData(TaskRecord.class, "filePath=? AND taskType=?", filePath,
+        String.valueOf(entity.getTaskType()));
     DbEntity.deleteData(M3U8Entity.class, "filePath=?", filePath);
 
     if (needRemoveFile || !entity.isComplete()) {

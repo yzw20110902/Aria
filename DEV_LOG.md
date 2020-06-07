@@ -1,4 +1,7 @@
 ## 开发日志
+  + v_3.8.8 (2020/6/7)
+    - 修复设置了cancel(false)，文件还是被删除的问题 https://github.com/AriaLyy/Aria/issues/686
+    - 修复错误url的下载任务，无法删除的问题 https://github.com/AriaLyy/Aria/issues/684
   + v_3.8.7 (2020/5/25)
     - 修复组合任务单个子任务失败后，重新恢复组合任务，组合任务状态变为完成的问题
     - 修复40x错误，会继续重试并且无法重试成功的问题 https://github.com/AriaLyy/Aria/issues/619

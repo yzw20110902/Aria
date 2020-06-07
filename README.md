@@ -45,19 +45,19 @@ Aria有以下特点：
 
 ## 引入库
 [![license](http://img.shields.io/badge/license-Apache2.0-brightgreen.svg?style=flat)](https://github.com/AriaLyy/Aria/blob/master/LICENSE)
-[![Core](https://img.shields.io/badge/Core-3.8.7-blue)](https://github.com/AriaLyy/Aria)
-[![Compiler](https://img.shields.io/badge/Compiler-3.8.7-blue)](https://github.com/AriaLyy/Aria)
-[![FtpComponent](https://img.shields.io/badge/FtpComponent-3.8.7-orange)](https://github.com/AriaLyy/Aria)
-[![FtpComponent](https://img.shields.io/badge/SFtpComponent-3.8.7-orange)](https://github.com/AriaLyy/Aria)
-[![M3U8Component](https://img.shields.io/badge/M3U8Component-3.8.7-orange)](https://github.com/AriaLyy/Aria)
+[![Core](https://img.shields.io/badge/Core-3.8.8-blue)](https://github.com/AriaLyy/Aria)
+[![Compiler](https://img.shields.io/badge/Compiler-3.8.8-blue)](https://github.com/AriaLyy/Aria)
+[![FtpComponent](https://img.shields.io/badge/FtpComponent-3.8.8-orange)](https://github.com/AriaLyy/Aria)
+[![FtpComponent](https://img.shields.io/badge/SFtpComponent-3.8.8-orange)](https://github.com/AriaLyy/Aria)
+[![M3U8Component](https://img.shields.io/badge/M3U8Component-3.8.8-orange)](https://github.com/AriaLyy/Aria)
 
 
 ```java
-implementation 'com.arialyy.aria:core:3.8.7'
-annotationProcessor 'com.arialyy.aria:compiler:3.8.7'
-implementation 'com.arialyy.aria:ftpComponent:3.8.7' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:sftpComponent:3.8.7' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:m3u8Component:3.8.7' # 如果需要使用m3u8下载功能，请增加该组件
+implementation 'com.arialyy.aria:core:3.8.8'
+annotationProcessor 'com.arialyy.aria:compiler:3.8.8'
+implementation 'com.arialyy.aria:ftpComponent:3.8.8' # 如果需要使用ftp，请增加该组件
+implementation 'com.arialyy.aria:sftpComponent:3.8.8' # 如果需要使用ftp，请增加该组件
+implementation 'com.arialyy.aria:m3u8Component:3.8.8' # 如果需要使用m3u8下载功能，请增加该组件
 ```
 
 如果你使用的是kotlin，请使用kotlin官方提供的方法配置apt，[kotlin kapt官方配置传送门](https://www.kotlincn.net/docs/reference/kapt.html)
@@ -138,17 +138,9 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
 ### 版本日志
-+ v_3.8.7 (2020/5/25)
-    - 修复组合任务单个子任务失败后，重新恢复组合任务，组合任务状态变为完成的问题
-    - 修复40x错误，会继续重试并且无法重试成功的问题 https://github.com/AriaLyy/Aria/issues/619
-    - 修复wait模式下，resume(true)无效问题
-    - 修复now模式下的一些问题 https://github.com/AriaLyy/Aria/issues/620
-    - 修复组任务，其中一个子任务在获取文件长度失败后，重新恢复组合任务，组合任务状态变为完成的问题 https://github.com/AriaLyy/Aria/issues/628
-    - 修复组任务中，其中一个子任务是30x地址，导致调度器无法出现该子任务状态的问题
-    - 增加组任务groupHash冲突检查 https://github.com/AriaLyy/Aria/issues/635
-    - 修复task.cancel(false)还是把本地文件删除的问题 https://github.com/AriaLyy/Aria/issues/646
-    - fix bug https://github.com/AriaLyy/Aria/issues/670
-    - fix bug https://github.com/AriaLyy/Aria/issues/664
+  + v_3.8.8 (2020/6/7)
+    - 修复设置了cancel(false)，文件还是被删除的问题 https://github.com/AriaLyy/Aria/issues/686
+    - 修复错误url的下载任务，无法删除的问题 https://github.com/AriaLyy/Aria/issues/684
     
 [更多版本记录](https://github.com/AriaLyy/Aria/blob/master/DEV_LOG.md)
 

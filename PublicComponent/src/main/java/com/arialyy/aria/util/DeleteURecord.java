@@ -17,6 +17,7 @@ package com.arialyy.aria.util;
 
 import android.text.TextUtils;
 import com.arialyy.aria.core.TaskRecord;
+import com.arialyy.aria.core.ThreadRecord;
 import com.arialyy.aria.core.common.AbsEntity;
 import com.arialyy.aria.core.upload.UploadEntity;
 import com.arialyy.aria.orm.DbEntity;
@@ -76,6 +77,10 @@ public class DeleteURecord implements IDeleteRecord {
     }
 
     UploadEntity entity = (UploadEntity) absEntity;
+
+    // 删除下载的线程记录和任务记录
+    DbEntity.deleteData(ThreadRecord.class, "taskKey=? AND threadType=?", entity.getFilePath(),
+        String.valueOf(entity.getTaskType()));
     DbEntity.deleteData(TaskRecord.class, "filePath=? AND taskType=?", entity.getFilePath(),
         String.valueOf(entity.getTaskType()));
 

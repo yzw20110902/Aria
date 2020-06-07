@@ -32,14 +32,14 @@ public class DeleteDRecord implements IDeleteRecord {
   private String TAG = CommonUtil.getClassName(this);
   private static volatile DeleteDRecord INSTANCE = null;
 
-  private DeleteDRecord(){
+  private DeleteDRecord() {
 
   }
 
   public static DeleteDRecord getInstance() {
-    if (INSTANCE == null){
-      synchronized (DeleteDRecord.class){
-        if (INSTANCE == null){
+    if (INSTANCE == null) {
+      synchronized (DeleteDRecord.class) {
+        if (INSTANCE == null) {
           INSTANCE = new DeleteDRecord();
         }
       }
@@ -84,7 +84,8 @@ public class DeleteDRecord implements IDeleteRecord {
     File targetFile = new File(filePath);
 
     // 兼容以前版本
-    if (entity.getTaskType() == ITaskWrapper.M3U8_VOD || entity.getTaskType() == ITaskWrapper.M3U8_LIVE){
+    if (entity.getTaskType() == ITaskWrapper.M3U8_VOD
+        || entity.getTaskType() == ITaskWrapper.M3U8_LIVE) {
       DeleteM3u8Record.getInstance().deleteRecord(entity, needRemoveFile, needRemoveEntity);
       return;
     }
@@ -92,13 +93,18 @@ public class DeleteDRecord implements IDeleteRecord {
     TaskRecord record = DbDataHelper.getTaskRecord(entity.getFilePath(), entity.getTaskType());
     if (record == null) {
       ALog.e(TAG, "删除下载记录失败，记录为空，filePath：" + entity.getFilePath());
+      FileUtil.deleteFile(targetFile);
+      DbEntity.deleteData(DownloadEntity.class, "downloadPath=?", filePath);
       return;
     }
 
+    // 删除下载的线程记录和任务记录
     DbEntity.deleteData(ThreadRecord.class, "taskKey=? AND threadType=?", filePath,
         String.valueOf(entity.getTaskType()));
+    DbEntity.deleteData(TaskRecord.class, "filePath=? AND taskType=?", filePath,
+        String.valueOf(entity.getTaskType()));
 
-    if (needRemoveEntity || !entity.isComplete()) {
+    if (needRemoveFile || !entity.isComplete()) {
       FileUtil.deleteFile(targetFile);
       if (record.isBlock) {
         removeBlockFile(record);
