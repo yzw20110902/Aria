@@ -32,8 +32,8 @@ import com.arialyy.aria.core.processor.ILiveTsUrlConverter;
 import com.arialyy.aria.core.processor.ITsMergeHandler;
 import com.arialyy.aria.core.task.ThreadTask;
 import com.arialyy.aria.core.wrapper.ITaskWrapper;
-import com.arialyy.aria.exception.AriaM3U8Exception;
 import com.arialyy.aria.exception.AriaException;
+import com.arialyy.aria.exception.AriaM3U8Exception;
 import com.arialyy.aria.m3u8.BaseM3U8Loader;
 import com.arialyy.aria.m3u8.IdGenerator;
 import com.arialyy.aria.m3u8.M3U8InfoTask;
@@ -265,7 +265,9 @@ final class M3U8LiveLoader extends BaseM3U8Loader {
           return;
         }
         mPeerUrls.add(url);
-        ILiveTsUrlConverter converter = mM3U8Option.getLiveTsUrlConverter();
+        ILiveTsUrlConverter converter = mM3U8Option.isUseDefConvert() ?
+            new LiveTsDefConverter() :
+            mM3U8Option.getLiveTsUrlConverter();
         if (converter != null) {
           if (TextUtils.isEmpty(mM3U8Option.getBandWidthUrl())) {
             url = converter.convert(getEntity().getUrl(), url);

@@ -106,6 +106,11 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
     }
 
     record = recordHandler.getRecord(wrapper.getEntity().getFileSize());
+    if (record == null){
+      ALog.d(TAG, "子任务记录为空");
+      sendFailState(false);
+      return;
+    }
     if (record.threadRecords != null
         && !TextUtils.isEmpty(record.filePath)
         && new File(record.filePath).exists()

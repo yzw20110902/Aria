@@ -120,6 +120,19 @@ public final class M3U8TaskOption implements ITaskOption {
    */
   private String keyPath;
 
+  /**
+   * 是否使用默认的码率转换器和Ts转换器
+   */
+  private boolean useDefConvert = false;
+
+  public boolean isUseDefConvert() {
+    return useDefConvert;
+  }
+
+  public void setUseDefConvert(boolean useDefConvert) {
+    this.useDefConvert = useDefConvert;
+  }
+
   public String getKeyPath() {
     return keyPath;
   }

@@ -30,5 +30,5 @@ public interface ILiveTsUrlConverter extends IEventHandler {
    * @param tsUrl ts文件下载地址
    * @return 转换后的http地址
    */
-  public String convert(String m3u8Url, String tsUrl);
+  String convert(String m3u8Url, String tsUrl);
 }

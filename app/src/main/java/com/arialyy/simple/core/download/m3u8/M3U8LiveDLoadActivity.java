@@ -266,15 +266,10 @@ public class M3U8LiveDLoadActivity extends BaseActivity<ActivityM3u8LiveBinding>
   }
 
   static class BandWidthUrlConverter implements IBandWidthUrlConverter {
-    String url;
 
-    BandWidthUrlConverter(String url) {
-      this.url = url;
-    }
-
-    @Override public String convert(String bandWidthUrl) {
-      int peerIndex = url.lastIndexOf("/");
-      return url.substring(0, peerIndex + 1) + bandWidthUrl;
+    @Override public String convert(String m3u8Url, String bandWidthUrl) {
+      int peerIndex = m3u8Url.lastIndexOf("/");
+      return m3u8Url.substring(0, peerIndex + 1) + bandWidthUrl;
     }
   }
 }

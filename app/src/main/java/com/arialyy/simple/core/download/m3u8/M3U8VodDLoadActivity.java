@@ -304,14 +304,14 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
 
   private M3U8VodOption getM3U8Option() {
     M3U8VodOption option = new M3U8VodOption();
-    option
-        .setBandWidth(200000)
+    //option.setBandWidth(200000);
         //.generateIndexFile()
         //.merge(true)
-        .setVodTsUrlConvert(new VodTsUrlConverter());
+        //.setVodTsUrlConvert(new VodTsUrlConverter());
     //.setMergeHandler(new TsMergeHandler());
-    option.setKeyUrlConverter(new KeyUrlConverter());
-    option.setBandWidthUrlConverter(new BandWidthUrlConverter(mUrl));
+    //option.setKeyUrlConverter(new KeyUrlConverter());
+    //option.setBandWidthUrlConverter(new BandWidthUrlConverter());
+    //option.setUseDefConvert(true);
     return option;
   }
 
@@ -327,7 +327,8 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
   static class VodTsUrlConverter implements IVodTsUrlConverter {
     @Override public List<String> convert(String m3u8Url, List<String> tsUrls) {
       Uri uri = Uri.parse(m3u8Url);
-      String parentUrl = "http://devimages.apple.com/iphone/samples/bipbop/gear1/";
+      //String parentUrl = "http://devimages.apple.com/iphone/samples/bipbop/gear1/";
+      String parentUrl = "http://youku.cdn7-okzy.com/20200123/16815_fbe419ed/1000k/hls/";
       //String parentUrl = "http://" + uri.getHost() + "/gear1/";
       //int index = m3u8Url.lastIndexOf("/");
       //String parentUrl = m3u8Url.substring(0, index + 1);
@@ -351,15 +352,10 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
 
   static class BandWidthUrlConverter implements IBandWidthUrlConverter {
 
-    private String url;
 
-    BandWidthUrlConverter(String url) {
-      this.url = url;
-    }
-
-    @Override public String convert(String bandWidthUrl) {
-      int index = url.lastIndexOf("/");
-      return url.substring(0, index + 1) + bandWidthUrl;
+    @Override public String convert(String m3u8Url, String bandWidthUrl) {
+      int index = m3u8Url.lastIndexOf("/");
+      return m3u8Url.substring(0, index + 1) + bandWidthUrl;
     }
   }
 

@@ -35,6 +35,8 @@ public class M3U8VodModule extends BaseViewModule {
   //private final String defUrl = "https://www.gaoya123.cn/2019/1557993797897.m3u8";
   // 多码率地址：
   private final String defUrl = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8";
+  //private final String defUrl = "http://youku.cdn7-okzy.com/20200123/16815_fbe419ed/index.m3u8";
+
   //private final String defUrl = "https://cn7.kankia.com/hls/20200108/e1eaec074274c64fe46a3bdb5d2ba487/1578488360/index.m3u8";
   //private final String defUrl = "https://youku.cdn7-okzy.com/20191213/16167_c3592a02/index.m3u8";
   //private final String defUrl = "http://qn.shytong.cn/b83137769ff6b555/11b0c9970f9a3fa0.mp4.m3u8";

@@ -171,8 +171,11 @@ final class SqlHelper extends SQLiteOpenHelper {
 
   private void createDbCacheDir() {
     String cacheDir = mContext.getCacheDir().getPath() + "/AriaDbCacheDir";
-    boolean rs = new File(cacheDir).mkdir();
-    ALog.d(TAG, rs + "");
+    File cacheFile = new File(cacheDir);
+    if (!cacheFile.exists()){
+      boolean rs = cacheFile.mkdirs();
+      ALog.d(TAG, rs + "");
+    }
     super.getReadableDatabase()
         .execSQL("PRAGMA temp_store_directory = '" + cacheDir + "'");
     mainTmpDirSet = true;

@@ -1,4 +1,8 @@
 ## 开发日志
+  + v_3.8.9 (2020/6/14)
+    - fix bug https://github.com/AriaLyy/Aria/issues/688
+    - fix bug https://github.com/AriaLyy/Aria/issues/690
+    - m3u8任务增加`setUseDefConvert()`方法，用于处理默认的m3u8任务
   + v_3.8.8 (2020/6/7)
     - 修复设置了cancel(false)，文件还是被删除的问题 https://github.com/AriaLyy/Aria/issues/686
     - 修复错误url的下载任务，无法删除的问题 https://github.com/AriaLyy/Aria/issues/684

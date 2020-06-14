@@ -328,9 +328,10 @@ final public class M3U8InfoTask implements IInfoTask {
    * 处理码率
    */
   private void handleBandWidth(HttpURLConnection conn, String bandWidthM3u8Url) throws IOException {
-    IBandWidthUrlConverter converter = mM3U8Option.getBandWidthUrlConverter();
+    IBandWidthUrlConverter converter = mM3U8Option.isUseDefConvert() ? new BandWidthDefConverter()
+        : mM3U8Option.getBandWidthUrlConverter();
     if (converter != null) {
-      bandWidthM3u8Url = converter.convert(bandWidthM3u8Url);
+      bandWidthM3u8Url = converter.convert(mEntity.getUrl(), bandWidthM3u8Url);
       if (!bandWidthM3u8Url.startsWith("http")) {
         failDownload(String.format("码率转换器转换后的url地址无效，转换后的url：%s", bandWidthM3u8Url), false);
         return;

@@ -37,10 +37,21 @@ public class M3U8Option<OP extends M3U8Option> extends BaseOption {
   private IKeyUrlConverter keyUrlConverter;
   private boolean ignoreFailureTs = false;
   private String keyPath;
+  private boolean useDefConvert = true;
 
   M3U8Option() {
     super();
     ComponentUtil.getInstance().checkComponentExist(ComponentUtil.COMPONENT_TYPE_M3U8);
+  }
+
+  /**
+   * 设置使用默认的码率转换器和TS转换器，默认打开
+   * @param useDefConvert true 使用默认的转换器，false 关闭默认的转换器
+   */
+  public OP setUseDefConvert(boolean useDefConvert) {
+    this.useDefConvert = true;
+    ALog.d(TAG, "使用默认的码率转换器和TS转换器，如果无法下载，请参考：https://github.com/AriaLyy/Aria/issues/597 定制转换器");
+    return (OP) this;
   }
 
   /**

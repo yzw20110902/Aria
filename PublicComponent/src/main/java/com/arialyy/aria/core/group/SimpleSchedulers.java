@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import com.arialyy.aria.core.AriaConfig;
+import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.config.Configuration;
 import com.arialyy.aria.core.inf.IThreadStateManager;
 import com.arialyy.aria.core.loader.IRecordHandler;
@@ -169,10 +170,11 @@ final class SimpleSchedulers implements Handler.Callback {
    */
   private synchronized void handleComplete(AbsSubDLoadUtil loader) {
     ALog.d(TAG, String.format("子任务【%s】完成", loader.getEntity().getFileName()));
-    if (loader.getRecord().isBlock) {
+    TaskRecord record = loader.getRecord();
+    if (record != null && record.isBlock) {
       File partFile =
-          new File(String.format(IRecordHandler.SUB_PATH, loader.getRecord().filePath, 0));
-      partFile.renameTo(new File(loader.getRecord().filePath));
+          new File(String.format(IRecordHandler.SUB_PATH, record.filePath, 0));
+      partFile.renameTo(new File(record.filePath));
     }
     ThreadTaskManager.getInstance().removeTaskThread(loader.getKey());
     mGState.listener.onSubComplete(loader.getEntity());
