@@ -106,7 +106,7 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
     }
 
     record = recordHandler.getRecord(wrapper.getEntity().getFileSize());
-    if (record == null){
+    if (record == null) {
       ALog.d(TAG, "子任务记录为空");
       sendFailState(false);
       return;
@@ -168,9 +168,9 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
         for (IThreadTask iThreadTask : mTask) {
           iThreadTask.call();
         }
-      } else {
-        ALog.e(TAG, "子任务的线程任务为空");
+        return;
       }
+      ALog.e(TAG, "子任务的线程任务为空");
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -263,9 +263,9 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
     }
     if (needGetInfo) {
       infoTask.run();
-    } else {
-      handlerTask();
+      return;
     }
+    handlerTask();
   }
 
   /**

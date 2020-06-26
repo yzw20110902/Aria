@@ -402,16 +402,18 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
     if (mTaskWrapper.getRequestType() == ITaskWrapper.M3U8_VOD) {
       writeConfig(false, 0);
       retryM3U8Peer(needRetry);
-    } else {
-      if (mTaskWrapper.isSupportBP()) {
-        writeConfig(false, subCurrentLocation);
-        retryBlockTask(needRetry && mConfig.startThreadNum != 1);
-      } else {
-        ALog.e(TAG, String.format("任务【%s】执行失败", getFileName()));
-        ErrorHelp.saveError("", ALog.getExceptionString(ex));
-        sendFailMsg(null, needRetry);
-      }
+      return;
     }
+
+    if (mTaskWrapper.isSupportBP()) {
+      writeConfig(false, subCurrentLocation);
+      retryBlockTask(needRetry);
+      return;
+    }
+
+    ALog.e(TAG, String.format("任务【%s】执行失败", getFileName()));
+    ErrorHelp.saveError("", ALog.getExceptionString(ex));
+    sendFailMsg(null, needRetry);
   }
 
   /**
@@ -432,9 +434,9 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
       FileUtil.deleteFile(mConfig.tempFile);
       FileUtil.createFile(mConfig.tempFile);
       ThreadTaskManager.getInstance().retryThread(this);
-    } else {
-      sendFailMsg(null, false);
+      return;
     }
+    sendFailMsg(null, false);
   }
 
   /**
@@ -454,10 +456,10 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
       mFailTimes++;
       handleBlockRecord();
       ThreadTaskManager.getInstance().retryThread(this);
-    } else {
-      ALog.e(TAG, String.format("任务【%s】执行失败", getFileName()));
-      sendFailMsg(null, needRetry);
+      return;
     }
+    ALog.e(TAG, String.format("任务【%s】执行失败", getFileName()));
+    sendFailMsg(null, needRetry);
   }
 
   /**
@@ -509,10 +511,8 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
     b.putBoolean(IThreadStateManager.DATA_RETRY, needRetry);
     if (e != null) {
       b.putSerializable(IThreadStateManager.DATA_ERROR_INFO, e);
-      updateState(IThreadStateManager.STATE_FAIL, b);
-    } else {
-      updateState(IThreadStateManager.STATE_FAIL, b);
     }
+    updateState(IThreadStateManager.STATE_FAIL, b);
   }
 
   /**

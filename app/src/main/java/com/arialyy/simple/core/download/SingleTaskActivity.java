@@ -190,7 +190,7 @@ public class SingleTaskActivity extends BaseActivity<ActivitySingleBinding> {
   @Download.onTaskRunning
   protected void running(DownloadTask task) {
     if (task.getKey().equals(mUrl)) {
-      ALog.d(TAG, "isRunning" + "; state = " + task.getEntity().getState());
+      //ALog.d(TAG, "isRunning" + "; state = " + task.getEntity().getState());
       getBinding().pl.setInfo(task.getEntity());
     }
   }

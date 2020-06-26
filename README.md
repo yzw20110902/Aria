@@ -45,19 +45,19 @@ Aria有以下特点：
 
 ## 引入库
 [![license](http://img.shields.io/badge/license-Apache2.0-brightgreen.svg?style=flat)](https://github.com/AriaLyy/Aria/blob/master/LICENSE)
-[![Core](https://img.shields.io/badge/Core-3.8.9-blue)](https://github.com/AriaLyy/Aria)
-[![Compiler](https://img.shields.io/badge/Compiler-3.8.9-blue)](https://github.com/AriaLyy/Aria)
-[![FtpComponent](https://img.shields.io/badge/FtpComponent-3.8.9-orange)](https://github.com/AriaLyy/Aria)
-[![FtpComponent](https://img.shields.io/badge/SFtpComponent-3.8.9-orange)](https://github.com/AriaLyy/Aria)
-[![M3U8Component](https://img.shields.io/badge/M3U8Component-3.8.9-orange)](https://github.com/AriaLyy/Aria)
+[![Core](https://img.shields.io/badge/Core-3.8.10-blue)](https://github.com/AriaLyy/Aria)
+[![Compiler](https://img.shields.io/badge/Compiler-3.8.10-blue)](https://github.com/AriaLyy/Aria)
+[![FtpComponent](https://img.shields.io/badge/FtpComponent-3.8.10-orange)](https://github.com/AriaLyy/Aria)
+[![FtpComponent](https://img.shields.io/badge/SFtpComponent-3.8.10-orange)](https://github.com/AriaLyy/Aria)
+[![M3U8Component](https://img.shields.io/badge/M3U8Component-3.8.10-orange)](https://github.com/AriaLyy/Aria)
 
 
 ```java
-implementation 'com.arialyy.aria:core:3.8.9'
-annotationProcessor 'com.arialyy.aria:compiler:3.8.9'
-implementation 'com.arialyy.aria:ftpComponent:3.8.9' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:sftpComponent:3.8.9' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:m3u8Component:3.8.9' # 如果需要使用m3u8下载功能，请增加该组件
+implementation 'com.arialyy.aria:core:3.8.10'
+annotationProcessor 'com.arialyy.aria:compiler:3.8.10'
+implementation 'com.arialyy.aria:ftpComponent:3.8.10' # 如果需要使用ftp，请增加该组件
+implementation 'com.arialyy.aria:sftpComponent:3.8.10' # 如果需要使用ftp，请增加该组件
+implementation 'com.arialyy.aria:m3u8Component:3.8.10' # 如果需要使用m3u8下载功能，请增加该组件
 ```
 
 如果你使用的是kotlin，请使用kotlin官方提供的方法配置apt，[kotlin kapt官方配置传送门](https://www.kotlincn.net/docs/reference/kapt.html)
@@ -138,10 +138,10 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
 ### 版本日志
- + v_3.8.9 (2020/6/14)
-    - fix bug https://github.com/AriaLyy/Aria/issues/688
-    - fix bug https://github.com/AriaLyy/Aria/issues/690
-    - m3u8任务增加`setUseDefConvert()`方法，用于处理默认的m3u8任务
+ + v_3.8.10 (2020/6/26)
+    - fix bug https://github.com/AriaLyy/Aria/issues/703
+    - fix bug https://github.com/AriaLyy/Aria/issues/702
+    - fix bug https://github.com/AriaLyy/Aria/issues/695
     
 [更多版本记录](https://github.com/AriaLyy/Aria/blob/master/DEV_LOG.md)
 
@@ -171,7 +171,7 @@ protected void onCreate(Bundle savedInstanceState) {
  在提交问题前，希望你已经查看过[wiki](https://aria.laoyuyu.me/aria_doc/)或搜索过[issues](https://github.com/AriaLyy/Aria/issues)。</br>
 
 ## 打赏
- 如果觉得框架写的不错并且帮助到了你，可以请我喝杯热茶。`^_^`</br>
+ 如果觉得框架写的不错并且帮助到了你，可以请我瓶快乐水。`^_^`</br>
  <img src="https://raw.githubusercontent.com/AriaLyy/Aria/master/img/ali_pay.png" width=336 height=336/>
  <img src="https://raw.githubusercontent.com/AriaLyy/Aria/master/img/wx_pay.png" width=336 height=336/>
 

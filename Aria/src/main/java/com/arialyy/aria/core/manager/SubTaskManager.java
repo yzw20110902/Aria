@@ -28,7 +28,7 @@ import java.util.List;
  * 子任务管理器
  */
 public class SubTaskManager {
-  private String TAG = "SubTaskManager";
+  private final String TAG = getClass().getSimpleName();
   private DGTaskWrapper mEntity;
 
   public SubTaskManager(DGTaskWrapper entity) {

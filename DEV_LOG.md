@@ -1,6 +1,8 @@
 ## 开发日志
-  + v_3.8.10
+  + v_3.8.10 (2020/6/26)
     - fix bug https://github.com/AriaLyy/Aria/issues/703
+    - fix bug https://github.com/AriaLyy/Aria/issues/702
+    - fix bug https://github.com/AriaLyy/Aria/issues/695
   + v_3.8.9 (2020/6/14)
     - fix bug https://github.com/AriaLyy/Aria/issues/688
     - fix bug https://github.com/AriaLyy/Aria/issues/690

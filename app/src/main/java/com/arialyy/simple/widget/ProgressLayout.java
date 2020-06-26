@@ -157,7 +157,7 @@ public class ProgressLayout extends RelativeLayout implements View.OnClickListen
     this.currentState = entity.getState();
     if (entity instanceof AbsNormalEntity) {
       AbsNormalEntity normalEntity = (AbsNormalEntity) entity;
-      ALog.d(TAG, "fileName = " + ((AbsNormalEntity) entity).getFileName());
+      //ALog.d(TAG, "fileName = " + ((AbsNormalEntity) entity).getFileName());
       fileName.setText(normalEntity.getFileName());
     } else if (entity instanceof AbsGroupEntity) {
       AbsGroupEntity groupEntity = (AbsGroupEntity) entity;
