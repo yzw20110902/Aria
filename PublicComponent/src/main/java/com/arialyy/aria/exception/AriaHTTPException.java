@@ -18,11 +18,11 @@ package com.arialyy.aria.exception;
 public class AriaHTTPException extends AriaException {
   private static final String HTTP_EXCEPTION = "Aria HTTP Exception:";
 
-  public AriaHTTPException(String tag, String message) {
-    super(tag, String.format("%s\n%s", HTTP_EXCEPTION, message));
+  public AriaHTTPException( String message) {
+    super(String.format("%s\n%s", HTTP_EXCEPTION, message));
   }
 
-  public AriaHTTPException(String tag, String message, Exception e) {
-    super(tag, message, e);
+  public AriaHTTPException(String message, Exception e) {
+    super(message, e);
   }
 }

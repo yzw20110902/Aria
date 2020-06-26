@@ -17,6 +17,7 @@ package com.arialyy.simple.core.download.group;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import com.arialyy.annotations.DownloadGroup;
 import com.arialyy.aria.core.Aria;
@@ -82,6 +83,7 @@ public class DownloadGroupActivity extends BaseActivity<ActivityDownloadGroupBin
             //.setFileSize(114981416)
             //.updateUrls(temp)
             .create();
+        Log.d(TAG, "taskId = " + mTaskId);
       }
 
       @Override public void stop(View v, AbsEntity entity) {

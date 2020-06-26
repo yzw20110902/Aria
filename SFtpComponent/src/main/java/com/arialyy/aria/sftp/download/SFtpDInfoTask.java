@@ -63,7 +63,7 @@ final class SFtpDInfoTask extends AbsSFtpInfoTask<DTaskWrapper> {
       callback.onSucceed(getWrapper().getKey(), info);
     } else {
       callback.onFail(getWrapper().getEntity(),
-          new AriaSFTPException(TAG, String.format("文件不存在，remotePath：%s", remotePath)), false);
+          new AriaSFTPException(String.format("文件不存在，remotePath：%s", remotePath)), false);
     }
     channel.disconnect();
   }

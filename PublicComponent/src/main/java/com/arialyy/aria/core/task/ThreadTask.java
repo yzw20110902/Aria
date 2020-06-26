@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
-import android.util.Log;
 import com.arialyy.aria.core.AriaConfig;
 import com.arialyy.aria.core.ThreadRecord;
 import com.arialyy.aria.core.common.AbsEntity;
@@ -259,16 +258,15 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
     if (mTaskWrapper.getRequestType() == ITaskWrapper.M3U8_VOD) {
       writeConfig(false, getConfig().tempFile.length());
       ALog.i(TAG, String.format("任务【%s】已停止", getFileName()));
-    } else {
-      if (mTaskWrapper.isSupportBP()) {
-        ALog.d(TAG,
-            String.format("任务【%s】thread__%s__停止【当前线程停止位置：%s】", getFileName(),
-                mRecord.threadId, stopLocation));
-        writeConfig(false, stopLocation);
-      } else {
-        ALog.i(TAG, String.format("任务【%s】已停止", getFileName()));
-      }
+      return;
     }
+    if (mTaskWrapper.isSupportBP()) {
+      ALog.d(TAG, String.format("任务【%s】thread__%s__停止【当前线程停止位置：%s】", getFileName(),
+          mRecord.threadId, stopLocation));
+      writeConfig(false, stopLocation);
+      return;
+    }
+    ALog.i(TAG, String.format("任务【%s】已停止", getFileName()));
   }
 
   /**
@@ -410,7 +408,7 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
         retryBlockTask(needRetry && mConfig.startThreadNum != 1);
       } else {
         ALog.e(TAG, String.format("任务【%s】执行失败", getFileName()));
-        ErrorHelp.saveError(TAG, "", ALog.getExceptionString(ex));
+        ErrorHelp.saveError("", ALog.getExceptionString(ex));
         sendFailMsg(null, needRetry);
       }
     }

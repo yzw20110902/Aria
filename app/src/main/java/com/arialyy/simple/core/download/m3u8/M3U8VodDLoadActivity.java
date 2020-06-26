@@ -309,9 +309,10 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
         //.merge(true)
         //.setVodTsUrlConvert(new VodTsUrlConverter());
     //.setMergeHandler(new TsMergeHandler());
-    //option.setKeyUrlConverter(new KeyUrlConverter());
-    //option.setBandWidthUrlConverter(new BandWidthUrlConverter());
-    //option.setUseDefConvert(true);
+    option.setUseDefConvert(false);
+    option.setKeyUrlConverter(new KeyUrlConverter());
+    option.setBandWidthUrlConverter(new BandWidthUrlConverter());
+    option.setUseDefConvert(true);
     return option;
   }
 

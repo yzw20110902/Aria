@@ -84,7 +84,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       conn.connect();
       handleConnect(conn);
     } catch (IOException e) {
-      failDownload(new AriaHTTPException(TAG,
+      failDownload(new AriaHTTPException(
           String.format("下载失败，filePath: %s, url: %s", mEntity.getFilePath(), mEntity.getUrl()),
           e), true);
     } finally {
@@ -133,7 +133,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
     long len = lenAdapter.handleFileLen(conn.getHeaderFields());
 
     if (!FileUtil.checkMemorySpace(mEntity.getFilePath(), len)) {
-      failDownload(new AriaHTTPException(TAG,
+      failDownload(new AriaHTTPException(
           String.format("下载失败，内存空间不足；filePath: %s, url: %s", mEntity.getFilePath(),
               mEntity.getUrl())), false);
       return;
@@ -183,8 +183,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       if (!checkLen(len) && !isChunked) {
         if (len < 0) {
           failDownload(
-              new AriaHTTPException(TAG,
-                  String.format("任务下载失败，文件长度小于0， url: %s", mEntity.getUrl())),
+              new AriaHTTPException(String.format("任务下载失败，文件长度小于0， url: %s", mEntity.getUrl())),
               false);
         }
         return;
@@ -211,7 +210,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       } else if (!checkLen(len) && !isChunked) {
         if (len < 0) {
           failDownload(
-              new AriaHTTPException(TAG,
+              new AriaHTTPException(
                   String.format("任务下载失败，文件长度小于0， url: %s", mEntity.getUrl())),
               false);
         }
@@ -229,10 +228,10 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
         || code == 307) {
       handleUrlReTurn(conn, conn.getHeaderField("Location"));
     } else if (code >= HttpURLConnection.HTTP_BAD_REQUEST) {
-      failDownload(new AriaHTTPException(TAG,
+      failDownload(new AriaHTTPException(
           String.format("任务下载失败，errorCode：%s, url: %s", code, mEntity.getUrl())), false);
     } else {
-      failDownload(new AriaHTTPException(TAG,
+      failDownload(new AriaHTTPException(
           String.format("任务下载失败，errorCode：%s, errorMsg: %s, url: %s", code,
               conn.getResponseMessage(), mEntity.getUrl())), !CheckUtil.httpIsBadRequest(code));
     }
@@ -311,7 +310,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
     ALog.d(TAG, "30x跳转，新url为【" + newUrl + "】");
     if (TextUtils.isEmpty(newUrl) || newUrl.equalsIgnoreCase("null")) {
       if (callback != null) {
-        callback.onFail(mEntity, new AriaHTTPException(TAG, "获取重定向链接失败"), false);
+        callback.onFail(mEntity, new AriaHTTPException("获取重定向链接失败"), false);
       }
       return;
     }
@@ -321,7 +320,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
     }
 
     if (!CheckUtil.checkUrl(newUrl)) {
-      failDownload(new AriaHTTPException(TAG, "下载失败，重定向url错误"), false);
+      failDownload(new AriaHTTPException("下载失败，重定向url错误"), false);
       return;
     }
     taskOption.setRedirectUrl(newUrl);

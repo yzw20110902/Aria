@@ -18,11 +18,11 @@ package com.arialyy.aria.exception;
 public class AriaFTPException extends AriaException {
   private static final String FTP_EXCEPTION = "Aria FTP Exception:";
 
-  public AriaFTPException(String tag, String message) {
-    super(tag, String.format("%s\n%s", FTP_EXCEPTION, message));
+  public AriaFTPException(String message) {
+    super(String.format("%s\n%s", FTP_EXCEPTION, message));
   }
 
-  public AriaFTPException(String tag, String message, Exception e) {
-    super(tag, message, e);
+  public AriaFTPException(String message, Exception e) {
+    super(message, e);
   }
 }

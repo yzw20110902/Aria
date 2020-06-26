@@ -19,13 +19,14 @@ package com.arialyy.aria.core.group;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import com.arialyy.aria.core.AriaConfig;
 import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.config.Configuration;
 import com.arialyy.aria.core.inf.IThreadStateManager;
 import com.arialyy.aria.core.loader.IRecordHandler;
 import com.arialyy.aria.core.manager.ThreadTaskManager;
-import com.arialyy.aria.exception.AriaException;
+import com.arialyy.aria.exception.ExceptionFactory;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.NetUtils;
@@ -72,7 +73,7 @@ final class SimpleSchedulers implements Handler.Callback {
         mGState.listener.onSubRunning(loaderUtil.getEntity(), range);
         break;
       case IThreadStateManager.STATE_PRE:
-        mGState.listener.onSubPre(loaderUtil.getEntity( ));
+        mGState.listener.onSubPre(loaderUtil.getEntity());
         mGState.updateCount(loaderUtil.getKey());
         break;
       case IThreadStateManager.STATE_START:
@@ -104,8 +105,11 @@ final class SimpleSchedulers implements Handler.Callback {
    * @param needRetry true 需要重试，false 不需要重试
    */
   private synchronized void handleFail(final AbsSubDLoadUtil loaderUtil, boolean needRetry) {
-    Configuration config = Configuration.getInstance();
+    Log.d(TAG, String.format("handleFail, size = %s, completeNum = %s, failNum = %s, stopNum = %s",
+        mGState.getSubSize(), mGState.getCompleteNum(), mGState.getFailNum(),
+        mGState.getSubSize()));
 
+    Configuration config = Configuration.getInstance();
     int num = config.dGroupCfg.getSubReTryNum();
     boolean isNotNetRetry = config.appCfg.isNotNetRetry();
 
@@ -114,25 +118,27 @@ final class SimpleSchedulers implements Handler.Callback {
         || loaderUtil.getLoader() == null // 如果获取不到文件信息，loader为空
         || loaderUtil.getEntity().getFailNum() > num) {
       mQueue.removeTaskFromExecQ(loaderUtil);
-      mGState.listener.onSubFail(loaderUtil.getEntity(), new AriaException(TAG,
-          String.format("任务组子任务【%s】下载失败，下载地址【%s】", loaderUtil.getEntity().getFileName(),
-              loaderUtil.getEntity().getUrl())));
+      mGState.listener.onSubFail(loaderUtil.getEntity(),
+          ExceptionFactory.getException(ExceptionFactory.TYPE_GROUP,
+              String.format("任务组子任务【%s】下载失败，下载地址【%s】", loaderUtil.getEntity().getFileName(),
+                  loaderUtil.getEntity().getUrl()), null));
       mGState.countFailNum(loaderUtil.getKey());
       if (mGState.getFailNum() == mGState.getSubSize()
           || mGState.getStopNum() + mGState.getFailNum() + mGState.getCompleteNum()
           == mGState.getSubSize()) {
-        mQueue.clear();
         mGState.isRunning.set(false);
-        if (mGState.getCompleteNum() > 0&&Configuration.getInstance().dGroupCfg.isSubFailAsStop()) {
+        if (mGState.getCompleteNum() > 0
+            && Configuration.getInstance().dGroupCfg.isSubFailAsStop()) {
           ALog.e(TAG, String.format("任务组【%s】停止", mGState.getGroupHash()));
           mGState.listener.onStop(mGState.getProgress());
-        } else {
-          mGState.listener.onFail(false, new AriaException(TAG,
-              String.format("任务组【%s】下载失败", mGState.getGroupHash())));
+          return;
         }
-      } else {
-        startNext();
+        mGState.listener.onFail(false,
+            ExceptionFactory.getException(ExceptionFactory.TYPE_GROUP,
+                String.format("任务组【%s】下载失败", mGState.getGroupHash()), null));
+        return;
       }
+      startNext();
       return;
     }
     SimpleSubRetryQueue.getInstance().offer(loaderUtil);
@@ -144,6 +150,10 @@ final class SimpleSchedulers implements Handler.Callback {
    * 2、completeNum + failNum + stopNum = subSize，则认为组合任务停止
    */
   private synchronized void handleStop(AbsSubDLoadUtil loadUtil, long curLocation) {
+    Log.d(TAG, String.format("handleStop, size = %s, completeNum = %s, failNum = %s, stopNum = %s",
+        mGState.getSubSize(), mGState.getCompleteNum(), mGState.getFailNum(),
+        mGState.getSubSize()));
+
     mGState.listener.onSubStop(loadUtil.getEntity(), curLocation);
     mGState.countStopNum(loadUtil.getKey());
     if (mGState.getStopNum() == mGState.getSubSize()
@@ -152,12 +162,11 @@ final class SimpleSchedulers implements Handler.Callback {
         + mGState.getFailNum()
         + mQueue.getCacheSize()
         == mGState.getSubSize()) {
-      mQueue.clear();
       mGState.isRunning.set(false);
       mGState.listener.onStop(mGState.getProgress());
-    } else {
-      startNext();
+      return;
     }
+    startNext();
   }
 
   /**
@@ -170,6 +179,11 @@ final class SimpleSchedulers implements Handler.Callback {
    */
   private synchronized void handleComplete(AbsSubDLoadUtil loader) {
     ALog.d(TAG, String.format("子任务【%s】完成", loader.getEntity().getFileName()));
+    Log.d(TAG,
+        String.format("handleComplete, size = %s, completeNum = %s, failNum = %s, stopNum = %s",
+            mGState.getSubSize(), mGState.getCompleteNum(), mGState.getFailNum(),
+            mGState.getSubSize()));
+
     TaskRecord record = loader.getRecord();
     if (record != null && record.isBlock) {
       File partFile =
@@ -180,23 +194,22 @@ final class SimpleSchedulers implements Handler.Callback {
     mGState.listener.onSubComplete(loader.getEntity());
     mQueue.removeTaskFromExecQ(loader);
     mGState.updateCompleteNum();
-    ALog.d(TAG, String.format("总任务数：%s，完成的任务数：%s，失败的任务数：%s，停止的任务数：%s", mGState.getSubSize(),
-        mGState.getCompleteNum(), mGState.getFailNum(), mGState.getStopNum()));
     if (mGState.getCompleteNum() + mGState.getFailNum() + mGState.getStopNum()
         == mGState.getSubSize()) {
       if (mGState.getStopNum() == 0 && mGState.getFailNum() == 0) {
         mGState.listener.onComplete();
-      } else if(mGState.getStopNum() == 0&&!Configuration.getInstance().dGroupCfg.isSubFailAsStop() ){
-        mGState.listener.onFail(false, new AriaException(TAG,
-                String.format("任务组【%s】下载失败", mGState.getGroupHash())));
+      } else if (mGState.getStopNum() == 0
+          && !Configuration.getInstance().dGroupCfg.isSubFailAsStop()) {
+        mGState.listener.onFail(false,
+            ExceptionFactory.getException(ExceptionFactory.TYPE_GROUP,
+                String.format("任务组【%s】下载失败", mGState.getGroupHash()), null));
       } else {
         mGState.listener.onStop(mGState.getProgress());
       }
-      mQueue.clear();
       mGState.isRunning.set(false);
-    } else {
-      startNext();
+      return;
     }
+    startNext();
   }
 
   /**
@@ -210,8 +223,8 @@ final class SimpleSchedulers implements Handler.Callback {
     if (next != null) {
       ALog.d(TAG, String.format("启动任务：%s", next.getEntity().getFileName()));
       mQueue.startTask(next);
-    } else {
-      ALog.i(TAG, "没有下一子任务");
+      return;
     }
+    ALog.i(TAG, "没有下一子任务");
   }
 }

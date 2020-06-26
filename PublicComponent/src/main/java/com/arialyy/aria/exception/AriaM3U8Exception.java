@@ -18,11 +18,11 @@ package com.arialyy.aria.exception;
 public class AriaM3U8Exception extends AriaException {
   private static final String M3U8_EXCEPTION = "Aria M3U8 Exception:";
 
-  public AriaM3U8Exception(String tag, String message) {
-    super(tag, String.format("%s\n%s", M3U8_EXCEPTION, message));
+  public AriaM3U8Exception(String message) {
+    super(String.format("%s\n%s", M3U8_EXCEPTION, message));
   }
 
-  public AriaM3U8Exception(String tag, String message, Exception e){
-    super(tag, message, e);
+  public AriaM3U8Exception(String message, Exception e) {
+    super(message, e);
   }
 }

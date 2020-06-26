@@ -16,7 +16,6 @@
 package com.arialyy.aria.core.listener;
 
 import android.os.Handler;
-import android.util.Log;
 import com.arialyy.aria.core.common.AbsEntity;
 import com.arialyy.aria.core.inf.IEntity;
 import com.arialyy.aria.core.inf.TaskSchedulerType;
@@ -125,7 +124,7 @@ public abstract class BaseListener<ENTITY extends AbsEntity, TASK_WRAPPER extend
     if (e != null) {
       String error = ALog.getExceptionString(e);
       ALog.e(TAG, error);
-      ErrorHelp.saveError(e.getTag(), e.getMessage(), error);
+      ErrorHelp.saveError(e.getMessage(), error);
     }
   }
 

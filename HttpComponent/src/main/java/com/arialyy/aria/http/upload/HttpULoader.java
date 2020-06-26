@@ -62,7 +62,7 @@ final class HttpULoader extends AbsNormalLoader<UTaskWrapper> {
         new Handler(looper, mStateManager.getHandlerCallback()));
     if (tt == null || tt.isEmpty()) {
       ALog.e(TAG, "创建线程任务失败");
-      getListener().onFail(false, new AriaHTTPException(TAG, "创建线程任务失败"));
+      getListener().onFail(false, new AriaHTTPException("创建线程任务失败"));
       return;
     }
 

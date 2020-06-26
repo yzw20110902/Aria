@@ -117,21 +117,17 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
         handleComplete();
       }
     } catch (MalformedURLException e) {
-      fail(new AriaHTTPException(TAG,
-          String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
-              getEntity().getFilePath(), getEntity().getUrl()), e), false);
+      fail(new AriaHTTPException(String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
+          getEntity().getFilePath(), getEntity().getUrl()), e), false);
     } catch (IOException e) {
-      fail(new AriaHTTPException(TAG,
-          String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
-              getEntity().getFilePath(), getEntity().getUrl()), e), true);
+      fail(new AriaHTTPException(String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
+          getEntity().getFilePath(), getEntity().getUrl()), e), true);
     } catch (ArrayIndexOutOfBoundsException e) {
-      fail(new AriaHTTPException(TAG,
-          String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
-              getEntity().getFilePath(), getEntity().getUrl()), e), false);
+      fail(new AriaHTTPException(String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
+          getEntity().getFilePath(), getEntity().getUrl()), e), false);
     } catch (Exception e) {
-      fail(new AriaHTTPException(TAG,
-          String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
-              getEntity().getFilePath(), getEntity().getUrl()), e), false);
+      fail(new AriaHTTPException(String.format("任务【%s】下载失败，filePath: %s, url: %s", getFileName(),
+          getEntity().getFilePath(), getEntity().getUrl()), e), false);
     } finally {
       try {
         if (file != null) {
@@ -171,7 +167,7 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       }
       handleComplete();
     } catch (IOException e) {
-      fail(new AriaHTTPException(TAG,
+      fail(new AriaHTTPException(
           String.format("文件下载失败，savePath: %s, url: %s", getEntity().getFilePath(),
               getThreadConfig().url), e), true);
     } finally {
@@ -224,8 +220,7 @@ final class HttpDThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       }
       handleComplete();
     } catch (IOException e) {
-      fail(new AriaHTTPException(TAG,
-          String.format("文件下载失败，savePath: %s, url: %s", getEntity().getFilePath(),
+      fail(new AriaHTTPException(String.format("文件下载失败，savePath: %s, url: %s", getEntity().getFilePath(),
               getThreadConfig().url), e), true);
     } finally {
       try {

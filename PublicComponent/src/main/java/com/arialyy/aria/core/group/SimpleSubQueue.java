@@ -21,10 +21,10 @@ import com.arialyy.aria.util.CommonUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 组合任务队列，该队列生命周期和{@link AbsGroupLoaderUtil}生命周期一致
@@ -34,11 +34,11 @@ final class SimpleSubQueue implements ISubQueue<AbsSubDLoadUtil> {
   /**
    * 缓存下载器
    */
-  private Map<String, AbsSubDLoadUtil> mCache = new LinkedHashMap<>();
+  private Map<String, AbsSubDLoadUtil> mCache = new ConcurrentHashMap<>();
   /**
    * 执行中的下载器
    */
-  private Map<String, AbsSubDLoadUtil> mExec = new LinkedHashMap<>();
+  private Map<String, AbsSubDLoadUtil> mExec = new ConcurrentHashMap<>();
 
   /**
    * 最大执行任务数
@@ -85,12 +85,13 @@ final class SimpleSubQueue implements ISubQueue<AbsSubDLoadUtil> {
     if (mExec.size() < mExecSize) {
       mCache.remove(fileer.getKey());
       mExec.put(fileer.getKey(), fileer);
-      ALog.d(TAG, String.format("开始执行子任务：%s", fileer.getEntity().getFileName()));
+      ALog.d(TAG,
+          String.format("开始执行子任务：%s，key: %s", fileer.getEntity().getFileName(), fileer.getKey()));
       fileer.run();
-    } else {
-      ALog.d(TAG, String.format("执行队列已满，任务进入缓存器中，key: %s", fileer.getKey()));
-      addTask(fileer);
+      return;
     }
+    ALog.d(TAG, String.format("执行队列已满，任务进入缓存器中，key: %s", fileer.getKey()));
+    addTask(fileer);
   }
 
   @Override public void stopTask(AbsSubDLoadUtil fileer) {
@@ -144,15 +145,16 @@ final class SimpleSubQueue implements ISubQueue<AbsSubDLoadUtil> {
           addTask(t);
         }
       }
-    } else { // 处理队列变大的情况，该情况下将增加任务
-      if (mExec.size() < num) {
-        for (int i = 0; i < diff; i++) {
-          AbsSubDLoadUtil next = getNextTask();
-          if (next != null) {
-            startTask(next);
-          } else {
-            ALog.d(TAG, "子任务中没有缓存任务");
-          }
+      return;
+    }
+    // 处理队列变大的情况，该情况下将增加任务
+    if (mExec.size() < num) {
+      for (int i = 0; i < diff; i++) {
+        AbsSubDLoadUtil next = getNextTask();
+        if (next != null) {
+          startTask(next);
+        } else {
+          ALog.d(TAG, "子任务中没有缓存任务");
         }
       }
     }

@@ -60,7 +60,7 @@ public final class HttpDGInfoTask implements IInfoTask {
       ALog.e(TAG, String.format("获取文件信息失败，url：%s", ((DownloadEntity) entity).getUrl()));
       count.getAndIncrement();
       failCount.getAndIncrement();
-      listener.onSubFail((DownloadEntity) entity, new AriaHTTPException(TAG,
+      listener.onSubFail((DownloadEntity) entity, new AriaHTTPException(
           String.format("子任务获取文件长度失败，url：%s", ((DownloadEntity) entity).getUrl())));
       checkGetSizeComplete(count.get(), failCount.get());
     }
@@ -111,7 +111,7 @@ public final class HttpDGInfoTask implements IInfoTask {
           DownloadEntity subEntity = dTaskWrapper.getEntity();
           if (subEntity.getFileSize() > 0) {
             count.getAndIncrement();
-            if (subEntity.getCurrentProgress() < subEntity.getFileSize()){
+            if (subEntity.getCurrentProgress() < subEntity.getFileSize()) {
               // 如果没有完成需要拷贝一份数据
               cloneHeader(dTaskWrapper);
             }
@@ -132,7 +132,7 @@ public final class HttpDGInfoTask implements IInfoTask {
    */
   private void checkGetSizeComplete(int count, int failCount) {
     if (failCount == wrapper.getSubTaskWrapper().size()) {
-      callback.onFail(wrapper.getEntity(), new AriaHTTPException(TAG, "获取子任务长度失败"), false);
+      callback.onFail(wrapper.getEntity(), new AriaHTTPException("获取子任务长度失败"), false);
       notifyLock();
       return;
     }

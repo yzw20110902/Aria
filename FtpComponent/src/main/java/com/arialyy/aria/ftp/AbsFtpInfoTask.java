@@ -328,7 +328,7 @@ public abstract class AbsFtpInfoTask<ENTITY extends AbsEntity, TASK_WRAPPER exte
         needRetry = needRetry && !CheckUtil.ftpIsBadRequest(client.getReplyCode());
       }
 
-      callback.onFail(mEntity, new AriaFTPException(TAG, msg), needRetry);
+      callback.onFail(mEntity, new AriaFTPException(msg), needRetry);
     }
   }
 

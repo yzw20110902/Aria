@@ -59,7 +59,7 @@ public class AriaCrashHandler implements Thread.UncaughtExceptionHandler {
     mExecutorService.execute(new Runnable() {
       @Override
       public void run() {
-        ErrorHelp.saveError(name, "", ALog.getExceptionString(ex));
+        ErrorHelp.saveError("", ALog.getExceptionString(ex));
       }
     });
   }

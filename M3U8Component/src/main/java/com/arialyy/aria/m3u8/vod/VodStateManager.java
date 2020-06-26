@@ -149,7 +149,7 @@ public final class VodStateManager implements IThreadStateManager {
               if (loader.generateIndexFile(false)) {
                 listener.onComplete();
               } else {
-                listener.onFail(false, new AriaM3U8Exception(TAG, "创建索引文件失败"));
+                listener.onFail(false, new AriaM3U8Exception("创建索引文件失败"));
               }
             } else if (m3U8Option.isMergeFile()) {
               if (mergeFile()) {

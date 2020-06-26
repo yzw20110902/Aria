@@ -54,7 +54,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
   @Override protected void handlerThreadTask() {
     File uploadFile = new File(getEntity().getFilePath());
     if (!uploadFile.exists()) {
-      fail(new AriaHTTPException(TAG,
+      fail(new AriaHTTPException(
           String.format("上传失败，文件不存在；filePath: %s, url: %s", getEntity().getFilePath(),
               getEntity().getUrl())));
       return;
@@ -104,7 +104,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       getEntity().setResponseStr(finish(writer));
     } catch (Exception e) {
       e.printStackTrace();
-      fail(new AriaHTTPException(TAG,
+      fail(new AriaHTTPException(
           String.format("上传失败，filePath: %s, url: %s", getEntity().getFilePath(),
               getEntity().getUrl()), e));
     }
@@ -220,7 +220,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
     } else {
       String msg = "response msg: " + mHttpConn.getResponseMessage() + "，code: " + status;
       ALog.e(TAG, msg);
-      fail(new AriaHTTPException(TAG, msg), false);
+      fail(new AriaHTTPException(msg), false);
     }
     writer.flush();
     writer.close();

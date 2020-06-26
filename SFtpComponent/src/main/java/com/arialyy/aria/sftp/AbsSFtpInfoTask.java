@@ -54,11 +54,11 @@ public abstract class AbsSFtpInfoTask<WP extends AbsTaskWrapper> implements IInf
       }
       getFileInfo(session);
     } catch (JSchException e) {
-      fail(new AriaSFTPException(TAG, "jsch错误", e), false);
+      fail(new AriaSFTPException("jsch错误", e), false);
     } catch (UnsupportedEncodingException e) {
-      fail(new AriaSFTPException(TAG, "字符编码错误", e), false);
+      fail(new AriaSFTPException("字符编码错误", e), false);
     } catch (SftpException e) {
-      fail(new AriaSFTPException(TAG, "sftp错误，错误类型：" + e.id, e), false);
+      fail(new AriaSFTPException("sftp错误，错误类型：" + e.id, e), false);
     }
   }
 

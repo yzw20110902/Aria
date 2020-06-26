@@ -105,7 +105,7 @@ public abstract class BaseFtpThreadTaskAdapter extends AbsThreadTaskAdapter {
       int reply = client.getReplyCode();
       if (!FTPReply.isPositiveCompletion(reply)) {
         client.disconnect();
-        fail(new AriaFTPException(TAG,
+        fail(new AriaFTPException(
             String.format("无法连接到ftp服务器，错误码为：%s，msg:%s", reply, client.getReplyString())), false);
         return null;
       }

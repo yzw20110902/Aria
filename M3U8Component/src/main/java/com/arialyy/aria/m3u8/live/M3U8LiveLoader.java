@@ -276,7 +276,7 @@ final class M3U8LiveLoader extends BaseM3U8Loader {
           }
         }
         if (TextUtils.isEmpty(url) || !url.startsWith("http")) {
-          fail(new AriaM3U8Exception(TAG, String.format("ts地址错误，url：%s", url)), false);
+          fail(new AriaM3U8Exception(String.format("ts地址错误，url：%s", url)), false);
           return;
         }
         offerPeer(new M3U8LiveLoader.ExtInfo(url, extInf));
@@ -297,13 +297,13 @@ final class M3U8LiveLoader extends BaseM3U8Loader {
         if (generateIndexFile(true)) {
           getListener().onComplete();
         } else {
-          getListener().onFail(false, new AriaM3U8Exception(TAG, "创建索引文件失败"));
+          getListener().onFail(false, new AriaM3U8Exception("创建索引文件失败"));
         }
       } else if (mM3U8Option.isMergeFile()) {
         if (mergeFile()) {
           getListener().onComplete();
         } else {
-          getListener().onFail(false, new AriaM3U8Exception(TAG, "合并文件失败"));
+          getListener().onFail(false, new AriaM3U8Exception("合并文件失败"));
         }
       } else {
         getListener().onComplete();

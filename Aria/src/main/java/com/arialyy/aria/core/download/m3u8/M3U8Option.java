@@ -49,7 +49,7 @@ public class M3U8Option<OP extends M3U8Option> extends BaseOption {
    * @param useDefConvert true 使用默认的转换器，false 关闭默认的转换器
    */
   public OP setUseDefConvert(boolean useDefConvert) {
-    this.useDefConvert = true;
+    this.useDefConvert = useDefConvert;
     ALog.d(TAG, "使用默认的码率转换器和TS转换器，如果无法下载，请参考：https://github.com/AriaLyy/Aria/issues/597 定制转换器");
     return (OP) this;
   }

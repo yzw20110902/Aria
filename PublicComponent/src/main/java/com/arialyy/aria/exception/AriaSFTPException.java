@@ -18,11 +18,11 @@ package com.arialyy.aria.exception;
 public class AriaSFTPException extends AriaException {
   private static final String SFTP_EXCEPTION = "Aria SFTP Exception:";
 
-  public AriaSFTPException(String tag, String message) {
-    super(tag, String.format("%s\n%s", SFTP_EXCEPTION, message));
+  public AriaSFTPException(String message) {
+    super(String.format("%s\n%s", SFTP_EXCEPTION, message));
   }
 
-  public AriaSFTPException(String tag, String message, Exception e) {
-    super(tag, message, e);
+  public AriaSFTPException(String message, Exception e) {
+    super(message, e);
   }
 }

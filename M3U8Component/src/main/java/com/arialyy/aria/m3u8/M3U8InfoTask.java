@@ -295,7 +295,7 @@ final public class M3U8InfoTask implements IInfoTask {
     ALog.d(TAG, "30x跳转，新url为【" + newUrl + "】");
     if (TextUtils.isEmpty(newUrl) || newUrl.equalsIgnoreCase("null")) {
       if (mCallback != null) {
-        mCallback.onFail(mEntity, new AriaM3U8Exception(TAG, "获取重定向链接失败"), false);
+        mCallback.onFail(mEntity, new AriaM3U8Exception("获取重定向链接失败"), false);
       }
       return;
     }
@@ -354,7 +354,7 @@ final public class M3U8InfoTask implements IInfoTask {
   }
 
   private void failDownload(String errorInfo, boolean needRetry) {
-    mCallback.onFail(mEntity, new AriaM3U8Exception(TAG, errorInfo), needRetry);
+    mCallback.onFail(mEntity, new AriaM3U8Exception(errorInfo), needRetry);
   }
 
   /**

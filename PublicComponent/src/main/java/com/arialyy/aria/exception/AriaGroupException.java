@@ -15,14 +15,14 @@
  */
 package com.arialyy.aria.exception;
 
-public class AriaException extends Exception {
+public class AriaGroupException extends AriaException {
+  private static final String FTP_EXCEPTION = "Aria Group Exception:";
 
-  public AriaException(String message) {
-    super(message);
+  public AriaGroupException(String message) {
+    super(String.format("%s\n%s", FTP_EXCEPTION, message));
   }
 
-  public AriaException(String message, Exception e) {
-    super(String.format("%s\n%s", message == null ? "" : message,
-        e == null ? "" : e.getMessage()));
+  public AriaGroupException(String message, Exception e) {
+    super(message, e);
   }
 }

@@ -19,7 +19,6 @@ import android.annotation.SuppressLint;
 import com.arialyy.aria.core.AriaConfig;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,8 +35,8 @@ public class ErrorHelp {
    * @param msg 错误提示
    * @param ex 异常
    */
-  public static void saveError(String tag, String msg, String ex) {
-    writeLogToFile(tag, String.format("\nmsg【%s】\nException：%s", msg, ex));
+  public static void saveError(String msg, String ex) {
+    writeLogToFile(String.format("\nmsg【%s】\nException：%s", msg, ex));
   }
 
   /**
@@ -57,11 +56,9 @@ public class ErrorHelp {
   /**
    * 把日志记录到文件
    */
-  private static int writeLogToFile(String tag, String message) {
+  private static int writeLogToFile(String message) {
     StringBuffer stringBuffer = new StringBuffer();
     stringBuffer.append(getData("yyyy-MM-dd HH:mm:ss"));
-    stringBuffer.append("    ");
-    stringBuffer.append(tag);
     stringBuffer.append("    ");
     stringBuffer.append(message);
     stringBuffer.append("\n\n");

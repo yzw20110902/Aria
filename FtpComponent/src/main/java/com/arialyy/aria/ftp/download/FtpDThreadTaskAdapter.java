@@ -56,7 +56,7 @@ final class FtpDThreadTaskAdapter extends BaseFtpThreadTaskAdapter {
               getThreadRecord().endLocation));
       client = createClient();
       if (client == null) {
-        fail(new AriaFTPException(TAG, "ftp client 创建失败"), false);
+        fail(new AriaFTPException("ftp client 创建失败"), false);
         return;
       }
       if (getThreadRecord().startLocation > 0) {
@@ -65,7 +65,7 @@ final class FtpDThreadTaskAdapter extends BaseFtpThreadTaskAdapter {
       //发送第二次指令时，还需要再做一次判断
       int reply = client.getReplyCode();
       if (!FTPReply.isPositivePreliminary(reply) && reply != FTPReply.COMMAND_OK) {
-        fail(new AriaFTPException(TAG,
+        fail(new AriaFTPException(
             String.format("获取文件信息错误，错误码为：%s，msg：%s", reply, client.getReplyString())), false);
         client.disconnect();
         return;
@@ -76,7 +76,7 @@ final class FtpDThreadTaskAdapter extends BaseFtpThreadTaskAdapter {
       is = client.retrieveFileStream(remotePath);
       reply = client.getReplyCode();
       if (!FTPReply.isPositivePreliminary(reply)) {
-        fail(new AriaFTPException(TAG,
+        fail(new AriaFTPException(
             String.format("获取流失败，错误码为：%s，msg：%s", reply, client.getReplyString())), true);
         client.disconnect();
         return;
@@ -89,9 +89,9 @@ final class FtpDThreadTaskAdapter extends BaseFtpThreadTaskAdapter {
         handleComplete();
       }
     } catch (IOException e) {
-      fail(new AriaFTPException(TAG, String.format("下载失败【%s】", getThreadConfig().url), e), true);
+      fail(new AriaFTPException(String.format("下载失败【%s】", getThreadConfig().url), e), true);
     } catch (Exception e) {
-      fail(new AriaFTPException(TAG, String.format("下载失败【%s】", getThreadConfig().url), e), false);
+      fail(new AriaFTPException(String.format("下载失败【%s】", getThreadConfig().url), e), false);
     } finally {
       try {
         if (is != null) {
@@ -153,7 +153,7 @@ final class FtpDThreadTaskAdapter extends BaseFtpThreadTaskAdapter {
       }
       handleComplete();
     } catch (IOException e) {
-      fail(new AriaFTPException(TAG, String.format("下载失败【%s】", getThreadConfig().url), e), true);
+      fail(new AriaFTPException(String.format("下载失败【%s】", getThreadConfig().url), e), true);
     } finally {
       try {
         if (fos != null) {
@@ -203,7 +203,7 @@ final class FtpDThreadTaskAdapter extends BaseFtpThreadTaskAdapter {
         }
       }
     } catch (IOException e) {
-      fail(new AriaFTPException(TAG, String.format("下载失败【%s】", getThreadConfig().url), e), true);
+      fail(new AriaFTPException(String.format("下载失败【%s】", getThreadConfig().url), e), true);
     } finally {
       try {
         if (file != null) {

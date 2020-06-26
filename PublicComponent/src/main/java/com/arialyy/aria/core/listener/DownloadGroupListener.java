@@ -91,7 +91,7 @@ public class DownloadGroupListener
     sendInState2Target(ISchedulers.SUB_FAIL, subEntity);
     if (e != null) {
       e.printStackTrace();
-      ErrorHelp.saveError(e.getTag(), "", ALog.getExceptionString(e));
+      ErrorHelp.saveError("", ALog.getExceptionString(e));
     }
   }
 

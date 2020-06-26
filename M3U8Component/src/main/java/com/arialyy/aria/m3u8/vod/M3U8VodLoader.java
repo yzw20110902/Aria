@@ -519,10 +519,10 @@ final class M3U8VodLoader extends BaseM3U8Loader {
           urls.addAll((Collection<? extends String>) info.obj);
         }
         if (urls.isEmpty()) {
-          fail(new AriaM3U8Exception(TAG, "获取地址失败"), false);
+          fail(new AriaM3U8Exception("获取地址失败"), false);
           return;
         } else if (!urls.get(0).startsWith("http")) {
-          fail(new AriaM3U8Exception(TAG, "地址错误，请使用IVodTsUrlConverter处理你的url信息"), false);
+          fail(new AriaM3U8Exception("地址错误，请使用IVodTsUrlConverter处理你的url信息"), false);
           return;
         }
         mM3U8Option.setUrls(urls);

@@ -159,7 +159,6 @@ public class SingleTaskActivity extends BaseActivity<ActivitySingleBinding> {
     }
     if (speed > -1) {
       msg = item.getTitle().toString();
-      Aria.download(this).setMaxSpeed(speed);
       T.showShort(this, msg);
     }
     return true;

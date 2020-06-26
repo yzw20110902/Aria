@@ -50,7 +50,7 @@ final class SFtpUThreadTaskAdapter extends AbsThreadTaskAdapter {
 
   @Override protected void handlerThreadTask() {
     if (session == null) {
-      fail(new AriaSFTPException(TAG, "session 为空"), false);
+      fail(new AriaSFTPException("session 为空"), false);
       return;
     }
     try {
@@ -75,13 +75,13 @@ final class SFtpUThreadTaskAdapter extends AbsThreadTaskAdapter {
       channelSftp.cd(remotePath);
       upload(remotePath);
     } catch (SftpException e) {
-      fail(new AriaSFTPException(TAG, "sftp错误，错误类型：" + e.id, e), false);
+      fail(new AriaSFTPException("sftp错误，错误类型：" + e.id, e), false);
     } catch (UnsupportedEncodingException e) {
-      fail(new AriaSFTPException(TAG, "字符编码错误", e), false);
+      fail(new AriaSFTPException("字符编码错误", e), false);
     } catch (IOException e) {
-      fail(new AriaSFTPException(TAG, "", e), true);
+      fail(new AriaSFTPException("", e), true);
     } catch (JSchException e) {
-      fail(new AriaSFTPException(TAG, "jsch 错误", e), false);
+      fail(new AriaSFTPException("jsch 错误", e), false);
     } finally {
       channelSftp.disconnect();
     }
