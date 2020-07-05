@@ -48,7 +48,8 @@ public class CommonModule extends BaseViewModule {
     String[] titles = context.getResources().getStringArray(R.array.component_items);
     int[] icons = new int[] {
         R.drawable.ic_fragment,
-        R.drawable.ic_dialog
+        R.drawable.ic_dialog,
+        R.drawable.ic_fragment
     };
     int i = 0;
     for (String title : titles) {

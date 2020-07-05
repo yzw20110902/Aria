@@ -75,6 +75,7 @@
   <string-array name="component_items">
     <item>fragment中使用</item>
     <item>dialog中使用</item>
+    <item>dialogFragment中使用</item>
   </string-array>
 
 

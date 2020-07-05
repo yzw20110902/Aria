@@ -166,7 +166,7 @@ public class DownloadReceiver extends AbsReceiver {
   public void register() {
     Object obj = OBJ_MAP.get(getKey());
     if (obj == null) {
-      ALog.e(TAG, String.format("【%s】观察者为空", getTargetName()));
+      ALog.e(TAG, String.format("register【%s】观察者为空", getTargetName()));
       return;
     }
     Set<Integer> set = ProxyHelper.getInstance().checkProxyType(obj.getClass());
@@ -212,7 +212,7 @@ public class DownloadReceiver extends AbsReceiver {
   @Override protected void unRegisterListener() {
     Object obj = OBJ_MAP.get(getKey());
     if (obj == null) {
-      ALog.e(TAG, String.format("【%s】观察者为空", getTargetName()));
+      ALog.e(TAG, String.format("unRegister【%s】观察者为空", getTargetName()));
       return;
     }
     Set<Integer> set = ProxyHelper.getInstance().mProxyCache.get(obj.getClass().getName());

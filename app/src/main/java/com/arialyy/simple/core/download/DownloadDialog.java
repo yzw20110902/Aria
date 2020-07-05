@@ -66,10 +66,7 @@ public class DownloadDialog extends AbsDialog implements View.OnClickListener {
       int p = (int) (entity.getCurrentProgress() * 100 / entity.getFileSize());
       mPb.setProgress(p);
       int state = entity.getState();
-      setBtState(state != DownloadEntity.STATE_RUNNING);
       mTaskId = entity.getId();
-    } else {
-      setBtState(true);
     }
     mStart.setOnClickListener(this);
     mCancel.setOnClickListener(this);
@@ -106,16 +103,13 @@ public class DownloadDialog extends AbsDialog implements View.OnClickListener {
 
   @Download.onTaskPre public void onTaskPre(DownloadTask task) {
     mSize.setText(CommonUtil.formatFileSize(task.getFileSize()));
-    setBtState(false);
   }
 
   @Download.onTaskStop public void onTaskStop(DownloadTask task) {
-    setBtState(true);
     mSpeed.setText(task.getConvertSpeed());
   }
 
   @Download.onTaskCancel public void onTaskCancel(DownloadTask task) {
-    setBtState(true);
     mPb.setProgress(0);
     mSpeed.setText(task.getConvertSpeed());
   }
@@ -131,8 +125,4 @@ public class DownloadDialog extends AbsDialog implements View.OnClickListener {
 
   }
 
-  private void setBtState(boolean startEnable) {
-    mStart.setEnabled(startEnable);
-    mCancel.setEnabled(!startEnable);
-  }
 }
