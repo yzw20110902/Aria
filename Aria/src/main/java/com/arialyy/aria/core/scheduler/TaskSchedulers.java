@@ -239,6 +239,7 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
     boolean canSend = mAriaConfig.getAConfig().isUseBroadcast();
     if (canSend) {
       Intent intent = new Intent(ISchedulers.ARIA_TASK_INFO_ACTION);
+      intent.setPackage(mAriaConfig.getAPP().getPackageName());
       intent.putExtras(data);
       mAriaConfig.getAPP().sendBroadcast(intent);
     }
@@ -362,6 +363,7 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
     boolean canSend = mAriaConfig.getAConfig().isUseBroadcast();
     if (canSend) {
       Intent intent = new Intent(ISchedulers.ARIA_TASK_INFO_ACTION);
+      intent.setPackage(mAriaConfig.getAPP().getPackageName());
       Bundle b = new Bundle();
       b.putInt(ISchedulers.TASK_TYPE, taskType);
       b.putInt(ISchedulers.TASK_STATE, ISchedulers.FAIL);
@@ -501,6 +503,7 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
    */
   private Intent createData(int taskState, int taskType, AbsEntity entity) {
     Intent intent = new Intent(ISchedulers.ARIA_TASK_INFO_ACTION);
+    intent.setPackage(mAriaConfig.getAPP().getPackageName());
     Bundle b = new Bundle();
     b.putInt(ISchedulers.TASK_TYPE, taskType);
     b.putInt(ISchedulers.TASK_STATE, taskState);
