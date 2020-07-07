@@ -16,6 +16,13 @@
 package com.arialyy.aria.core.common;
 
 import com.arialyy.annotations.TaskEnum;
+import com.arialyy.aria.core.download.DownloadGroupTaskListener;
+import com.arialyy.aria.core.download.DownloadTaskListener;
+import com.arialyy.aria.core.scheduler.BaseListenerInterface;
+import com.arialyy.aria.core.scheduler.M3U8PeerTaskListenerInterface;
+import com.arialyy.aria.core.scheduler.SubTaskListenerInterface;
+import com.arialyy.aria.core.upload.UploadTaskListener;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -69,12 +76,25 @@ public class ProxyHelper {
    * @return {@link #PROXY_TYPE_DOWNLOAD}，如果没有实体对象则返回空的list
    */
   public Set<Integer> checkProxyType(Class clazz) {
-    final String className = clazz.getName();
     Set<Integer> result = mProxyCache.get(clazz.getName());
     if (result != null) {
       return result;
     }
-    result = new HashSet<>();
+    result = checkProxyTypeByInterface(clazz);
+    if (result != null) {
+      return result;
+    }
+    result = checkProxyTypeByProxyClass(clazz);
+
+    if (!result.isEmpty()) {
+      mProxyCache.put(clazz.getName(), result);
+    }
+    return result;
+  }
+
+  private Set<Integer> checkProxyTypeByProxyClass(Class clazz) {
+    final String className = clazz.getName();
+    Set<Integer> result = new HashSet<>();
     if (checkProxyExist(className, TaskEnum.DOWNLOAD_GROUP.proxySuffix)) {
       result.add(PROXY_TYPE_DOWNLOAD_GROUP);
     }
@@ -93,9 +113,31 @@ public class ProxyHelper {
     if (checkProxyExist(className, TaskEnum.DOWNLOAD_GROUP_SUB.proxySuffix)) {
       result.add(PROXY_TYPE_DOWNLOAD_GROUP_SUB);
     }
+    return result;
+  }
 
-    if (!result.isEmpty()) {
-      mProxyCache.put(clazz.getName(), result);
+  private Set<Integer> checkProxyTypeByInterface(Class clazz) {
+    if (clazz.isAssignableFrom(BaseListenerInterface.class)) {
+      return null;
+    }
+    Set<Integer> result = new HashSet<>();
+    if (clazz.isAssignableFrom(DownloadGroupTaskListener.class)) {
+      result.add(PROXY_TYPE_DOWNLOAD_GROUP);
+    }
+    if (clazz.isAssignableFrom(DownloadTaskListener.class)) {
+      result.add(PROXY_TYPE_DOWNLOAD);
+    }
+
+    if (clazz.isAssignableFrom(UploadTaskListener.class)) {
+      result.add(PROXY_TYPE_UPLOAD);
+    }
+
+    if (clazz.isAssignableFrom(M3U8PeerTaskListenerInterface.class)) {
+      result.add(PROXY_TYPE_M3U8_PEER);
+    }
+
+    if (clazz.isAssignableFrom(SubTaskListenerInterface.class)) {
+      result.add(PROXY_TYPE_DOWNLOAD_GROUP_SUB);
     }
     return result;
   }
