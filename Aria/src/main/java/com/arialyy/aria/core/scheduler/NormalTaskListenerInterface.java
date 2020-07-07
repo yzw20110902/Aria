@@ -24,7 +24,7 @@ import com.arialyy.aria.core.task.UploadTask;
  * Created by Aria.Lao on 2017/6/7.
  * 普通任务事件{@link DownloadTask}、{@link UploadTask}、{@link DownloadGroupTask}回调类
  */
-public interface NormalTaskListenerInterface<TASK extends ITask> extends BaseListenerInterface {
+public interface NormalTaskListenerInterface<TASK extends ITask> extends DownloadTaskInternalListenerInterface {
 
   /**
    * 队列已经满了，继续创建任务，将会回调该方法

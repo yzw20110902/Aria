@@ -106,7 +106,7 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
     }
 
     if (!hasProxyListener(listeners, taskEnum)) {
-      if (obj instanceof BaseListenerInterface) {
+      if (obj instanceof DownloadTaskInternalListenerInterface) {
         listeners.put(taskEnum, obj);
         return;
       }

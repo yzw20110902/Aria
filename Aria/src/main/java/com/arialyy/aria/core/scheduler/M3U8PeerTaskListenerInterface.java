@@ -19,7 +19,7 @@ package com.arialyy.aria.core.scheduler;
  * Created by Aria.Lao on 2019/6/26.
  * m3u8切片事件回调类
  */
-public interface M3U8PeerTaskListenerInterface extends BaseListenerInterface {
+public interface M3U8PeerTaskListenerInterface extends DownloadTaskInternalListenerInterface {
 
   public void onPeerStart(final String m3u8Url, final String peerPath, final int peerIndex);
 

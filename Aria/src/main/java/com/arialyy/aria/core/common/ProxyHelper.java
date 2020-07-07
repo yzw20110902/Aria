@@ -18,7 +18,7 @@ package com.arialyy.aria.core.common;
 import com.arialyy.annotations.TaskEnum;
 import com.arialyy.aria.core.download.DownloadGroupTaskListener;
 import com.arialyy.aria.core.download.DownloadTaskListener;
-import com.arialyy.aria.core.scheduler.BaseListenerInterface;
+import com.arialyy.aria.core.scheduler.DownloadTaskInternalListenerInterface;
 import com.arialyy.aria.core.scheduler.M3U8PeerTaskListenerInterface;
 import com.arialyy.aria.core.scheduler.SubTaskListenerInterface;
 import com.arialyy.aria.core.upload.UploadTaskListener;
@@ -117,7 +117,7 @@ public class ProxyHelper {
   }
 
   private Set<Integer> checkProxyTypeByInterface(Class clazz) {
-    if (!BaseListenerInterface.class.isAssignableFrom(clazz)) {
+    if (!DownloadTaskInternalListenerInterface.class.isAssignableFrom(clazz)) {
       return null;
     }
     Set<Integer> result = new HashSet<>();

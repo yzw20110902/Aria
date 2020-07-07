@@ -22,7 +22,7 @@ import com.arialyy.aria.core.task.ITask;
  * Created by Aria.Lao on 2019/6/26.
  * 子任务事件回调类
  */
-public interface SubTaskListenerInterface<TASK extends ITask, SUB_ENTITY extends AbsNormalEntity> extends BaseListenerInterface {
+public interface SubTaskListenerInterface<TASK extends ITask, SUB_ENTITY extends AbsNormalEntity> extends DownloadTaskInternalListenerInterface {
 
   public void onNoSupportBreakPoint(TASK task);
 
