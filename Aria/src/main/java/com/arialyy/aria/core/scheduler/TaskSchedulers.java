@@ -18,7 +18,6 @@ package com.arialyy.aria.core.scheduler;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 import com.arialyy.annotations.TaskEnum;
 import com.arialyy.aria.core.AriaConfig;
 import com.arialyy.aria.core.common.AbsEntity;
@@ -107,8 +106,8 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
     }
 
     if (!hasProxyListener(listeners, taskEnum)) {
-      if (obj instanceof BaseListenerInterface){
-        listeners.put(taskEnum, (ISchedulerListener) obj);
+      if (obj instanceof BaseListenerInterface) {
+        listeners.put(taskEnum, obj);
         return;
       }
       String proxyClassName = targetName + taskEnum.proxySuffix;
@@ -409,14 +408,14 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
         if (listeners == null || listeners.isEmpty()) {
           continue;
         }
-        NormalTaskListener<TASK> listener = null;
+        NormalTaskListenerInterface<TASK> listener = null;
         if (mObservers.get(key) != null) {
           if (task instanceof DownloadTask) {
-            listener = (NormalTaskListener<TASK>) listeners.get(TaskEnum.DOWNLOAD);
+            listener = (NormalTaskListenerInterface<TASK>) listeners.get(TaskEnum.DOWNLOAD);
           } else if (task instanceof DownloadGroupTask) {
-            listener = (NormalTaskListener<TASK>) listeners.get(TaskEnum.DOWNLOAD_GROUP);
+            listener = (NormalTaskListenerInterface<TASK>) listeners.get(TaskEnum.DOWNLOAD_GROUP);
           } else if (task instanceof UploadTask) {
-            listener = (NormalTaskListener<TASK>) listeners.get(TaskEnum.UPLOAD);
+            listener = (NormalTaskListenerInterface<TASK>) listeners.get(TaskEnum.UPLOAD);
           }
         }
         if (listener != null) {

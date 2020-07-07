@@ -117,26 +117,26 @@ public class ProxyHelper {
   }
 
   private Set<Integer> checkProxyTypeByInterface(Class clazz) {
-    if (clazz.isAssignableFrom(BaseListenerInterface.class)) {
+    if (!BaseListenerInterface.class.isAssignableFrom(clazz)) {
       return null;
     }
     Set<Integer> result = new HashSet<>();
-    if (clazz.isAssignableFrom(DownloadGroupTaskListener.class)) {
+    if (DownloadGroupTaskListener.class.isAssignableFrom(clazz)) {
       result.add(PROXY_TYPE_DOWNLOAD_GROUP);
     }
-    if (clazz.isAssignableFrom(DownloadTaskListener.class)) {
+    if (DownloadTaskListener.class.isAssignableFrom(clazz)) {
       result.add(PROXY_TYPE_DOWNLOAD);
     }
 
-    if (clazz.isAssignableFrom(UploadTaskListener.class)) {
+    if (UploadTaskListener.class.isAssignableFrom(clazz)) {
       result.add(PROXY_TYPE_UPLOAD);
     }
 
-    if (clazz.isAssignableFrom(M3U8PeerTaskListenerInterface.class)) {
+    if (M3U8PeerTaskListenerInterface.class.isAssignableFrom(clazz)) {
       result.add(PROXY_TYPE_M3U8_PEER);
     }
 
-    if (clazz.isAssignableFrom(SubTaskListenerInterface.class)) {
+    if (SubTaskListenerInterface.class.isAssignableFrom(clazz)) {
       result.add(PROXY_TYPE_DOWNLOAD_GROUP_SUB);
     }
     return result;
