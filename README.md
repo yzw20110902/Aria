@@ -165,6 +165,7 @@ protected void onCreate(Bundle savedInstanceState) {
 感谢小伙伴们提供的PR ``^_^`
 [DaveBoy](https://github.com/DaveBoy)
 [liuxiaowei](https://github.com/liuxiaowei)
+[chenfei0928](https://github.com/chenfei0928)
 
 ## 其他
  有任何问题，可以在[issues](https://github.com/AriaLyy/Aria/issues)给我留言反馈。</br>
