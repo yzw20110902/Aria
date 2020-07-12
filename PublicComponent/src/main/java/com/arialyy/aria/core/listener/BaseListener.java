@@ -29,22 +29,20 @@ import com.arialyy.aria.util.ErrorHelp;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 
-public abstract class BaseListener<ENTITY extends AbsEntity, TASK_WRAPPER extends AbsTaskWrapper<ENTITY>,
-    TASK extends AbsTask<TASK_WRAPPER>>
-    implements IEventListener {
-  protected static String TAG;
-  protected static final int RUN_SAVE_INTERVAL = 5 * 1000;  //5s保存一次下载中的进度
+public abstract class BaseListener implements IEventListener {
+  protected String TAG = getClass().getSimpleName();
+  static final int RUN_SAVE_INTERVAL = 5 * 1000;  //5s保存一次下载中的进度
   protected SoftReference<Handler> outHandler;
   private long mLastLen;   //上一次发送长度
   private boolean isFirst = true;
-  private TASK mTask;
-  protected long mLastSaveTime;
-  protected ENTITY mEntity;
-  protected TASK_WRAPPER mTaskWrapper;
+  private AbsTask mTask;
+  long mLastSaveTime;
+  protected AbsEntity mEntity;
+  protected AbsTaskWrapper mTaskWrapper;
   private boolean isConvertSpeed;
   private long mUpdateInterval;
 
-  protected BaseListener(TASK task, Handler outHandler) {
+  @Override public IEventListener setParams(AbsTask task, Handler outHandler) {
     this.outHandler = new SoftReference<>(outHandler);
     mTask = new WeakReference<>(task).get();
     mEntity = mTask.getTaskWrapper().getEntity();
@@ -54,10 +52,11 @@ public abstract class BaseListener<ENTITY extends AbsEntity, TASK_WRAPPER extend
     mLastLen = mEntity.getCurrentProgress();
     mLastSaveTime = System.currentTimeMillis();
     TAG = CommonUtil.getClassName(getClass());
+    return this;
   }
 
-  protected TASK getTask() {
-    return mTask;
+  protected <TASK extends AbsTask> TASK getTask(Class<TASK> clazz) {
+    return (TASK) mTask;
   }
 
   @Override public void onPre() {

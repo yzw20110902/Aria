@@ -16,14 +16,12 @@
 package com.arialyy.aria.ftp.download;
 
 import com.arialyy.aria.core.download.DTaskWrapper;
-import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.loader.AbsNormalLoader;
 import com.arialyy.aria.core.loader.AbsNormalLoaderUtil;
 import com.arialyy.aria.core.loader.LoaderStructure;
 import com.arialyy.aria.core.loader.NormalLoader;
 import com.arialyy.aria.core.loader.NormalTTBuilder;
 import com.arialyy.aria.core.loader.NormalThreadStateManager;
-import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.ftp.FtpTaskOption;
 
 /**
@@ -32,13 +30,12 @@ import com.arialyy.aria.ftp.FtpTaskOption;
  */
 public final class FtpDLoaderUtil extends AbsNormalLoaderUtil {
 
-  public FtpDLoaderUtil(AbsTaskWrapper wrapper, IEventListener listener) {
-    super(wrapper, listener);
-    wrapper.generateTaskOption(FtpTaskOption.class);
-  }
-
   @Override public AbsNormalLoader getLoader() {
-    return mLoader == null ? new NormalLoader(getTaskWrapper(), getListener()) : mLoader;
+    if (mLoader == null){
+      getTaskWrapper().generateTaskOption(FtpTaskOption.class);
+      mLoader = new NormalLoader(getTaskWrapper(), getListener());
+    }
+    return mLoader ;
   }
 
   public LoaderStructure BuildLoaderStructure() {

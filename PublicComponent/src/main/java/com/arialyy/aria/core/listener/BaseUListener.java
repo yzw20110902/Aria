@@ -15,26 +15,18 @@
  */
 package com.arialyy.aria.core.listener;
 
-import android.os.Handler;
 import com.arialyy.aria.core.inf.IEntity;
 import com.arialyy.aria.core.inf.TaskSchedulerType;
-import com.arialyy.aria.core.task.AbsTask;
-import com.arialyy.aria.core.upload.UTaskWrapper;
-import com.arialyy.aria.core.upload.UploadEntity;
+import com.arialyy.aria.core.task.UploadTask;
 import com.arialyy.aria.util.DeleteURecord;
 
 /**
  * 下载监听类
  */
-public class BaseUListener extends BaseListener<UploadEntity, UTaskWrapper, AbsTask<UTaskWrapper>>
-    implements IUploadListener {
-
-  public BaseUListener(AbsTask<UTaskWrapper> task, Handler outHandler) {
-    super(task, outHandler);
-  }
+public class BaseUListener extends BaseListener implements IUploadListener {
 
   @Override protected void handleCancel() {
-    int sType = getTask().getSchedulerType();
+    int sType = getTask(UploadTask.class).getSchedulerType();
     if (sType == TaskSchedulerType.TYPE_CANCEL_AND_NOT_NOTIFY) {
       mEntity.setComplete(false);
       mEntity.setState(IEntity.STATE_WAIT);

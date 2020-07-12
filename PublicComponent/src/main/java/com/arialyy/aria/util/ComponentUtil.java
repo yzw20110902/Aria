@@ -24,10 +24,9 @@ import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.task.AbsTask;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.core.wrapper.ITaskWrapper;
+import com.arialyy.aria.exception.AriaComponentException;
 import java.lang.ref.SoftReference;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -44,9 +43,12 @@ public class ComponentUtil {
 
   private String TAG = CommonUtil.getClassName(getClass());
   private static volatile ComponentUtil INSTANCE = null;
+  private AriaServiceLoader<IUtil> utilLoader;
+  private AriaServiceLoader<IEventListener> listenerLoader;
 
   private ComponentUtil() {
-
+    utilLoader = AriaServiceLoader.load(IUtil.class);
+    listenerLoader = AriaServiceLoader.load(IEventListener.class);
   }
 
   public static ComponentUtil getInstance() {
@@ -99,12 +101,12 @@ public class ComponentUtil {
   }
 
   /**
-   * 创建下载工具
+   * 创建任务工具
    *
-   * @return 返回下载工具，创建失败返回null
+   * @return 返回任务工具
    */
-  public synchronized <T extends IUtil> T buildUtil(AbsTaskWrapper wrapper,
-      IEventListener listener) {
+  public synchronized IUtil buildUtil(AbsTaskWrapper wrapper, IEventListener listener) {
+    utilLoader.reload();
     int requestType = wrapper.getRequestType();
     String className = null;
     switch (requestType) {
@@ -139,29 +141,11 @@ public class ComponentUtil {
         className = "com.arialyy.aria.sftp.upload.SFtpULoaderUtil";
         break;
     }
-    if (className == null) {
-      ALog.e(TAG, "不识别的类名：" + className);
-      return null;
+    IUtil util = utilLoader.getService(className);
+    if (util == null) {
+      throw new AriaComponentException("加载工具异常，请求类型：" + wrapper.getRequestType());
     }
-    T util = null;
-    try {
-      Class<T> clazz = (Class<T>) getClass().getClassLoader().loadClass(className);
-      Class[] paramTypes = { AbsTaskWrapper.class, IEventListener.class };
-      Object[] params = { wrapper, listener };
-      Constructor<T> con = clazz.getConstructor(paramTypes);
-      util = con.newInstance(params);
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    }
-    return util;
+    return util.setParams(wrapper, listener);
   }
 
   /**
@@ -170,7 +154,7 @@ public class ComponentUtil {
    * @param wrapperType 任务类型{@link ITaskWrapper}
    * @return 返回事件监听，如果创建失败返回null
    */
-  public synchronized <T extends IEventListener> T buildListener(int wrapperType, AbsTask task,
+  public synchronized IEventListener buildListener(int wrapperType, AbsTask task,
       Handler outHandler) {
     String className = null, errorStr = "请添加FTP插件";
     switch (wrapperType) {
@@ -197,25 +181,12 @@ public class ComponentUtil {
     if (className == null) {
       return null;
     }
-    T listener = null;
-    try {
-      Class<T> clazz = (Class<T>) getClass().getClassLoader().loadClass(className);
-      Class[] paramTypes = { AbsTask.class, Handler.class };
-      Object[] params = { task, outHandler };
-      Constructor<T> con = clazz.getConstructor(paramTypes);
-      listener = con.newInstance(params);
-    } catch (ClassNotFoundException e) {
-      throw new IllegalArgumentException(errorStr);
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
+
+    IEventListener listener = listenerLoader.getService(className);
+    if (listener == null) {
+      throw new AriaComponentException(errorStr);
     }
-    return listener;
+    return listener.setParams(task, outHandler);
   }
 
   /**

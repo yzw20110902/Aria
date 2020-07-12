@@ -16,11 +16,9 @@
 package com.arialyy.aria.m3u8.vod;
 
 import com.arialyy.aria.core.download.DTaskWrapper;
-import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.loader.AbsNormalLoader;
 import com.arialyy.aria.core.loader.AbsNormalLoaderUtil;
 import com.arialyy.aria.core.loader.LoaderStructure;
-import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.http.HttpTaskOption;
 import com.arialyy.aria.m3u8.M3U8InfoTask;
 import com.arialyy.aria.m3u8.M3U8Listener;
@@ -36,8 +34,7 @@ import com.arialyy.aria.m3u8.M3U8TaskOption;
  */
 public final class M3U8VodUtil extends AbsNormalLoaderUtil {
 
-  public M3U8VodUtil(AbsTaskWrapper wrapper, IEventListener listener) {
-    super(wrapper, listener);
+  public M3U8VodUtil() {
   }
 
   @Override public DTaskWrapper getTaskWrapper() {
@@ -45,10 +42,12 @@ public final class M3U8VodUtil extends AbsNormalLoaderUtil {
   }
 
   @Override public AbsNormalLoader getLoader() {
-    getTaskWrapper().generateM3u8Option(M3U8TaskOption.class);
-    getTaskWrapper().generateTaskOption(HttpTaskOption.class);
-    return mLoader == null ? new M3U8VodLoader(getTaskWrapper(), (M3U8Listener) getListener())
-        : mLoader;
+    if (mLoader == null) {
+      getTaskWrapper().generateM3u8Option(M3U8TaskOption.class);
+      getTaskWrapper().generateTaskOption(HttpTaskOption.class);
+      mLoader = new M3U8VodLoader(getTaskWrapper(), (M3U8Listener) getListener());
+    }
+    return mLoader;
   }
 
   @Override public LoaderStructure BuildLoaderStructure() {

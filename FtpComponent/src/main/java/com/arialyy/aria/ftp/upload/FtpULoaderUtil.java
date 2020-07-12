@@ -17,7 +17,6 @@ package com.arialyy.aria.ftp.upload;
 
 import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.common.SubThreadConfig;
-import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.loader.AbsNormalLoader;
 import com.arialyy.aria.core.loader.AbsNormalLoaderUtil;
 import com.arialyy.aria.core.loader.AbsNormalTTBuilderAdapter;
@@ -26,7 +25,6 @@ import com.arialyy.aria.core.loader.NormalTTBuilder;
 import com.arialyy.aria.core.loader.NormalThreadStateManager;
 import com.arialyy.aria.core.task.IThreadTaskAdapter;
 import com.arialyy.aria.core.upload.UTaskWrapper;
-import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.ftp.FtpTaskOption;
 
 /**
@@ -35,14 +33,12 @@ import com.arialyy.aria.ftp.FtpTaskOption;
  */
 public final class FtpULoaderUtil extends AbsNormalLoaderUtil {
 
-  public FtpULoaderUtil(AbsTaskWrapper wrapper, IEventListener listener) {
-    super(wrapper, listener);
-    wrapper.generateTaskOption(FtpTaskOption.class);
-  }
-
   @Override public AbsNormalLoader getLoader() {
-    return mLoader == null ? new FtpULoader((UTaskWrapper) getTaskWrapper(), getListener())
-        : mLoader;
+    if (mLoader == null) {
+      getTaskWrapper().generateTaskOption(FtpTaskOption.class);
+      mLoader = new FtpULoader((UTaskWrapper) getTaskWrapper(), getListener());
+    }
+    return mLoader;
   }
 
   @Override public LoaderStructure BuildLoaderStructure() {

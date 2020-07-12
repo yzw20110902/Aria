@@ -24,6 +24,7 @@ import com.arialyy.aria.core.loader.NormalLoader;
 import com.arialyy.aria.core.loader.NormalTTBuilder;
 import com.arialyy.aria.core.loader.NormalThreadStateManager;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
+import com.arialyy.aria.core.wrapper.ITaskWrapper;
 import com.arialyy.aria.http.HttpRecordHandler;
 import com.arialyy.aria.http.HttpTaskOption;
 
@@ -32,13 +33,13 @@ import com.arialyy.aria.http.HttpTaskOption;
  * @Date 2019-09-21
  */
 public final class HttpDLoaderUtil extends AbsNormalLoaderUtil {
-  public HttpDLoaderUtil(AbsTaskWrapper wrapper, IEventListener listener) {
-    super(wrapper, listener);
-    wrapper.generateTaskOption(HttpTaskOption.class);
-  }
 
   @Override public AbsNormalLoader getLoader() {
-    return mLoader == null ? new NormalLoader(getTaskWrapper(), getListener()) : mLoader;
+    if (mLoader == null){
+      getTaskWrapper().generateTaskOption(HttpTaskOption.class);
+      mLoader = new NormalLoader(getTaskWrapper(), getListener());
+    }
+    return mLoader;
   }
 
   public LoaderStructure BuildLoaderStructure() {

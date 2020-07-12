@@ -64,7 +64,7 @@ public abstract class AbsTask<TASK_WRAPPER extends AbsTaskWrapper>
     return mOutHandler;
   }
 
-  protected synchronized IUtil getUtil() {
+  synchronized IUtil getUtil() {
     if (mUtil == null) {
       mUtil = ComponentUtil.getInstance().buildUtil(mTaskWrapper, mListener);
     }

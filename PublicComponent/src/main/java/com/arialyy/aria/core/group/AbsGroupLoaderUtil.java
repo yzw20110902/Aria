@@ -19,6 +19,7 @@ import com.arialyy.aria.core.inf.IUtil;
 import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.loader.LoaderStructure;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
+import com.arialyy.aria.core.wrapper.ITaskWrapper;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
 
@@ -34,10 +35,12 @@ public abstract class AbsGroupLoaderUtil implements IUtil {
   private AbsTaskWrapper mTaskWrapper;
   private boolean isStop = false, isCancel = false;
 
-  protected AbsGroupLoaderUtil(AbsTaskWrapper wrapper, IEventListener listener) {
-    mTaskWrapper = wrapper;
+
+  @Override public IUtil setParams(AbsTaskWrapper taskWrapper, IEventListener listener) {
+    mTaskWrapper = taskWrapper;
     mListener = listener;
     mLoader = getLoader();
+    return this;
   }
 
   protected abstract AbsGroupLoader getLoader();

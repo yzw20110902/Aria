@@ -18,13 +18,17 @@ package com.arialyy.aria.core.inf;
 
 import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.download.DownloadGroupEntity;
+import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.upload.UploadEntity;
+import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 
 /**
  * Created by lyy on 2016/10/31.
  * 任务功能接口
  */
 public interface IUtil {
+
+  IUtil setParams(AbsTaskWrapper taskWrapper, IEventListener listener);
 
   /**
    * 获取任务标志

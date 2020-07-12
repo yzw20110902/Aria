@@ -15,6 +15,8 @@
  */
 package com.arialyy.aria.core.listener;
 
+import android.os.Handler;
+import com.arialyy.aria.core.task.AbsTask;
 import com.arialyy.aria.exception.AriaException;
 
 /**
@@ -22,6 +24,8 @@ import com.arialyy.aria.exception.AriaException;
  * 基础事件
  */
 public interface IEventListener {
+
+  IEventListener setParams(AbsTask task, Handler outHandler);
 
   /**
    * 预处理，有时有些地址链接比较慢，这时可以先在这个地方出来一些界面上的UI，如按钮的状态

@@ -19,6 +19,7 @@ package com.arialyy.aria.core.loader;
 import com.arialyy.aria.core.inf.IUtil;
 import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
+import com.arialyy.aria.core.wrapper.ITaskWrapper;
 import com.arialyy.aria.exception.AriaException;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
@@ -34,10 +35,14 @@ public abstract class AbsNormalLoaderUtil implements IUtil {
   private AbsTaskWrapper mTaskWrapper;
   private boolean isStop = false, isCancel = false;
 
-  protected AbsNormalLoaderUtil(AbsTaskWrapper wrapper, IEventListener listener) {
-    mTaskWrapper = wrapper;
+  protected AbsNormalLoaderUtil() {
+  }
+
+  @Override public IUtil setParams(AbsTaskWrapper taskWrapper, IEventListener listener) {
+    mTaskWrapper = taskWrapper;
     mListener = listener;
     mLoader = getLoader();
+    return this;
   }
 
   /**

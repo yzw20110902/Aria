@@ -17,7 +17,6 @@ package com.arialyy.aria.http.upload;
 
 import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.common.SubThreadConfig;
-import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.loader.AbsNormalLoader;
 import com.arialyy.aria.core.loader.AbsNormalLoaderUtil;
 import com.arialyy.aria.core.loader.AbsNormalTTBuilderAdapter;
@@ -26,7 +25,6 @@ import com.arialyy.aria.core.loader.NormalTTBuilder;
 import com.arialyy.aria.core.loader.NormalThreadStateManager;
 import com.arialyy.aria.core.task.IThreadTaskAdapter;
 import com.arialyy.aria.core.upload.UTaskWrapper;
-import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.http.HttpRecordHandler;
 import com.arialyy.aria.http.HttpTaskOption;
 
@@ -35,14 +33,13 @@ import com.arialyy.aria.http.HttpTaskOption;
  * @Date 2019-09-19
  */
 public final class HttpULoaderUtil extends AbsNormalLoaderUtil {
-  public HttpULoaderUtil(AbsTaskWrapper wrapper, IEventListener listener) {
-    super(wrapper, listener);
-    wrapper.generateTaskOption(HttpTaskOption.class);
-  }
 
   @Override public AbsNormalLoader getLoader() {
-    return mLoader == null ? new HttpULoader((UTaskWrapper) getTaskWrapper(), getListener())
-        : mLoader;
+    if (mLoader == null) {
+      getTaskWrapper().generateTaskOption(HttpTaskOption.class);
+      mLoader = new HttpULoader((UTaskWrapper) getTaskWrapper(), getListener());
+    }
+    return mLoader;
   }
 
   @Override public LoaderStructure BuildLoaderStructure() {

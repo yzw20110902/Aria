@@ -45,7 +45,9 @@ final class FtpDGLoader extends AbsGroupLoader {
 
   @Override
   protected AbsSubDLoadUtil createSubLoader(DTaskWrapper wrapper, boolean needGetFileInfo) {
-    return new FtpSubDLoaderUtil(wrapper, getScheduler(), needGetFileInfo, getKey());
+    FtpSubDLoaderUtil subUtil = new FtpSubDLoaderUtil(getScheduler(), needGetFileInfo, getKey());
+    subUtil.setParams(wrapper, null);
+    return subUtil;
   }
 
   /**

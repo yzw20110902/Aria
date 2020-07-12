@@ -15,14 +15,12 @@
  */
 package com.arialyy.aria.sftp.upload;
 
-import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.loader.AbsNormalLoader;
 import com.arialyy.aria.core.loader.AbsNormalLoaderUtil;
 import com.arialyy.aria.core.loader.LoaderStructure;
 import com.arialyy.aria.core.loader.NormalTTBuilder;
 import com.arialyy.aria.core.loader.NormalThreadStateManager;
 import com.arialyy.aria.core.upload.UTaskWrapper;
-import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.sftp.SFtpTaskOption;
 
 /**
@@ -32,14 +30,12 @@ import com.arialyy.aria.sftp.SFtpTaskOption;
  */
 public class SFtpULoaderUtil extends AbsNormalLoaderUtil {
 
-  public SFtpULoaderUtil(AbsTaskWrapper wrapper, IEventListener listener) {
-    super(wrapper, listener);
-    wrapper.generateTaskOption(SFtpTaskOption.class);
-  }
-
   @Override public AbsNormalLoader getLoader() {
-    return mLoader == null ? new SFtpULoader((UTaskWrapper) getTaskWrapper(), getListener())
-        : mLoader;
+    if (mLoader == null) {
+      getTaskWrapper().generateTaskOption(SFtpTaskOption.class);
+      mLoader = new SFtpULoader((UTaskWrapper) getTaskWrapper(), getListener());
+    }
+    return mLoader;
   }
 
   @Override public LoaderStructure BuildLoaderStructure() {

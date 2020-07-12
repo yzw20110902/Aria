@@ -33,9 +33,8 @@ final class HttpSubDLoaderUtil extends AbsSubDLoadUtil {
    * @param schedulers 调度器
    * @param needGetInfo {@code true} 需要获取文件信息。{@code false} 不需要获取文件信息
    */
-  HttpSubDLoaderUtil(DTaskWrapper taskWrapper, Handler schedulers, boolean needGetInfo,
-      String parentKey) {
-    super(taskWrapper, schedulers, needGetInfo, parentKey);
+  HttpSubDLoaderUtil( Handler schedulers, boolean needGetInfo, String parentKey) {
+    super(schedulers, needGetInfo, parentKey);
   }
 
   @Override protected SubLoader getLoader() {

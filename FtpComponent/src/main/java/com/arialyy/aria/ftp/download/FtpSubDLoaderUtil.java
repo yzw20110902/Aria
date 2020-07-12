@@ -32,9 +32,8 @@ final class FtpSubDLoaderUtil extends AbsSubDLoadUtil {
    * @param schedulers 调度器
    * @param needGetInfo {@code true} 需要获取文件信息。{@code false} 不需要获取文件信息
    */
-  FtpSubDLoaderUtil(DTaskWrapper taskWrapper, Handler schedulers, boolean needGetInfo,
-      String parentKey) {
-    super(taskWrapper, schedulers, needGetInfo, parentKey);
+  FtpSubDLoaderUtil(Handler schedulers, boolean needGetInfo, String parentKey) {
+    super(schedulers, needGetInfo, parentKey);
   }
 
   @Override protected SubLoader getLoader() {

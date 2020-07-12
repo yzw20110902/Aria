@@ -15,26 +15,16 @@
  */
 package com.arialyy.aria.core.listener;
 
-import android.os.Handler;
-import com.arialyy.aria.core.download.DTaskWrapper;
-import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.inf.IEntity;
-import com.arialyy.aria.core.loader.IRecordHandler;
 import com.arialyy.aria.core.inf.TaskSchedulerType;
-import com.arialyy.aria.core.task.AbsTask;
+import com.arialyy.aria.core.task.DownloadTask;
 import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.DeleteDRecord;
-import com.arialyy.aria.util.RecordUtil;
 
 /**
  * 下载监听类
  */
-public class BaseDListener extends BaseListener<DownloadEntity, DTaskWrapper, AbsTask<DTaskWrapper>>
-    implements IDLoadListener {
-
-  public BaseDListener(AbsTask<DTaskWrapper> task, Handler outHandler) {
-    super(task, outHandler);
-  }
+public class BaseDListener extends BaseListener implements IDLoadListener {
 
   @Override
   public void onPostPre(long fileSize) {
@@ -52,7 +42,7 @@ public class BaseDListener extends BaseListener<DownloadEntity, DTaskWrapper, Ab
   }
 
   @Override protected void handleCancel() {
-    int sType = getTask().getSchedulerType();
+    int sType = getTask(DownloadTask.class).getSchedulerType();
     if (sType == TaskSchedulerType.TYPE_CANCEL_AND_NOT_NOTIFY) {
       mEntity.setComplete(false);
       mEntity.setState(IEntity.STATE_WAIT);

@@ -18,7 +18,6 @@ package com.arialyy.aria.ftp.download;
 import com.arialyy.aria.core.download.DGTaskWrapper;
 import com.arialyy.aria.core.group.AbsGroupLoader;
 import com.arialyy.aria.core.group.AbsGroupLoaderUtil;
-import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.loader.LoaderStructure;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.ftp.FtpTaskOption;
@@ -29,13 +28,12 @@ import com.arialyy.aria.ftp.FtpTaskOption;
  */
 public final class FtpDGLoaderUtil extends AbsGroupLoaderUtil {
 
-  public FtpDGLoaderUtil(AbsTaskWrapper wrapper, IEventListener listener) {
-    super(wrapper, listener);
-    wrapper.generateTaskOption(FtpTaskOption.class);
-  }
-
   @Override protected AbsGroupLoader getLoader() {
-    return mLoader == null ? new FtpDGLoader(getTaskWrapper(), getListener()) : mLoader;
+    if (mLoader == null) {
+      ((AbsTaskWrapper) getTaskWrapper()).generateTaskOption(FtpTaskOption.class);
+      mLoader = new FtpDGLoader((AbsTaskWrapper) getTaskWrapper(), getListener());
+    }
+    return mLoader;
   }
 
   @Override protected LoaderStructure buildLoaderStructure() {

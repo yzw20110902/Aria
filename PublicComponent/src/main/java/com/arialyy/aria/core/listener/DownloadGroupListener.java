@@ -16,7 +16,6 @@
 package com.arialyy.aria.core.listener;
 
 import android.os.Handler;
-import com.arialyy.aria.core.download.DGTaskWrapper;
 import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.download.DownloadGroupEntity;
 import com.arialyy.aria.core.group.GroupSendParams;
@@ -35,15 +34,14 @@ import static com.arialyy.aria.core.task.AbsTask.ERROR_INFO_KEY;
 /**
  * Created by Aria.Lao on 2017/7/20. 任务组下载事件
  */
-public class DownloadGroupListener
-    extends BaseListener<DownloadGroupEntity, DGTaskWrapper, AbsTask<DGTaskWrapper>>
-    implements IDGroupListener {
+public class DownloadGroupListener extends BaseListener implements IDGroupListener {
   private GroupSendParams<DownloadGroupTask, DownloadEntity> mSeedEntity;
 
-  public DownloadGroupListener(AbsTask<DGTaskWrapper> task, Handler outHandler) {
-    super(task, outHandler);
+  @Override public IEventListener setParams(AbsTask task, Handler outHandler) {
+    IEventListener listener = super.setParams(task, outHandler);
     mSeedEntity = new GroupSendParams<>();
     mSeedEntity.groupTask = (DownloadGroupTask) task;
+    return listener;
   }
 
   @Override
@@ -164,12 +162,13 @@ public class DownloadGroupListener
   }
 
   private void saveCurrentLocation() {
-    if (mEntity.getSubEntities() == null || mEntity.getSubEntities().isEmpty()) {
+    DownloadGroupEntity dgEntity = (DownloadGroupEntity) mEntity;
+    if (dgEntity.getSubEntities() == null || dgEntity.getSubEntities().isEmpty()) {
       ALog.w(TAG, "保存进度失败，子任务为null");
       return;
     }
     long location = 0;
-    for (DownloadEntity e : mEntity.getSubEntities()) {
+    for (DownloadEntity e : dgEntity.getSubEntities()) {
       location += e.getCurrentProgress();
     }
     if (location > mEntity.getFileSize()) {
@@ -193,7 +192,7 @@ public class DownloadGroupListener
   }
 
   @Override protected void handleCancel() {
-    int sType = getTask().getSchedulerType();
+    int sType = getTask(DownloadGroupTask.class).getSchedulerType();
     if (sType == TaskSchedulerType.TYPE_CANCEL_AND_NOT_NOTIFY) {
       mEntity.setComplete(false);
       mEntity.setState(IEntity.STATE_WAIT);

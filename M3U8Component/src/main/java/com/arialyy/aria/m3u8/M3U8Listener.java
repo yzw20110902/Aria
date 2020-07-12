@@ -16,29 +16,20 @@
 package com.arialyy.aria.m3u8;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
-import com.arialyy.aria.core.download.DTaskWrapper;
-import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.inf.IEntity;
 import com.arialyy.aria.core.inf.TaskSchedulerType;
 import com.arialyy.aria.core.listener.BaseListener;
 import com.arialyy.aria.core.listener.IDLoadListener;
 import com.arialyy.aria.core.listener.ISchedulers;
-import com.arialyy.aria.core.task.AbsTask;
+import com.arialyy.aria.core.task.DownloadTask;
 import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.DeleteM3u8Record;
 
 /**
  * 下载监听类
  */
-public final class M3U8Listener
-    extends BaseListener<DownloadEntity, DTaskWrapper, AbsTask<DTaskWrapper>>
-    implements IDLoadListener {
-
-  public M3U8Listener(AbsTask<DTaskWrapper> task, Handler outHandler) {
-    super(task, outHandler);
-  }
+public final class M3U8Listener extends BaseListener implements IDLoadListener {
 
   @Override
   public void onPostPre(long fileSize) {
@@ -88,7 +79,7 @@ public final class M3U8Listener
   }
 
   @Override protected void handleCancel() {
-    int sType = getTask().getSchedulerType();
+    int sType = getTask(DownloadTask.class).getSchedulerType();
     if (sType == TaskSchedulerType.TYPE_CANCEL_AND_NOT_NOTIFY) {
       mEntity.setComplete(false);
       mEntity.setState(IEntity.STATE_WAIT);

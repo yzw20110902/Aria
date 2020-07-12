@@ -45,7 +45,9 @@ final class HttpDGLoader extends AbsGroupLoader {
 
   @Override
   protected AbsSubDLoadUtil createSubLoader(DTaskWrapper wrapper, boolean needGetFileInfo) {
-    return new HttpSubDLoaderUtil(wrapper, getScheduler(), needGetFileInfo, getKey());
+    HttpSubDLoaderUtil subUtil = new HttpSubDLoaderUtil(getScheduler(), needGetFileInfo, getKey());
+    subUtil.setParams(wrapper, null);
+    return subUtil;
   }
 
   private void startSub() {

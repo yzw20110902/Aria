@@ -29,8 +29,7 @@ import com.arialyy.aria.util.ComponentUtil;
 /**
  * Created by lyy on 2017/2/23. 所有任务实体的父类
  */
-public abstract class AbsTaskWrapper<ENTITY extends AbsEntity>
-    implements ITaskWrapper {
+public abstract class AbsTaskWrapper<ENTITY extends AbsEntity> implements ITaskWrapper {
 
   /**
    * 刷新信息 {@code true} 重新刷新下载信息
