@@ -352,7 +352,7 @@ final class SqlUtil {
    * @return 编码后的字符串
    */
   static String encodeStr(String str) {
-    str = str.replaceAll("\\\\+", "%2B");
+    str = str.replaceAll("\\+", "%2B");
     return URLEncoder.encode(str);
   }
 
