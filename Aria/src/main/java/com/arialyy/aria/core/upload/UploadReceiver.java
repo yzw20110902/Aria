@@ -48,7 +48,9 @@ import java.util.Set;
  * 上传功能接收器
  */
 public class UploadReceiver extends AbsReceiver {
-  private static final String TAG = "UploadReceiver";
+  public UploadReceiver(Object obj) {
+    super(obj);
+  }
 
   /**
    * 设置最大上传速度，单位：kb
@@ -264,7 +266,6 @@ public class UploadReceiver extends AbsReceiver {
    * 将当前类注册到Aria
    */
   public void register() {
-    Object obj = OBJ_MAP.get(getKey());
     if (obj == null) {
       ALog.e(TAG, String.format("【%s】观察者为空", getTargetName()));
       return;
@@ -286,18 +287,17 @@ public class UploadReceiver extends AbsReceiver {
    * 如果是Dialog或popupwindow，需要你在撤销界面时调用该方法
    */
   @Override public void unRegister() {
-    if (needRmListener) {
+    if (isNeedRmListener()) {
       unRegisterListener();
     }
-    AriaManager.getInstance().removeReceiver(OBJ_MAP.get(getKey()));
+    AriaManager.getInstance().removeReceiver(obj);
   }
 
-  @Override public String getType() {
+  @Override public ReceiverType getType() {
     return ReceiverType.UPLOAD;
   }
 
   @Override protected void unRegisterListener() {
-    Object obj = OBJ_MAP.get(getKey());
     if (obj == null) {
       ALog.e(TAG, String.format("【%s】观察者为空", getTargetName()));
       return;

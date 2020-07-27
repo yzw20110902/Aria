@@ -19,11 +19,10 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.PopupWindow;
+import android.util.Log;
 import com.arialyy.aria.core.command.CommandManager;
 import com.arialyy.aria.core.common.QueueMod;
 import com.arialyy.aria.core.config.AppConfig;
@@ -35,23 +34,19 @@ import com.arialyy.aria.core.download.DownloadGroupEntity;
 import com.arialyy.aria.core.download.DownloadReceiver;
 import com.arialyy.aria.core.inf.AbsReceiver;
 import com.arialyy.aria.core.inf.IReceiver;
-import com.arialyy.aria.core.loader.IRecordHandler;
 import com.arialyy.aria.core.inf.ReceiverType;
+import com.arialyy.aria.core.loader.IRecordHandler;
 import com.arialyy.aria.core.upload.UploadEntity;
 import com.arialyy.aria.core.upload.UploadReceiver;
 import com.arialyy.aria.orm.DbEntity;
 import com.arialyy.aria.orm.DelegateWrapper;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.AriaCrashHandler;
-import com.arialyy.aria.util.DeleteDGRecord;
+import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.DeleteURecord;
 import com.arialyy.aria.util.RecordUtil;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -63,34 +58,11 @@ import java.util.concurrent.ConcurrentHashMap;
   private static final String TAG = "AriaManager";
   private static final Object LOCK = new Object();
 
-  /**
-   * android、androidx、support的fragment、dialogFragment类名
-   */
-  private static List<String> mFragmentClassName = new ArrayList<>();
-  private static List<String> mDialogFragmentClassName = new ArrayList<>();
-
   @SuppressLint("StaticFieldLeak") private static volatile AriaManager INSTANCE = null;
   private Map<String, AbsReceiver> mReceivers = new ConcurrentHashMap<>();
-  /**
-   * activity 和其Dialog、Fragment的映射表
-   */
-  private Map<String, List<String>> mSubClass = new ConcurrentHashMap<>();
   private static Context APP;
   private DelegateWrapper mDbWrapper;
   private AriaConfig mConfig;
-
-  static {
-    mFragmentClassName.add("androidx.fragment.app.Fragment");
-    mFragmentClassName.add("androidx.fragment.app.DialogFragment");
-    mFragmentClassName.add("android.app.Fragment");
-    mFragmentClassName.add("android.app.DialogFragment");
-    mFragmentClassName.add("android.support.v4.app.Fragment");
-    mFragmentClassName.add("android.support.v4.app.DialogFragment");
-
-    mDialogFragmentClassName.add("androidx.fragment.app.DialogFragment");
-    mDialogFragmentClassName.add("android.app.DialogFragment");
-    mDialogFragmentClassName.add("android.support.v4.app.DialogFragment");
-  }
 
   private AriaManager(Context context) {
     APP = context.getApplicationContext();
@@ -253,6 +225,7 @@ import java.util.concurrent.ConcurrentHashMap;
    * 处理下载操作
    */
   DownloadReceiver download(Object obj) {
+
     IReceiver receiver = mReceivers.get(getKey(ReceiverType.DOWNLOAD, obj));
     if (receiver == null) {
       receiver = putReceiver(ReceiverType.DOWNLOAD, obj);
@@ -292,136 +265,17 @@ import java.util.concurrent.ConcurrentHashMap;
     }
   }
 
-  private IReceiver putReceiver(String type, Object obj) {
+  private IReceiver putReceiver(ReceiverType type, Object obj) {
     final String key = getKey(type, obj);
     IReceiver receiver = mReceivers.get(key);
-    boolean needRmReceiver = false;
-    // 监控Dialog、fragment、popupWindow的生命周期
-    final WidgetLiftManager widgetLiftManager = new WidgetLiftManager();
-    Context subParenActivity = null;
-
-    if (obj instanceof Dialog) {
-      needRmReceiver = widgetLiftManager.handleDialogLift((Dialog) obj);
-      subParenActivity = ((Dialog) obj).getOwnerActivity();
-    } else if (obj instanceof PopupWindow) {
-      needRmReceiver = widgetLiftManager.handlePopupWindowLift((PopupWindow) obj);
-      subParenActivity = ((PopupWindow) obj).getContentView().getContext();
-    } else if (isDialogFragment(obj.getClass())) {
-      needRmReceiver = widgetLiftManager.handleDialogFragmentLift(getDialog(obj));
-      subParenActivity = getFragmentActivity(obj);
-    } else if (isFragment(obj.getClass())) {
-      subParenActivity = getFragmentActivity(obj);
-    }
-
-    if (subParenActivity instanceof Activity) {
-      relateSubClass(type, obj, (Activity) subParenActivity);
-    }
 
     if (receiver == null) {
       AbsReceiver absReceiver =
-          type.equals(ReceiverType.DOWNLOAD) ? new DownloadReceiver() : new UploadReceiver();
-      absReceiver.targetName = obj.getClass().getName();
-      AbsReceiver.OBJ_MAP.put(absReceiver.getKey(), obj);
-      absReceiver.needRmListener = needRmReceiver;
+          type.equals(ReceiverType.DOWNLOAD) ? new DownloadReceiver(obj) : new UploadReceiver(obj);
       mReceivers.put(key, absReceiver);
       receiver = absReceiver;
     }
     return receiver;
-  }
-
-  /**
-   * 获取fragment的activity
-   *
-   * @return 获取失败，返回null
-   */
-  static Activity getFragmentActivity(Object obj) {
-    try {
-      Method method = obj.getClass().getMethod("getActivity");
-      return (Activity) method.invoke(obj);
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
-  /**
-   * 判断注解对象是否是fragment
-   *
-   * @return true 对象是fragment
-   */
-  static boolean isFragment(Class subClazz) {
-    Class parentClass = subClazz.getSuperclass();
-    if (parentClass == null) {
-      return false;
-    } else {
-      String parentName = parentClass.getName();
-      if (mFragmentClassName.contains(parentName)) {
-        return true;
-      } else {
-        return isFragment(parentClass);
-      }
-    }
-  }
-
-  /**
-   * 判断对象是否是DialogFragment
-   *
-   * @return true 对象是DialogFragment
-   */
-  private boolean isDialogFragment(Class subClazz) {
-    Class parentClass = subClazz.getSuperclass();
-    if (parentClass == null) {
-      return false;
-    } else {
-      String parentName = parentClass.getName();
-      if (mDialogFragmentClassName.contains(parentName)) {
-        return true;
-      } else {
-        return isDialogFragment(parentClass);
-      }
-    }
-  }
-
-  /**
-   * 获取DialogFragment的dialog
-   *
-   * @return 获取失败，返回null
-   */
-  private Dialog getDialog(Object obj) {
-    try {
-      Method method = obj.getClass().getMethod("getDialog");
-      return (Dialog) method.invoke(obj);
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
-  /**
-   * 关联Activity类和Fragment间的关系
-   *
-   * @param sub Fragment或dialog类
-   * @param activity activity寄主类
-   */
-  private void relateSubClass(String type, Object sub, Activity activity) {
-    String key = getKey(type, activity);
-    List<String> subClass = mSubClass.get(key);
-    if (subClass == null) {
-      subClass = new ArrayList<>();
-      mSubClass.put(key, subClass);
-    }
-    subClass.add(getKey(type, sub));
-    if (mReceivers.get(key) == null) { // 将activity填充进去
-      mReceivers.put(key, new DownloadReceiver());
-    }
   }
 
   /**
@@ -432,8 +286,8 @@ import java.util.concurrent.ConcurrentHashMap;
    * @return key的格式为：{@code String.format("%s_%s_%s", obj.getClass().getName(), type,
    * obj.hashCode());}
    */
-  private String getKey(String type, Object obj) {
-    return String.format("%s_%s_%s", obj.getClass().getName(), type, obj.hashCode());
+  private String getKey(ReceiverType type, Object obj) {
+    return String.format("%s_%s_%s", CommonUtil.getTargetName(obj), type.name(), obj.hashCode());
   }
 
   /**
@@ -455,40 +309,27 @@ import java.util.concurrent.ConcurrentHashMap;
       ALog.e(TAG, "target obj is null");
       return;
     }
-    List<String> temp = new ArrayList<>();
     // 移除寄主的receiver
     for (Iterator<Map.Entry<String, AbsReceiver>> iter = mReceivers.entrySet().iterator();
         iter.hasNext(); ) {
       Map.Entry<String, AbsReceiver> entry = iter.next();
       String key = entry.getKey();
-      if (key.equals(getKey(ReceiverType.DOWNLOAD, obj)) || key.equals(
-          getKey(ReceiverType.UPLOAD, obj))) {
-        AbsReceiver receiver = mReceivers.get(key);
-        List<String> subNames = mSubClass.get(key);
-        if (subNames != null && !subNames.isEmpty()) {
-          temp.addAll(subNames);
-        }
-        if (receiver != null) {
-          receiver.destroy();
-        }
+      AbsReceiver receiver = entry.getValue();
+      if ((receiver.isLocalOrAnonymousClass || receiver.isFragment())
+          && key.startsWith(obj.getClass().getName())) {
+        receiver.destroy();
+        iter.remove();
+        continue;
+      }
+
+      if (key.equals(getKey(ReceiverType.DOWNLOAD, obj))
+          || key.equals(getKey(ReceiverType.UPLOAD, obj))
+      ) {
+        receiver.destroy();
         iter.remove();
       }
     }
-
-    // 移除寄生的receiver
-    if (!temp.isEmpty()) {
-      for (Iterator<Map.Entry<String, AbsReceiver>> iter = mReceivers.entrySet().iterator();
-          iter.hasNext(); ) {
-        Map.Entry<String, AbsReceiver> entry = iter.next();
-        if (temp.contains(entry.getKey())) {
-          AbsReceiver receiver = mReceivers.get(entry.getKey());
-          if (receiver != null) {
-            receiver.destroy();
-          }
-          iter.remove();
-        }
-      }
-    }
+    Log.d(TAG, "debug");
   }
 
   /**

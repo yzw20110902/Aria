@@ -101,7 +101,7 @@ final public class M3U8InfoTask implements IInfoTask {
       ConnectionHelp.setConnectParam(mHttpOption, conn);
       conn.setConnectTimeout(mConnectTimeOut);
       conn.connect();
-      handleConnect(conn);
+      handleConnect(mEntity.getUrl(), conn);
     } catch (IOException e) {
       failDownload(e.getMessage(), false);
     } finally {
@@ -115,7 +115,7 @@ final public class M3U8InfoTask implements IInfoTask {
     mCallback = callback;
   }
 
-  private void handleConnect(HttpURLConnection conn) throws IOException {
+  private void handleConnect(String tsListUrl, HttpURLConnection conn) throws IOException {
     int code = conn.getResponseCode();
     if (code == HttpURLConnection.HTTP_OK) {
       BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -151,7 +151,9 @@ final public class M3U8InfoTask implements IInfoTask {
           // 点播文件的下载写入结束标志，直播文件的下载在停止时才写入结束标志
           addIndexInfo(isGenerateIndexFile && !isLive, fos, line);
           break;
-        } else if (line.startsWith("#EXTINF")) {
+        }
+
+        if (line.startsWith("#EXTINF")) {
           String url = reader.readLine();
           if (isLive) {
             if (onGetPeerCallback != null) {
@@ -163,7 +165,10 @@ final public class M3U8InfoTask implements IInfoTask {
           ALog.d(TAG, url);
           addIndexInfo(isGenerateIndexFile && !isLive, fos, line);
           addIndexInfo(isGenerateIndexFile && !isLive, fos, url);
-        } else if (line.startsWith("#EXT-X-STREAM-INF")) {
+          continue;
+        }
+
+        if (line.startsWith("#EXT-X-STREAM-INF")) {
           addIndexInfo(isGenerateIndexFile, fos, line);
           int setBand = mM3U8Option.getBandWidth();
           int bandWidth = getBandWidth(line);
@@ -179,12 +184,14 @@ final public class M3U8InfoTask implements IInfoTask {
             failDownload(String.format("【%s】码率不存在", setBand), false);
           }
           return;
-        } else if (line.startsWith("#EXT-X-KEY")) {
-          addIndexInfo(isGenerateIndexFile, fos, line);
-          getKeyInfo(line);
-        } else {
-          addIndexInfo(isGenerateIndexFile, fos, line);
         }
+
+        if (line.startsWith("#EXT-X-KEY")) {
+          addIndexInfo(isGenerateIndexFile, fos, line);
+          getKeyInfo(tsListUrl, line);
+          continue;
+        }
+        addIndexInfo(isGenerateIndexFile, fos, line);
       }
 
       if (!isLive && extInf.isEmpty()) {
@@ -248,7 +255,7 @@ final public class M3U8InfoTask implements IInfoTask {
   /**
    * 获取加密的密钥信息
    */
-  private void getKeyInfo(String line) {
+  private void getKeyInfo(String tsListUrl, String line) {
     String temp = line.substring(line.indexOf(":") + 1);
     String[] params = temp.split(",");
     M3U8Entity m3U8Entity = mEntity.getM3U8Entity();
@@ -273,7 +280,7 @@ final public class M3U8InfoTask implements IInfoTask {
         m3U8Entity.keyFormatVersion = param.split("=")[1];
       }
     }
-    downloadKey(m3U8Entity);
+    downloadKey(tsListUrl, m3U8Entity);
   }
 
   /**
@@ -320,7 +327,7 @@ final public class M3U8InfoTask implements IInfoTask {
     conn.setRequestProperty("Cookie", cookies);
     conn.setConnectTimeout(mConnectTimeOut);
     conn.connect();
-    handleConnect(conn);
+    handleConnect(newUrl, conn);
     conn.disconnect();
   }
 
@@ -349,7 +356,7 @@ final public class M3U8InfoTask implements IInfoTask {
     conn.setRequestProperty("Cookie", cookies);
     conn.setConnectTimeout(mConnectTimeOut);
     conn.connect();
-    handleConnect(conn);
+    handleConnect(bandWidthM3u8Url, conn);
     conn.disconnect();
   }
 
@@ -360,7 +367,7 @@ final public class M3U8InfoTask implements IInfoTask {
   /**
    * 密钥不存在，下载密钥
    */
-  private void downloadKey(M3U8Entity info) {
+  private void downloadKey(String tsListUr, M3U8Entity info) {
     HttpURLConnection conn = null;
     FileOutputStream fos = null;
     try {
@@ -375,7 +382,7 @@ final public class M3U8InfoTask implements IInfoTask {
       IKeyUrlConverter keyUrlConverter = mM3U8Option.getKeyUrlConverter();
       String keyUrl = info.keyUrl;
       if (keyUrlConverter != null) {
-        keyUrl = keyUrlConverter.convert(mEntity.getUrl(), keyUrl);
+        keyUrl = keyUrlConverter.convert(mEntity.getUrl(), tsListUr, keyUrl);
       }
       if (TextUtils.isEmpty(keyUrl)) {
         ALog.e(TAG, "m3u8密钥key url 为空");

@@ -25,9 +25,10 @@ public interface IKeyUrlConverter extends IEventHandler {
   /**
    * 将被加密的密钥下载地址转换为可使用的http下载地址
    *
-   * @param m3u8Url m3u8文件的下载地址
+   * @param m3u8Url 主m3u8的url地址
+   * @param tsListUrl m3u8切片列表url地址
    * @param keyUrl 加密的url地址
    * @return 可正常访问的http地址
    */
-  String convert(String m3u8Url, String keyUrl);
+  String convert(String m3u8Url, String tsListUrl, String keyUrl);
 }

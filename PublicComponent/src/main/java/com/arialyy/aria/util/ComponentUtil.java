@@ -106,7 +106,6 @@ public class ComponentUtil {
    * @return 返回任务工具
    */
   public synchronized IUtil buildUtil(AbsTaskWrapper wrapper, IEventListener listener) {
-    utilLoader.reload();
     int requestType = wrapper.getRequestType();
     String className = null;
     switch (requestType) {

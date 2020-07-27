@@ -29,20 +29,20 @@ import java.lang.reflect.Field;
  * Created by lyy on 2017/2/7.
  * 为组件添加生命周期
  */
-final class WidgetLiftManager {
+public final class WidgetLiftManager {
   private final String TAG = "WidgetLiftManager";
 
   /**
    * 处理DialogFragment事件
    */
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB) boolean handleDialogFragmentLift(Dialog dialog) {
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB) public boolean handleDialogFragmentLift(Dialog dialog) {
     return handleDialogLift(dialog);
   }
 
   /**
    * 处理悬浮框取消或dismiss事件
    */
-  boolean handlePopupWindowLift(PopupWindow popupWindow) {
+  public boolean handlePopupWindowLift(PopupWindow popupWindow) {
     try {
       Field dismissField = CommonUtil.getField(popupWindow.getClass(), "mOnDismissListener");
       PopupWindow.OnDismissListener listener =
@@ -76,7 +76,7 @@ final class WidgetLiftManager {
    *
    * @return true 设置了dialog的销毁事件。false 没有设置dialog的销毁事件
    */
-  boolean handleDialogLift(Dialog dialog) {
+  public boolean handleDialogLift(Dialog dialog) {
     if (dialog == null) {
       ALog.w(TAG,
           "dialog 为空，没有设置自动销毁事件，为了防止内存泄露，请在dismiss方法中调用Aria.download(this).unRegister();来注销事件\n"

@@ -16,6 +16,7 @@
 
 package com.arialyy.aria.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import com.arialyy.aria.core.AriaConfig;
 import com.arialyy.aria.core.FtpUrlEntity;
 import dalvik.system.DexFile;
@@ -34,6 +36,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -60,6 +64,101 @@ public class CommonUtil {
   private static final String TAG = "CommonUtil";
   public static final String SERVER_CHARSET = "ISO-8859-1";
   private static long lastClickTime;
+  /**
+   * android、androidx、support的fragment、dialogFragment类名
+   */
+  private static List<String> mFragmentClassName = new ArrayList<>();
+  private static List<String> mDialogFragmentClassName = new ArrayList<>();
+
+  static {
+    mFragmentClassName.add("androidx.fragment.app.Fragment");
+    mFragmentClassName.add("androidx.fragment.app.DialogFragment");
+    mFragmentClassName.add("android.app.Fragment");
+    mFragmentClassName.add("android.app.DialogFragment");
+    mFragmentClassName.add("android.support.v4.app.Fragment");
+    mFragmentClassName.add("android.support.v4.app.DialogFragment");
+
+    mDialogFragmentClassName.add("androidx.fragment.app.DialogFragment");
+    mDialogFragmentClassName.add("android.app.DialogFragment");
+    mDialogFragmentClassName.add("android.support.v4.app.DialogFragment");
+  }
+
+  /**
+   * 获取fragment的activityz
+   *
+   * @return 获取失败，返回null
+   */
+  public static Activity getFragmentActivity(Object obj) {
+    try {
+      Method method = obj.getClass().getMethod("getActivity");
+      return (Activity) method.invoke(obj);
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  /**
+   * 判断注解对象是否是fragment
+   *
+   * @return true 对象是fragment
+   */
+  public static boolean isFragment(Class subClazz) {
+    Class parentClass = subClazz.getSuperclass();
+    if (parentClass == null) {
+      return false;
+    } else {
+      String parentName = parentClass.getName();
+      if (mFragmentClassName.contains(parentName)) {
+        return true;
+      } else {
+        return isFragment(parentClass);
+      }
+    }
+  }
+
+  /**
+   * 判断对象是否是DialogFragment
+   *
+   * @return true 对象是DialogFragment
+   */
+  public static boolean isDialogFragment(Class subClazz) {
+    Class parentClass = subClazz.getSuperclass();
+    if (parentClass == null) {
+      return false;
+    } else {
+      String parentName = parentClass.getName();
+      if (mDialogFragmentClassName.contains(parentName)) {
+        return true;
+      } else {
+        return isDialogFragment(parentClass);
+      }
+    }
+  }
+
+  public static boolean isLocalOrAnonymousClass(Class clazz) {
+    // JVM Spec 4.8.6: A class must have an EnclosingMethod
+    // attribute if and only if it is a local class or an
+    // anonymous class.
+    return clazz.isLocalClass() || clazz.isAnonymousClass();
+  }
+
+  public static String getTargetName(Object obj) {
+    String targetName;
+    if (isLocalOrAnonymousClass(obj.getClass())) {
+      Log.w(TAG, String.format("%s 是匿名内部类或局部类，将使用其主类的对象", obj.getClass().getName()));
+      String clsName = obj.getClass().getName();
+      int $Index = clsName.lastIndexOf("$");
+      targetName = clsName.substring(0, $Index);
+    } else {
+      targetName = obj.getClass().getName();
+    }
+    return targetName;
+  }
 
   /**
    * 获取线程名称，命名规则：md5(任务地址 + 线程id)

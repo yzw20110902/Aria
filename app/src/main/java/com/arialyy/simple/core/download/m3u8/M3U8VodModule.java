@@ -34,7 +34,8 @@ public class M3U8VodModule extends BaseViewModule {
   // m3u8测试集合：http://www.voidcn.com/article/p-snaliarm-ct.html
   //private final String defUrl = "https://www.gaoya123.cn/2019/1557993797897.m3u8";
   // 多码率地址：
-  private final String defUrl = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8";
+  //private final String defUrl = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8";
+  private final String defUrl = "http://mgjx.awu1k.cn:8000/parse/player.m3u8?target=eb2d3ca5198516269cf356463be86573";
   //private final String defUrl = "http://youku.cdn7-okzy.com/20200123/16815_fbe419ed/index.m3u8";
 
   //private final String defUrl = "https://cn7.kankia.com/hls/20200108/e1eaec074274c64fe46a3bdb5d2ba487/1578488360/index.m3u8";

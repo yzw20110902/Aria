@@ -18,7 +18,15 @@ package com.arialyy.aria.core.inf;
 /**
  * {@link AbsReceiver}类型
  */
-public interface ReceiverType {
-  String DOWNLOAD = "download";
-  String UPLOAD = "upload";
+public enum ReceiverType {
+  DOWNLOAD(1, "download"),
+  UPLOAD(2, "upload");
+
+  String name;
+  int type;
+
+  ReceiverType(int type, String name) {
+    this.type = type;
+    this.name = name;
+  }
 }

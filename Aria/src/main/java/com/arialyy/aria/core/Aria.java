@@ -27,6 +27,7 @@ import android.widget.PopupWindow;
 import com.arialyy.aria.core.download.DownloadReceiver;
 import com.arialyy.aria.core.upload.UploadReceiver;
 import com.arialyy.aria.util.ALog;
+import com.arialyy.aria.util.CommonUtil;
 
 /**
  * Created by lyy on 2016/12/1.
@@ -134,8 +135,8 @@ import com.arialyy.aria.util.ALog;
       return (Service) obj;
     } else if (obj instanceof Activity) {
       return (Activity) obj;
-    } else if (AriaManager.isFragment(obj.getClass())) {
-      return AriaManager.getFragmentActivity(obj);
+    } else if (CommonUtil.isFragment(obj.getClass())) {
+      return CommonUtil.getFragmentActivity(obj);
     } else if (obj instanceof Dialog) {
       return ((Dialog) obj).getContext();
     } else if (obj instanceof PopupWindow) {

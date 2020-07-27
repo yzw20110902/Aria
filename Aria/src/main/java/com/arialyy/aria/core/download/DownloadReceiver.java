@@ -55,7 +55,10 @@ import java.util.Set;
  * 下载功能接收器
  */
 public class DownloadReceiver extends AbsReceiver {
-  private final String TAG = "DownloadReceiver";
+
+  public DownloadReceiver(Object obj) {
+    super(obj);
+  }
 
   /**
    * 设置最大下载速度，单位：kb
@@ -164,7 +167,6 @@ public class DownloadReceiver extends AbsReceiver {
    * 将当前类注册到Aria
    */
   public void register() {
-    Object obj = OBJ_MAP.get(getKey());
     if (obj == null) {
       ALog.e(TAG, String.format("register【%s】观察者为空", getTargetName()));
       return;
@@ -199,18 +201,17 @@ public class DownloadReceiver extends AbsReceiver {
    * @see <a href="https://aria.laoyuyu.me/aria_doc/start/any_java.html#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9">module类中销毁</a>
    */
   @Override public void unRegister() {
-    if (needRmListener) {
+    if (isNeedRmListener()) {
       unRegisterListener();
     }
-    AriaManager.getInstance().removeReceiver(OBJ_MAP.get(getKey()));
+    AriaManager.getInstance().removeReceiver(obj);
   }
 
-  @Override public String getType() {
+  @Override public ReceiverType getType() {
     return ReceiverType.DOWNLOAD;
   }
 
   @Override protected void unRegisterListener() {
-    Object obj = OBJ_MAP.get(getKey());
     if (obj == null) {
       ALog.e(TAG, String.format("unRegister【%s】观察者为空", getTargetName()));
       return;
@@ -220,7 +221,9 @@ public class DownloadReceiver extends AbsReceiver {
       for (Integer integer : set) {
         if (integer == ProxyHelper.PROXY_TYPE_DOWNLOAD) {
           TaskSchedulers.getInstance().unRegister(obj);
-        } else if (integer == ProxyHelper.PROXY_TYPE_DOWNLOAD_GROUP) {
+          continue;
+        }
+        if (integer == ProxyHelper.PROXY_TYPE_DOWNLOAD_GROUP) {
           TaskSchedulers.getInstance().unRegister(obj);
         }
       }
@@ -417,7 +420,7 @@ public class DownloadReceiver extends AbsReceiver {
    * @return 如果没有任务组列表，则返回null
    */
   public List<DownloadGroupEntity> getGroupTaskList() {
-    return getGroupTaskList(1,10);
+    return getGroupTaskList(1, 10);
   }
 
   /**

@@ -78,7 +78,7 @@ public class AriaServiceLoader<S> {
     private Class<S> service;
     private ClassLoader loader;
     private Enumeration<URL> configs = null;
-    private Iterator<String> pending = null;
+    private List<String> pending = null;
 
     private LazyLoader(Class<S> service, ClassLoader loader) {
       this.service = service;
@@ -103,7 +103,7 @@ public class AriaServiceLoader<S> {
     //         If an I/O error occurs while reading from the given URL, or
     //         if a configuration-file format error is detected
     //
-    private Iterator<String> parse(Class<?> service, URL u) throws ServiceConfigurationError {
+    private List<String> parse(Class<?> service, URL u) throws ServiceConfigurationError {
       InputStream in = null;
       BufferedReader r = null;
       ArrayList<String> names = new ArrayList<>();
@@ -122,7 +122,7 @@ public class AriaServiceLoader<S> {
           fail(service, "Error closing configuration file", y);
         }
       }
-      return names.iterator();
+      return names;
     }
 
     private void fail(Class<?> service, String msg, Throwable cause)
@@ -177,8 +177,8 @@ public class AriaServiceLoader<S> {
     }
 
     private S loadService(String serviceName) {
-      while (pending.hasNext()) {
-        if (pending.next().equals(serviceName)) {
+      for (String s : pending) {
+        if (s.equals(serviceName)) {
           Class<?> c = null;
           try {
             c = Class.forName(serviceName, false, loader);
@@ -224,7 +224,7 @@ public class AriaServiceLoader<S> {
           fail(service, "Error locating configuration files", x);
         }
       }
-      while ((pending == null) || !pending.hasNext()) {
+      while ((pending == null) || pending.isEmpty()) {
         if (!configs.hasMoreElements()) {
           return;
         }

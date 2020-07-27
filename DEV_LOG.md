@@ -1,4 +1,8 @@
 ## 开发日志
+  + v_3.8.11
+    - 修复一个正则表达式导致的文件名保存号异常问题 https://github.com/AriaLyy/Aria/issues/715
+    - 修复一个匿名内部类中的内存溢出的问题 https://github.com/AriaLyy/Aria/issues/705
+    - m3u8密钥下载地址转换器增加ts列表的url地址 https://github.com/AriaLyy/Aria/issues/718
   + v_3.8.10 (2020/6/26)
     - fix bug https://github.com/AriaLyy/Aria/issues/703
     - fix bug https://github.com/AriaLyy/Aria/issues/702
