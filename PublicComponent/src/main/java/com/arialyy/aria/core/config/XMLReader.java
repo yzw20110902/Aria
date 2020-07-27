@@ -146,7 +146,7 @@ public class XMLReader extends DefaultHandler {
           break;
         case "subFailAsStop": // 子任务失败时回调stop
           setField("subFailAsStop", checkBoolean(value) ? Boolean.valueOf(value) : false,
-                  ConfigType.D_GROUP);
+              ConfigType.D_GROUP);
           break;
         case "subReTryNum": // 子任务重试次数
           int subReTryNum = checkInt(value) ? Integer.parseInt(value) : 5;
@@ -155,6 +155,10 @@ public class XMLReader extends DefaultHandler {
         case "subReTryInterval":  // 子任务重试间隔
           int subReTryInterval = checkInt(value) ? Integer.parseInt(value) : 2000;
           setField("subReTryInterval", subReTryInterval, ConfigType.D_GROUP);
+          break;
+        case "useHeadRequest": // 是否使用head请求
+          boolean useHeadRequest = checkBoolean(value) ? Boolean.valueOf(value) : true;
+          setField("useHeadRequest", useHeadRequest, ConfigType.DOWNLOAD);
           break;
       }
     } else if (mType == ConfigType.APP) {

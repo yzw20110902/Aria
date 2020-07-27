@@ -19,6 +19,7 @@ import android.net.TrafficStats;
 import android.net.Uri;
 import android.os.Process;
 import android.text.TextUtils;
+import android.util.Log;
 import com.arialyy.aria.core.AriaConfig;
 import com.arialyy.aria.core.common.CompleteInfo;
 import com.arialyy.aria.core.common.RequestEnum;
@@ -80,6 +81,10 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       conn = ConnectionHelp.handleConnection(url, taskOption);
       ConnectionHelp.setConnectParam(taskOption, conn);
       conn.setRequestProperty("Range", "bytes=" + 0 + "-");
+      if (AriaConfig.getInstance().getDConfig().isUseHeadRequest()){
+        ALog.d(TAG, "head请求");
+        conn.setRequestMethod("HEAD");
+      }
       conn.setConnectTimeout(mConnectTimeOut);
       conn.connect();
       handleConnect(conn);
@@ -333,6 +338,9 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
     ConnectionHelp.setConnectParam(taskOption, conn);
     conn.setRequestProperty("Cookie", cookies);
     conn.setRequestProperty("Range", "bytes=" + 0 + "-");
+    if (AriaConfig.getInstance().getDConfig().isUseHeadRequest()){
+      conn.setRequestMethod("HEAD");
+    }
     conn.setConnectTimeout(mConnectTimeOut);
     conn.connect();
     handleConnect(conn);

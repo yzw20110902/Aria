@@ -364,7 +364,7 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
 
   static class KeyUrlConverter implements IKeyUrlConverter {
 
-    @Override public String convert(String m3u8Url, String keyUrl) {
+    @Override public String convert(String m3u8Url, String tsListUrl, String keyUrl) {
       ALog.d("TAG", "convertUrl....");
       return null;
     }

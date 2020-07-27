@@ -55,7 +55,9 @@ public class HttpUploadActivity extends BaseActivity<ActivitySingleBinding> {
     Aria.upload(this).getTaskList();
 
     mEntity = Aria.upload(this).getFirstUploadEntity(FILE_PATH);
-    getBinding().pl.setInfo(mEntity);
+    if (mEntity != null){
+      getBinding().pl.setInfo(mEntity);
+    }
     Aria.upload(this).register();
 
     getBinding().pl.setBtListener(new ProgressLayout.OnProgressLayoutBtListener() {

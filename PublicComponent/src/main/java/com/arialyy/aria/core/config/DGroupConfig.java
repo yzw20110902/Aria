@@ -15,6 +15,7 @@
  */
 package com.arialyy.aria.core.config;
 
+import com.arialyy.aria.core.AriaConfig;
 import com.arialyy.aria.core.event.DGMaxNumEvent;
 import com.arialyy.aria.core.event.DSpeedEvent;
 import com.arialyy.aria.core.event.EventMsgUtil;
@@ -63,22 +64,7 @@ public class DGroupConfig extends BaseTaskConfig implements Serializable {
   }
 
   public DownloadConfig getSubConfig() {
-    if (subConfig == null) {
-      subConfig = new DownloadConfig();
-      subConfig.threadNum = 1;
-      subConfig.useBlock = false;
-      subConfig.buffSize = buffSize;
-      subConfig.caName = caName;
-      subConfig.caPath = caPath;
-      subConfig.connectTimeOut = connectTimeOut;
-      subConfig.iOTimeOut = iOTimeOut;
-      subConfig.isConvertSpeed = isConvertSpeed;
-      subConfig.maxSpeed = maxSpeed;
-      subConfig.queueMod = "now";
-      subConfig.reTryInterval = subReTryInterval;
-      subConfig.reTryNum = subReTryNum;
-      subConfig.updateInterval = updateInterval;
-    }
+    subConfig = AriaConfig.getInstance().getDConfig();
     return subConfig;
   }
 

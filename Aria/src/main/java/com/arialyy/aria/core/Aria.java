@@ -131,15 +131,20 @@ import com.arialyy.aria.util.CommonUtil;
   private static Context convertContext(Object obj) {
     if (obj instanceof Application) {
       return (Application) obj;
-    } else if (obj instanceof Service) {
+    }
+    if (obj instanceof Service) {
       return (Service) obj;
-    } else if (obj instanceof Activity) {
+    }
+    if (obj instanceof Activity) {
       return (Activity) obj;
-    } else if (CommonUtil.isFragment(obj.getClass())) {
+    }
+    if (CommonUtil.isFragment(obj.getClass())) {
       return CommonUtil.getFragmentActivity(obj);
-    } else if (obj instanceof Dialog) {
+    }
+    if (obj instanceof Dialog) {
       return ((Dialog) obj).getContext();
-    } else if (obj instanceof PopupWindow) {
+    }
+    if (obj instanceof PopupWindow) {
       return ((PopupWindow) obj).getContentView().getContext();
     }
     ALog.e("Aria", "请使用download(this)或upload(this)");
