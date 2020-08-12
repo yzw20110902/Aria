@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.arialyy.aria.core.upload;
-
-import com.arialyy.aria.core.scheduler.NormalTaskListenerInterface;
-import com.arialyy.aria.core.task.UploadTask;
+package com.arialyy.aria.core.scheduler;
 
 /**
- * 上传任务接口
+ * 直接实现监听器回调接口的基类，不对外部直接开放，仅作为内部监听器的父接口使用
  *
  * @author ChenFei(chenfei0928 @ gmail.com)
- * @date 2020-07-07 13:23
+ * @date 2020-07-07 15:18
  */
-public interface UploadTaskListener extends NormalTaskListenerInterface<UploadTask> {
+public interface TaskInternalListenerInterface {
 }

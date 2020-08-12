@@ -21,15 +21,15 @@ package com.arialyy.annotations;
  */
 public enum TaskEnum {
   DOWNLOAD("com.arialyy.aria.core.task", "DownloadTask", "$$DownloadListenerProxy",
-      "NormalTaskListener"),
+      "AptNormalTaskListener"),
   DOWNLOAD_GROUP("com.arialyy.aria.core.task", "DownloadGroupTask",
-      "$$DownloadGroupListenerProxy", "NormalTaskListener"),
+      "$$DownloadGroupListenerProxy", "AptNormalTaskListener"),
   DOWNLOAD_GROUP_SUB("com.arialyy.aria.core.task", "DownloadGroupTask",
-      "$$DGSubListenerProxy", "SubTaskListener"),
+      "$$DGSubListenerProxy", "AptSubTaskListener"),
   UPLOAD("com.arialyy.aria.core.task", "UploadTask", "$$UploadListenerProxy",
-      "NormalTaskListener"),
+      "AptNormalTaskListener"),
   M3U8_PEER("com.arialyy.aria.core.task", "DownloadTask", "$$M3U8PeerListenerProxy",
-      "M3U8PeerTaskListener");
+      "AptM3U8PeerTaskListener");
 
   public String pkg, className, proxySuffix, proxySuperClass;
 

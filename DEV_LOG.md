@@ -2,8 +2,11 @@
   + v_3.8.11
     - 修复一个正则表达式导致的文件名保存号异常问题 https://github.com/AriaLyy/Aria/issues/715
     - 修复一个匿名内部类中的内存溢出的问题 https://github.com/AriaLyy/Aria/issues/705
-    - m3u8密钥下载地址转换器增加ts列表的url地址 https://github.com/AriaLyy/Aria/issues/718
-    - 现在http文件下载将使用HEAD请求获取文件大小，配置文件增加 <useHeadRequest value="false"/>
+    - 修复同一个url地址的任务提示路径冲突的问题
+    - 修复m3u8任务地址错误时，无法删除实体的问题 https://github.com/AriaLyy/Aria/issues/712
+    - 增加m3u8密钥下载地址转换器增加ts列表的url地址 https://github.com/AriaLyy/Aria/issues/718
+    - 增加现在http文件下载将使用HEAD请求获取文件大小，配置文件增加 <useHeadRequest value="true"/>
+    - 增加允许不使用apt直接通过实现监听器来回调下载进度更新，该功能由[chenfei0928](https://github.com/chenfei0928)提交，感谢他的pr。如果注解不生效，只需要实现`DownloadListener`接口便可
   + v_3.8.10 (2020/6/26)
     - fix bug https://github.com/AriaLyy/Aria/issues/703
     - fix bug https://github.com/AriaLyy/Aria/issues/702

@@ -31,6 +31,7 @@ import com.arialyy.annotations.Download;
 import com.arialyy.annotations.M3U8;
 import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.common.AbsEntity;
+import com.arialyy.aria.core.common.HttpOption;
 import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.download.M3U8Entity;
 import com.arialyy.aria.core.download.m3u8.M3U8VodOption;
@@ -309,7 +310,7 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
         //.merge(true)
         //.setVodTsUrlConvert(new VodTsUrlConverter());
     //.setMergeHandler(new TsMergeHandler());
-    option.setUseDefConvert(false);
+    option.setUseDefConvert(true);
     option.setKeyUrlConverter(new KeyUrlConverter());
     option.setVodTsUrlConvert(new VodTsUrlConverter());
     option.setBandWidthUrlConverter(new BandWidthUrlConverter());

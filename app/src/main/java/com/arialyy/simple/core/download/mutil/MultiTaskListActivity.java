@@ -42,7 +42,7 @@ import java.util.List;
 /**
  * Created by Lyy on 2016/9/27.
  */
-public class MultiTaskActivity extends BaseActivity<ActivityMultiBinding> {
+public class MultiTaskListActivity extends BaseActivity<ActivityMultiBinding> {
   RecyclerView mList;
   Toolbar mBar;
   private FileListAdapter mAdapter;

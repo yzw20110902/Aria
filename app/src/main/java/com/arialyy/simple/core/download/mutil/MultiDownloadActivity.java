@@ -26,6 +26,7 @@ import com.arialyy.annotations.Download;
 import com.arialyy.annotations.DownloadGroup;
 import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.common.AbsEntity;
+import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.task.DownloadGroupTask;
 import com.arialyy.aria.core.task.DownloadTask;
 import com.arialyy.aria.util.ALog;
@@ -100,6 +101,10 @@ public class MultiDownloadActivity extends BaseActivity<ActivityMultiDownloadBin
 
   @Download.onTaskCancel void taskCancel(DownloadTask task) {
     mAdapter.updateState(task.getEntity());
+    List<DownloadEntity> tasks = Aria.download(this).getAllNotCompleteTask();
+    if (tasks != null){
+      ALog.d(TAG, "未完成的任务数：" + tasks.size());
+    }
   }
 
   @Download.onTaskFail void taskFail(DownloadTask task) {

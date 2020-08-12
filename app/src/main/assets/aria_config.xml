@@ -20,13 +20,12 @@
 
   <!--普通下载任务-->
   <download>
-
-    <!--设置http下载获取文件大小是否使用Head请求。true：使用head请求，false：使用默认的get请求-->
+    <!--设置http下载获取文件大小是否使用Head请求。true：使用head请求，false：使用默认的get请求。默认为false-->
     <!--只适用于3.8.11以上的版本-->
-    <useHeadRequest value="true"/>
+    <useHeadRequest value="false"/>
 
     <!--设置任务最大下载速度，0表示不限速，单位为：kb-->
-    <maxSpeed value="128"/>
+    <maxSpeed value="0"/>
 
     <!--
       多线程下载是否使用块下载模式，{@code true}使用，{@code false}不使用
@@ -45,7 +44,7 @@
       3、从3.4.1开始，如果线程数为1，文件初始化时将不再预占用对应长度的空间，下载多少byte，则占多大的空间；
          对于采用多线程的任务或旧任务，依然采用原来的文件空间占用方式；
     -->
-    <threadNum value="1"/>
+    <threadNum value="3"/>
 
     <!--设置下载队列最大任务数， 默认为2-->
     <maxTaskNum value="1"/>

@@ -29,6 +29,7 @@ import com.arialyy.aria.core.event.EventMsgUtil;
 import com.arialyy.aria.core.inf.AbsReceiver;
 import com.arialyy.aria.core.inf.ReceiverType;
 import com.arialyy.aria.core.queue.UTaskQueue;
+import com.arialyy.aria.core.scheduler.TaskInternalListenerInterface;
 import com.arialyy.aria.core.scheduler.TaskSchedulers;
 import com.arialyy.aria.core.task.ITask;
 import com.arialyy.aria.core.upload.target.FtpBuilderTarget;
@@ -270,6 +271,13 @@ public class UploadReceiver extends AbsReceiver {
       ALog.e(TAG, String.format("【%s】观察者为空", getTargetName()));
       return;
     }
+    if (obj instanceof TaskInternalListenerInterface){
+      if (obj instanceof UploadTaskListener){
+        TaskSchedulers.getInstance().register(obj, TaskEnum.UPLOAD);
+      }
+      return;
+    }
+
     Set<Integer> set = ProxyHelper.getInstance().checkProxyType(obj.getClass());
     if (set != null && !set.isEmpty()) {
       for (Integer type : set) {

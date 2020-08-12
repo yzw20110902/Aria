@@ -38,6 +38,9 @@ import com.arialyy.aria.core.inf.AbsReceiver;
 import com.arialyy.aria.core.inf.ReceiverType;
 import com.arialyy.aria.core.queue.DGroupTaskQueue;
 import com.arialyy.aria.core.queue.DTaskQueue;
+import com.arialyy.aria.core.scheduler.M3U8PeerTaskListener;
+import com.arialyy.aria.core.scheduler.SubTaskListener;
+import com.arialyy.aria.core.scheduler.TaskInternalListenerInterface;
 import com.arialyy.aria.core.scheduler.TaskSchedulers;
 import com.arialyy.aria.core.task.ITask;
 import com.arialyy.aria.orm.DbEntity;
@@ -171,6 +174,22 @@ public class DownloadReceiver extends AbsReceiver {
       ALog.e(TAG, String.format("register【%s】观察者为空", getTargetName()));
       return;
     }
+    if (obj instanceof TaskInternalListenerInterface){
+      if (obj instanceof DownloadTaskListener){
+        TaskSchedulers.getInstance().register(obj, TaskEnum.DOWNLOAD);
+      }
+      if (obj instanceof DownloadGroupTaskListener){
+        TaskSchedulers.getInstance().register(obj, TaskEnum.DOWNLOAD_GROUP);
+      }
+      if (obj instanceof M3U8PeerTaskListener){
+        TaskSchedulers.getInstance().register(obj, TaskEnum.M3U8_PEER);
+      }
+      if (obj instanceof SubTaskListener){
+        TaskSchedulers.getInstance().register(obj, TaskEnum.DOWNLOAD_GROUP_SUB);
+      }
+      return;
+    }
+
     Set<Integer> set = ProxyHelper.getInstance().checkProxyType(obj.getClass());
     if (set != null && !set.isEmpty()) {
       for (Integer type : set) {

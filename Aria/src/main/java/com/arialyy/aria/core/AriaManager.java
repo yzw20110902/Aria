@@ -46,6 +46,8 @@ import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.DeleteURecord;
 import com.arialyy.aria.util.RecordUtil;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -315,8 +317,28 @@ import java.util.concurrent.ConcurrentHashMap;
       Map.Entry<String, AbsReceiver> entry = iter.next();
       String key = entry.getKey();
       AbsReceiver receiver = entry.getValue();
-      if ((receiver.isLocalOrAnonymousClass || receiver.isFragment())
-          && key.startsWith(obj.getClass().getName())) {
+
+      if (receiver.isFragment()){
+        Method method = CommonUtil.getMethod(receiver.obj.getClass(), "getActivity");
+        if (method != null){
+          try {
+            Activity ac = (Activity) method.invoke(receiver.obj);
+            if (ac == obj){
+              receiver.destroy();
+              iter.remove();
+              continue;
+            }
+          } catch (IllegalAccessException e) {
+            e.printStackTrace();
+          } catch (InvocationTargetException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+
+      // 处理内部类的
+      String objClsName = obj.getClass().getName();
+      if (receiver.isLocalOrAnonymousClass && key.startsWith(objClsName)) {
         receiver.destroy();
         iter.remove();
         continue;

@@ -24,7 +24,7 @@ import java.util.List;
  */
 public abstract class DbEntity {
   private static final Object LOCK = new Object();
-  protected long rowID = -1;
+  public long rowID = -1;
 
   protected DbEntity() {
 

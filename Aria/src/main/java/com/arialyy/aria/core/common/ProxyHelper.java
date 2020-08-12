@@ -18,9 +18,9 @@ package com.arialyy.aria.core.common;
 import com.arialyy.annotations.TaskEnum;
 import com.arialyy.aria.core.download.DownloadGroupTaskListener;
 import com.arialyy.aria.core.download.DownloadTaskListener;
-import com.arialyy.aria.core.scheduler.DownloadTaskInternalListenerInterface;
-import com.arialyy.aria.core.scheduler.M3U8PeerTaskListenerInterface;
-import com.arialyy.aria.core.scheduler.SubTaskListenerInterface;
+import com.arialyy.aria.core.scheduler.TaskInternalListenerInterface;
+import com.arialyy.aria.core.scheduler.M3U8PeerTaskListener;
+import com.arialyy.aria.core.scheduler.SubTaskListener;
 import com.arialyy.aria.core.upload.UploadTaskListener;
 
 import java.util.HashSet;
@@ -117,7 +117,7 @@ public class ProxyHelper {
   }
 
   private Set<Integer> checkProxyTypeByInterface(Class clazz) {
-    if (!DownloadTaskInternalListenerInterface.class.isAssignableFrom(clazz)) {
+    if (!TaskInternalListenerInterface.class.isAssignableFrom(clazz)) {
       return null;
     }
     Set<Integer> result = new HashSet<>();
@@ -132,11 +132,11 @@ public class ProxyHelper {
       result.add(PROXY_TYPE_UPLOAD);
     }
 
-    if (M3U8PeerTaskListenerInterface.class.isAssignableFrom(clazz)) {
+    if (M3U8PeerTaskListener.class.isAssignableFrom(clazz)) {
       result.add(PROXY_TYPE_M3U8_PEER);
     }
 
-    if (SubTaskListenerInterface.class.isAssignableFrom(clazz)) {
+    if (SubTaskListener.class.isAssignableFrom(clazz)) {
       result.add(PROXY_TYPE_DOWNLOAD_GROUP_SUB);
     }
     return result;

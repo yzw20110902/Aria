@@ -21,6 +21,7 @@ import com.arialyy.aria.core.inf.ICheckEntityUtil;
 import com.arialyy.aria.core.inf.IOptionConstant;
 import com.arialyy.aria.core.inf.ITargetHandler;
 import com.arialyy.aria.core.wrapper.ITaskWrapper;
+import com.arialyy.aria.orm.DbEntity;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CheckUtil;
 import com.arialyy.aria.util.CommonUtil;
@@ -135,8 +136,16 @@ public class CheckDEntityUtil implements ICheckEntityUtil {
 
   /**
    * 检查路径冲突
+   * @return true 路径没有冲突
    */
   private boolean checkPathConflicts(String filePath) {
+    DownloadEntity de = DbEntity.findFirst(DownloadEntity.class, "downloadPath=?", filePath);
+    if (de != null && de.getUrl().equals(mEntity.getUrl())){
+      mEntity.rowID = de.rowID;
+      mEntity.setFilePath(filePath);
+      mEntity.setFileName(new File(filePath).getName());
+      return true;
+    }
     //设置文件保存路径，如果新文件路径和旧文件路径不同，则修改路径
     if (!filePath.equals(mEntity.getFilePath())) {
       // 检查路径冲突

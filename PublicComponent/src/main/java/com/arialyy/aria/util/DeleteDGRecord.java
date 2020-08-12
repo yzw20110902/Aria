@@ -34,14 +34,14 @@ public class DeleteDGRecord implements IDeleteRecord {
 
   private static volatile DeleteDGRecord INSTANCE = null;
 
-  private DeleteDGRecord(){
+  private DeleteDGRecord() {
 
   }
 
   public static DeleteDGRecord getInstance() {
-    if (INSTANCE == null){
-      synchronized (DeleteDGRecord.class){
-        if (INSTANCE == null){
+    if (INSTANCE == null) {
+      synchronized (DeleteDGRecord.class) {
+        if (INSTANCE == null) {
           INSTANCE = new DeleteDGRecord();
         }
       }
@@ -108,9 +108,13 @@ public class DeleteDGRecord implements IDeleteRecord {
       }
     }
 
+    deleteEntity(needRemoveEntity, groupEntity.getGroupHash());
+  }
+
+  private void deleteEntity(boolean needRemoveEntity, String groupHash) {
     if (needRemoveEntity) {
-      DbEntity.deleteData(DownloadEntity.class, "groupHash=?", groupEntity.getGroupHash());
-      DbEntity.deleteData(DownloadGroupEntity.class, "groupHash=?", groupEntity.getGroupHash());
+      DbEntity.deleteData(DownloadEntity.class, "groupHash=?", groupHash);
+      DbEntity.deleteData(DownloadGroupEntity.class, "groupHash=?", groupHash);
     }
   }
 

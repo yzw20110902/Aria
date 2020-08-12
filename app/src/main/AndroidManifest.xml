@@ -27,11 +27,12 @@
       </intent-filter>
     </activity>
 
+    <activity android:name=".core.download.fragment.MultiFragmentActivity"/>
     <activity android:name=".core.upload.SFtpUploadActivity" />
     <activity android:name=".core.download.SFtpDownloadActivity" />
     <activity android:name=".core.download.DownloadActivity" />
     <activity android:name=".core.download.SingleTaskActivity" />
-    <activity android:name=".core.download.mutil.MultiTaskActivity" />
+    <activity android:name=".core.download.mutil.MultiTaskListActivity" />
     <activity android:name=".core.download.fragment.FragmentActivity" />
     <activity android:name=".core.download.mutil.MultiDownloadActivity" />
     <activity android:name=".core.download.HighestPriorityActivity" />

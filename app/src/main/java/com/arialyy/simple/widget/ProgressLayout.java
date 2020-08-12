@@ -99,7 +99,7 @@ public class ProgressLayout extends RelativeLayout implements View.OnClickListen
 
   @Override public void onClick(View v) {
     if (listener == null) {
-      ALog.d(TAG, "没有设置OnProgressLayoutBtListener");
+      ALog.e(TAG, "没有设置OnProgressLayoutBtListener");
       return;
     }
     if (entity == null) {

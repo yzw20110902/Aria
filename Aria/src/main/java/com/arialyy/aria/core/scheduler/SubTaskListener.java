@@ -22,47 +22,22 @@ import com.arialyy.aria.core.task.ITask;
  * Created by Aria.Lao on 2019/6/26.
  * 子任务事件回调类
  */
-public class SubTaskListener<TASK extends ITask, SUB_ENTITY extends AbsNormalEntity>
-    implements SubTaskListenerInterface<TASK, SUB_ENTITY>, ISchedulerListener {
+public interface SubTaskListener<TASK extends ITask, SUB_ENTITY extends AbsNormalEntity> extends
+    TaskInternalListenerInterface {
 
-  @Override public void onNoSupportBreakPoint(TASK task) {
+  public void onNoSupportBreakPoint(TASK task);
 
-  }
+  public void onSubTaskPre(TASK task, SUB_ENTITY subTask);
 
-  @Override public void onSubTaskPre(TASK task, SUB_ENTITY subTask) {
+  public void onSubTaskStart(TASK task, SUB_ENTITY subTask);
 
-  }
+  public void onSubTaskStop(TASK task, SUB_ENTITY subTask);
 
-  @Override public void onSubTaskStart(TASK task, SUB_ENTITY subTask) {
+  public void onSubTaskCancel(TASK task, SUB_ENTITY subTask);
 
-  }
+  public void onSubTaskComplete(TASK task, SUB_ENTITY subTask);
 
-  @Override public void onSubTaskStop(TASK task, SUB_ENTITY subTask) {
+  public void onSubTaskFail(TASK task, SUB_ENTITY subTask, Exception e);
 
-  }
-
-  @Override public void onSubTaskCancel(TASK task, SUB_ENTITY subTask) {
-
-  }
-
-  @Override public void onSubTaskComplete(TASK task, SUB_ENTITY subTask) {
-
-  }
-
-  @Deprecated
-  public void onSubTaskFail(TASK task, SUB_ENTITY subTask) {
-
-  }
-
-  @Override public void onSubTaskFail(TASK task, SUB_ENTITY subTask, Exception e) {
-
-  }
-
-  @Override public void onSubTaskRunning(TASK task, SUB_ENTITY subTask) {
-
-  }
-
-  @Override public void setListener(Object obj) {
-
-  }
+  public void onSubTaskRunning(TASK task, SUB_ENTITY subTask);
 }

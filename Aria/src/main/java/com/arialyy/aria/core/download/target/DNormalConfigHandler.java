@@ -98,6 +98,7 @@ class DNormalConfigHandler<TARGET extends AbsTarget> implements IConfigHandler {
 
   void setUrl(String url) {
     mEntity.setUrl(url);
+    mWrapper.setTempUrl(url);
   }
 
   String getUrl() {

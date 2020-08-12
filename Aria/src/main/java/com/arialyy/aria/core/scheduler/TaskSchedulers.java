@@ -106,7 +106,7 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
     }
 
     if (!hasProxyListener(listeners, taskEnum)) {
-      if (obj instanceof DownloadTaskInternalListenerInterface) {
+      if (obj instanceof TaskInternalListenerInterface) {
         listeners.put(taskEnum, obj);
         return;
       }
@@ -209,8 +209,8 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
         if (listeners == null || listeners.isEmpty()) {
           continue;
         }
-        M3U8PeerTaskListenerInterface listener =
-            (M3U8PeerTaskListenerInterface) listeners.get(TaskEnum.M3U8_PEER);
+        M3U8PeerTaskListener listener =
+            (M3U8PeerTaskListener) listeners.get(TaskEnum.M3U8_PEER);
         if (listener == null) {
           continue;
         }
@@ -258,8 +258,8 @@ public class TaskSchedulers<TASK extends ITask> implements ISchedulers {
         if (listeners == null || listeners.isEmpty()) {
           continue;
         }
-        SubTaskListenerInterface<TASK, AbsNormalEntity> listener =
-            (SubTaskListenerInterface<TASK, AbsNormalEntity>) listeners.get(TaskEnum.DOWNLOAD_GROUP_SUB);
+        SubTaskListener<TASK, AbsNormalEntity> listener =
+            (SubTaskListener<TASK, AbsNormalEntity>) listeners.get(TaskEnum.DOWNLOAD_GROUP_SUB);
         if (listener == null) {
           continue;
         }

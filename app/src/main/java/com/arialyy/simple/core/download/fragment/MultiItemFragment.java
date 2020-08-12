@@ -32,17 +32,21 @@ import com.arialyy.simple.widget.ProgressLayout;
 /**
  * Created by lyy on 2017/1/4.
  */
-public class DownloadFragment extends AbsFragment<FragmentDownloadBinding> {
+public class MultiItemFragment extends AbsFragment<FragmentDownloadBinding> {
   private long mTaskId = -1;
 
-  private static final String DOWNLOAD_URL =
-      "https://res5.d.cn/2137e42d610b3488d9420c6421529386eee5bdbfd9be1fafe0a05d6dabaec8c156ddbd00581055bbaeac03904fb63310e80010680235d16bd4c040b50096a0c20dd1c4b0854529a1.apk";
-  private static final String FILE_NAME = "王者军团";
+  private String DOWNLOAD_URL;
+  private String FILE_NAME;
+
+  public MultiItemFragment(String url, String fileName) {
+    DOWNLOAD_URL = url;
+    FILE_NAME = fileName;
+  }
 
   @Override protected void init(Bundle savedInstanceState) {
     Aria.download(this).register();
     DownloadEntity entity = Aria.download(this).getFirstDownloadEntity(DOWNLOAD_URL);
-    if (entity == null){
+    if (entity == null) {
       entity = new DownloadEntity();
       entity.setUrl(DOWNLOAD_URL);
     }
@@ -78,18 +82,30 @@ public class DownloadFragment extends AbsFragment<FragmentDownloadBinding> {
   }
 
   @Download.onTaskPre public void onTaskPre(DownloadTask task) {
+    if (!task.getKey().equals(DOWNLOAD_URL)){
+      return;
+    }
     getBinding().pl.setInfo(task.getEntity());
   }
 
   @Download.onTaskStop public void onTaskStop(DownloadTask task) {
+    if (!task.getKey().equals(DOWNLOAD_URL)){
+      return;
+    }
     getBinding().pl.setInfo(task.getEntity());
   }
 
   @Download.onTaskCancel public void onTaskCancel(DownloadTask task) {
+    if (!task.getKey().equals(DOWNLOAD_URL)){
+      return;
+    }
     getBinding().pl.setInfo(task.getEntity());
   }
 
   @Download.onTaskRunning public void onTaskRunning(DownloadTask task) {
+    if (!task.getKey().equals(DOWNLOAD_URL)){
+      return;
+    }
     long len = task.getFileSize();
     getBinding().pl.setInfo(task.getEntity());
   }

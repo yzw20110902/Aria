@@ -76,12 +76,13 @@ public class DeleteM3u8Record implements IDeleteRecord {
     }
 
     DownloadEntity entity = (DownloadEntity) absEntity;
-    TaskRecord record = DbDataHelper.getTaskRecord(entity.getFilePath(), entity.getTaskType());
+    final String filePath = entity.getFilePath();
+    TaskRecord record = DbDataHelper.getTaskRecord(filePath, entity.getTaskType());
     if (record == null) {
-      ALog.e(TAG, "删除下载记录失败，记录为空，filePath：" + entity.getFilePath());
+      ALog.e(TAG, "删除下载记录失败，记录为空，将删除实体记录，filePath：" + entity.getFilePath());
+      deleteEntity(needRemoveEntity, filePath);
       return;
     }
-    final String filePath = entity.getFilePath();
 
     // 删除下载的线程记录和任务记录
     DbEntity.deleteData(ThreadRecord.class, "taskKey=? AND threadType=?", filePath,
@@ -95,6 +96,10 @@ public class DeleteM3u8Record implements IDeleteRecord {
       FileUtil.deleteFile(filePath);
     }
 
+    deleteEntity(needRemoveEntity, filePath);
+  }
+
+  private void deleteEntity(boolean needRemoveEntity, String filePath){
     if (needRemoveEntity) {
       DbEntity.deleteData(DownloadEntity.class, "downloadPath=?", filePath);
     }

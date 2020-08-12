@@ -768,7 +768,7 @@ public class CommonUtil {
         field = clazz.getField(name);
       } catch (NoSuchFieldException e1) {
         if (clazz.getSuperclass() == null) {
-          return field;
+          return null;
         } else {
           field = getField(clazz.getSuperclass(), name);
         }
@@ -778,6 +778,32 @@ public class CommonUtil {
       field.setAccessible(true);
     }
     return field;
+  }
+
+  /**
+   * 获取类里面的指定对象，如果该类没有则从父类查询
+   */
+  public static Method getMethod(Class clazz, String methodName, Class<?>... params){
+    Method method = null;
+    try {
+      method = clazz.getDeclaredMethod(methodName, params);
+    } catch (NoSuchMethodException e) {
+      try {
+        method = clazz.getMethod(methodName, params);
+      } catch (NoSuchMethodException ex) {
+        if (clazz.getSuperclass() == null) {
+          return null;
+        } else {
+          method = getMethod(clazz.getSuperclass(), methodName, params);
+        }
+      }
+    }
+
+    if (method != null){
+      method.setAccessible(true);
+    }
+
+    return method;
   }
 
   /**

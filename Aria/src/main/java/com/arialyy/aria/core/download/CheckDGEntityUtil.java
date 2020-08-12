@@ -123,6 +123,12 @@ public class CheckDGEntityUtil implements ICheckEntityUtil {
    * @return false 任务不再执行，true 任务继续执行
    */
   private boolean checkGroupHash(boolean isIgnoreTaskOccupy, String groupHash) {
+    DownloadGroupEntity dge = DbEntity.findFirst(DownloadGroupEntity.class, "groupHash=?", groupHash);
+    if (dge != null && dge.getGroupHash().equals(mEntity.getGroupHash())){
+      mEntity.rowID = dge.rowID;
+      return true;
+    }
+
     if (DbEntity.checkDataExist(DownloadGroupEntity.class, "groupHash=?", groupHash)) {
       if (!isIgnoreTaskOccupy) {
         ALog.e(TAG, String.format("下载失败，数据库中已存在相同的url的组任务，groupHash = %s", groupHash));

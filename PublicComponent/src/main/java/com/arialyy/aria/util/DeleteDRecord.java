@@ -92,9 +92,9 @@ public class DeleteDRecord implements IDeleteRecord {
 
     TaskRecord record = DbDataHelper.getTaskRecord(entity.getFilePath(), entity.getTaskType());
     if (record == null) {
-      ALog.e(TAG, "删除下载记录失败，记录为空，filePath：" + entity.getFilePath());
+      ALog.e(TAG, "删除下载记录失败，记录为空，将删除实体记录，filePath：" + entity.getFilePath());
       FileUtil.deleteFile(targetFile);
-      DbEntity.deleteData(DownloadEntity.class, "downloadPath=?", filePath);
+      deleteEntity(needRemoveEntity, filePath);
       return;
     }
 
@@ -111,6 +111,10 @@ public class DeleteDRecord implements IDeleteRecord {
       }
     }
 
+    deleteEntity(needRemoveEntity, filePath);
+  }
+
+  private void deleteEntity(boolean needRemoveEntity, String filePath){
     if (needRemoveEntity) {
       DbEntity.deleteData(DownloadEntity.class, "downloadPath=?", filePath);
     }

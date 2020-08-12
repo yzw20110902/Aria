@@ -157,7 +157,7 @@ public class XMLReader extends DefaultHandler {
           setField("subReTryInterval", subReTryInterval, ConfigType.D_GROUP);
           break;
         case "useHeadRequest": // 是否使用head请求
-          boolean useHeadRequest = checkBoolean(value) ? Boolean.valueOf(value) : true;
+          boolean useHeadRequest = checkBoolean(value) ? Boolean.valueOf(value) : false;
           setField("useHeadRequest", useHeadRequest, ConfigType.DOWNLOAD);
           break;
       }

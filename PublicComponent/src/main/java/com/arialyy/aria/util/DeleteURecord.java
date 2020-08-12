@@ -88,8 +88,12 @@ public class DeleteURecord implements IDeleteRecord {
       FileUtil.deleteFile(entity.getFilePath());
     }
 
+    deleteEntity(needRemoveEntity, entity.getFilePath());
+  }
+
+  private void deleteEntity(boolean needRemoveEntity, String filePath) {
     if (needRemoveEntity) {
-      DbEntity.deleteData(UploadEntity.class, "filePath=?", entity.getFilePath());
+      DbEntity.deleteData(UploadEntity.class, "filePath=?", filePath);
     }
   }
 }

@@ -47,7 +47,7 @@ public class DownloadConfig extends BaseTaskConfig implements Serializable {
   /**
    * 设置http下载获取文件大小是否使用Head请求。true：使用head请求，false：使用默认的get请求
    */
-  boolean useHeadRequest;
+  boolean useHeadRequest = false;
 
   public boolean isUseHeadRequest() {
     return useHeadRequest;

@@ -37,7 +37,7 @@ public abstract class AbsReceiver implements IReceiver {
   /**
    * 观察者对象
    */
-  protected Object obj;
+  public Object obj;
 
   /**
    * 观察者对象类的完整名称
