@@ -118,7 +118,8 @@ final public class M3U8InfoTask implements IInfoTask {
   private void handleConnect(String tsListUrl, HttpURLConnection conn) throws IOException {
     int code = conn.getResponseCode();
     if (code == HttpURLConnection.HTTP_OK) {
-      BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+      BufferedReader reader =
+          new BufferedReader(new InputStreamReader(ConnectionHelp.convertInputStream(conn)));
       String line = reader.readLine();
       if (TextUtils.isEmpty(line) || !line.equalsIgnoreCase("#EXTM3U")) {
         failDownload("读取M3U8信息失败，读取不到#EXTM3U标签", false);
@@ -394,7 +395,7 @@ final public class M3U8InfoTask implements IInfoTask {
       ConnectionHelp.setConnectParam(mHttpOption, conn);
       conn.setConnectTimeout(mConnectTimeOut);
       conn.connect();
-      InputStream is = conn.getInputStream();
+      InputStream is = ConnectionHelp.convertInputStream(conn);
       fos = new FileOutputStream(keyF);
       byte[] buffer = new byte[1024];
       int len;

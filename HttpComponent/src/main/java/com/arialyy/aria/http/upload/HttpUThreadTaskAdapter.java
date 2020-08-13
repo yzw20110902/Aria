@@ -20,6 +20,7 @@ import com.arialyy.aria.core.common.SubThreadConfig;
 import com.arialyy.aria.core.upload.UploadEntity;
 import com.arialyy.aria.exception.AriaHTTPException;
 import com.arialyy.aria.http.BaseHttpThreadTaskAdapter;
+import com.arialyy.aria.http.ConnectionHelp;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
 import java.io.BufferedReader;
@@ -209,7 +210,8 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
     int status = mHttpConn.getResponseCode();
 
     if (status == HttpURLConnection.HTTP_OK) {
-      BufferedReader reader = new BufferedReader(new InputStreamReader(mHttpConn.getInputStream()));
+      BufferedReader reader =
+          new BufferedReader(new InputStreamReader(ConnectionHelp.convertInputStream(mHttpConn)));
       String line;
       while (getThreadTask().isLive() && (line = reader.readLine()) != null) {
         response.append(line);

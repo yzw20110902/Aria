@@ -420,6 +420,11 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
    * 重试ts分片
    */
   private void retryM3U8Peer(boolean needRetry) {
+    if (mConfig.ignoreFailure){
+      ALog.d(TAG, "忽略失败的切片");
+      sendFailMsg(null, false);
+      return;
+    }
     boolean isConnected = NetUtils.isConnected(AriaConfig.getInstance().getAPP());
     if (!isConnected && !isNotNetRetry) {
       ALog.w(TAG, String.format("ts切片【%s】重试失败，网络未连接", getFileName()));

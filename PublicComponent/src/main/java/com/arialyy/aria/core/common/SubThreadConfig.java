@@ -51,6 +51,8 @@ public class SubThreadConfig {
   public long updateInterval = 1000;
   // 扩展数据
   public Object obj;
+  // 忽略失败
+  public boolean ignoreFailure = false;
 
   /**
    * 转换线程任务类型

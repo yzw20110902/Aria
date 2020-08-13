@@ -196,6 +196,7 @@ final class M3U8LiveLoader extends BaseM3U8Loader {
     config.peerIndex = indexId;
     config.threadType = SubThreadConfig.getThreadType(ITaskWrapper.M3U8_LIVE);
     config.updateInterval = SubThreadConfig.getUpdateInterval(ITaskWrapper.M3U8_LIVE);
+    config.ignoreFailure = mM3U8Option.isIgnoreFailureTs();
     if (!config.tempFile.exists()) {
       FileUtil.createFile(config.tempFile);
     }

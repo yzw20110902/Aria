@@ -486,6 +486,7 @@ final class M3U8VodLoader extends BaseM3U8Loader {
     config.peerIndex = index;
     config.threadType = SubThreadConfig.getThreadType(ITaskWrapper.M3U8_LIVE);
     config.updateInterval = SubThreadConfig.getUpdateInterval(ITaskWrapper.M3U8_LIVE);
+    config.ignoreFailure = mM3U8Option.isIgnoreFailureTs();
     if (!config.tempFile.exists()) {
       FileUtil.createFile(config.tempFile);
     }

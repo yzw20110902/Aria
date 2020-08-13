@@ -161,6 +161,7 @@ public class SingleTaskActivity extends BaseActivity<ActivitySingleBinding> {
     if (speed > -1) {
       msg = item.getTitle().toString();
       T.showShort(this, msg);
+      Aria.get(this).getDownloadConfig().setMaxSpeed(speed);
     }
     return true;
   }
@@ -244,7 +245,8 @@ public class SingleTaskActivity extends BaseActivity<ActivitySingleBinding> {
     if (task.getKey().equals(mUrl)) {
       Toast.makeText(SingleTaskActivity.this, getString(R.string.download_success),
           Toast.LENGTH_SHORT).show();
-      ALog.d(TAG, "md5: " + CommonUtil.getFileMD5(new File(task.getFilePath())));
+      ALog.d(TAG, "文件md5: 9886e90f014d462b560dcec9c327bdb7");
+      ALog.d(TAG, "下载完成的文件md5: " + CommonUtil.getFileMD5(new File(task.getFilePath())));
       getBinding().pl.setInfo(task.getEntity());
     }
   }
