@@ -40,7 +40,8 @@ import java.io.File;
 public class HttpUploadActivity extends BaseActivity<ActivitySingleBinding> {
   private static final String TAG = "HttpUploadActivity";
 
-  private final String FILE_PATH = "/mnt/sdcard/QQMusic-import-1.2.1.zip";
+  //private final String FILE_PATH = "/mnt/sdcard/QQMusic-import-1.2.1.zip";
+  private final String FILE_PATH = "/mnt/sdcard/update.jpg";
   //private final String FILE_PATH =
   //    Environment.getExternalStorageDirectory().getPath() + "/Download/QQMusic-import-1.2.1.zip";
   private UploadEntity mEntity;
@@ -55,9 +56,11 @@ public class HttpUploadActivity extends BaseActivity<ActivitySingleBinding> {
     Aria.upload(this).getTaskList();
 
     mEntity = Aria.upload(this).getFirstUploadEntity(FILE_PATH);
-    if (mEntity != null){
-      getBinding().pl.setInfo(mEntity);
+    if (mEntity == null) {
+      mEntity = new UploadEntity();
+      mEntity.setFilePath(FILE_PATH);
     }
+    getBinding().pl.setInfo(mEntity);
     Aria.upload(this).register();
 
     getBinding().pl.setBtListener(new ProgressLayout.OnProgressLayoutBtListener() {
@@ -86,7 +89,7 @@ public class HttpUploadActivity extends BaseActivity<ActivitySingleBinding> {
     option.setAttachment("file");
     Aria.upload(HttpUploadActivity.this).load(FILE_PATH)
         //.setUploadUrl("http://lib-test.xzxyun.com:8042/Api/upload?data={\"type\":\"1\",\"fileType\":\".apk\"}")
-        .setUploadUrl("http://9.9.9.28:5000/upload/")
+        .setUploadUrl("http://172.16.0.91:5000/upload/")
         .ignoreFilePathOccupy()
         //.setTempUrl("http://192.168.1.6:8080/upload/sign_file/").setAttachment("file")
         //.addHeader("iplanetdirectorypro", "11a09102fb934ad0bc206f9c611d7933")

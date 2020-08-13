@@ -26,6 +26,7 @@ import com.arialyy.aria.util.CommonUtil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -75,7 +76,6 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       mHttpConn.setRequestProperty("User-Agent", getUserAgent());
       mHttpConn.setConnectTimeout(getTaskConfig().getConnectTimeOut());
       mHttpConn.setReadTimeout(getTaskConfig().getIOTimeOut());
-      //mHttpConn.setRequestProperty("Range", "bytes=" + 0 + "-" + "100");
       //内部缓冲区---分段上传防止oom
       mHttpConn.setChunkedStreamingMode(getTaskConfig().getBuffSize());
 
@@ -123,9 +123,10 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
   }
 
   private String getContentType() {
-    return (mTaskOption.getHeaders() == null || TextUtils.isEmpty(
-        mTaskOption.getHeaders().get("Content-Type"))) ? "multipart/form-data"
-        : mTaskOption.getHeaders().get("Content-Type");
+    //return (mTaskOption.getHeaders() == null || TextUtils.isEmpty(
+    //    mTaskOption.getHeaders().get("Content-Type"))) ? "multipart/form-data"
+    //    : mTaskOption.getHeaders().get("Content-Type");
+    return "multipart/form-data";
   }
 
   private String getUserAgent() {
@@ -176,23 +177,23 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
 
     FileInputStream inputStream = new FileInputStream(uploadFile);
     byte[] buffer = new byte[4096];
-    int bytesRead;
-    while ((bytesRead = inputStream.read(buffer)) != -1) {
-      progress(bytesRead);
-      mOutputStream.write(buffer, 0, bytesRead);
+    int bytesLen;
+    while ((bytesLen = inputStream.read(buffer)) != -1) {
+      mOutputStream.write(buffer, 0, bytesLen);
+      progress(bytesLen);
       if (getThreadTask().isBreak()) {
         break;
       }
       if (mSpeedBandUtil != null) {
-        mSpeedBandUtil.limitNextBytes(bytesRead);
+        mSpeedBandUtil.limitNextBytes(bytesLen);
       }
     }
 
     mOutputStream.flush();
-    //outputStream.close(); //不能调用，否则服务器端异常
     inputStream.close();
-    writer.append(LINE_END);
-    writer.flush();
+    writer.append(LINE_END).flush();
+    // 保证上传的文件和本地的一致，https://www.cnblogs.com/tugenhua0707/p/8975121.html
+    writer.append(PREFIX).append(BOUNDARY).append(PREFIX).append(LINE_END).flush();
   }
 
   /**
@@ -202,11 +203,6 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
    */
   private String finish(PrintWriter writer) throws IOException {
     StringBuilder response = new StringBuilder();
-
-    writer.append(LINE_END).flush();
-    writer.append(PREFIX).append(BOUNDARY).append(PREFIX).append(LINE_END);
-    writer.flush();
-
     int status = mHttpConn.getResponseCode();
 
     if (status == HttpURLConnection.HTTP_OK) {
