@@ -95,7 +95,7 @@ public abstract class BaseM3U8Loader extends AbsNormalLoader<DTaskWrapper> {
           i++;
         } else if (line.startsWith("#EXT-X-KEY")) {
           M3U8Entity m3U8Entity = getEntity().getM3U8Entity();
-          String keyInfo = String.format("#EXT-X-KEY:METHOD=%s,URI=%s,IV=%s\r\n", m3U8Entity.method,
+          String keyInfo = String.format("#EXT-X-KEY:METHOD=%s,URI=\"%s\",IV=%s\r\n", m3U8Entity.method,
               m3U8Entity.keyPath, m3U8Entity.iv);
           bytes = keyInfo.getBytes(Charset.forName("UTF-8"));
         } else {

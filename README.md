@@ -171,7 +171,8 @@ protected void onCreate(Bundle savedInstanceState) {
  有任何问题，可以在[issues](https://github.com/AriaLyy/Aria/issues)给我留言反馈。</br>
  在提交问题前，希望你已经查看过[wiki](https://aria.laoyuyu.me/aria_doc/)或搜索过[issues](https://github.com/AriaLyy/Aria/issues)。</br>
 
-## 请我喝瓶快乐水
+## 捐赠
+ Aria是作业利用业余时间开发的一个项目，如果你喜欢我写的软件，可以考虑给我捐赠以支持我的工作</br>
  <img src="https://raw.githubusercontent.com/AriaLyy/Aria/master/img/ali_pay.png" width=336 height=336/>
  <img src="https://raw.githubusercontent.com/AriaLyy/Aria/master/img/wx_pay.png" width=336 height=336/>
 

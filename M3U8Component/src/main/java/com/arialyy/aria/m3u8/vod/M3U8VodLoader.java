@@ -18,6 +18,7 @@ package com.arialyy.aria.m3u8.vod;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseArray;
 import com.arialyy.aria.core.ThreadRecord;
 import com.arialyy.aria.core.common.AbsEntity;
@@ -160,6 +161,11 @@ final class M3U8VodLoader extends BaseM3U8Loader {
 
     // 启动定时器
     startTimer();
+    if (getStateManager().isComplete()){
+      Log.d(TAG, "任务已完成");
+      getStateManager().handleTaskComplete();
+      return;
+    }
 
     // 启动线程开始下载ts切片
     Thread th = new Thread(new Runnable() {

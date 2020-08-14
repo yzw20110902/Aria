@@ -139,28 +139,7 @@ public final class VodStateManager implements IThreadStateManager {
             loader.notifyWaitLock(true);
           }
           if (isComplete()) {
-            ALog.d(TAG, String.format(
-                "startThreadNum = %s, stopNum = %s, cancelNum = %s, failNum = %s, completeNum = %s, flagQueueSize = %s",
-                startThreadNum, stopNum, cancelNum, failNum, loader.getCompleteNum(),
-                loader.getCurrentFlagSize()));
-            ALog.d(TAG, String.format("vod任务【%s】完成", loader.getTempFile().getName()));
-
-            if (m3U8Option.isGenerateIndexFile()) {
-              if (loader.generateIndexFile(false)) {
-                listener.onComplete();
-              } else {
-                listener.onFail(false, new AriaM3U8Exception("创建索引文件失败"));
-              }
-            } else if (m3U8Option.isMergeFile()) {
-              if (mergeFile()) {
-                listener.onComplete();
-              } else {
-                listener.onFail(false, null);
-              }
-            } else {
-              listener.onComplete();
-            }
-            quitLooper();
+            handleTaskComplete();
           }
           break;
         case STATE_RUNNING:
@@ -174,6 +153,34 @@ public final class VodStateManager implements IThreadStateManager {
       return true;
     }
   };
+
+  /**
+   * 处理m3u8以完成
+   */
+  void handleTaskComplete() {
+    ALog.d(TAG, String.format(
+        "startThreadNum = %s, stopNum = %s, cancelNum = %s, failNum = %s, completeNum = %s, flagQueueSize = %s",
+        startThreadNum, stopNum, cancelNum, failNum, loader.getCompleteNum(),
+        loader.getCurrentFlagSize()));
+    ALog.d(TAG, String.format("vod任务【%s】完成", loader.getTempFile().getName()));
+
+    if (m3U8Option.isGenerateIndexFile()) {
+      if (loader.generateIndexFile(false)) {
+        listener.onComplete();
+      } else {
+        listener.onFail(false, new AriaM3U8Exception("创建索引文件失败"));
+      }
+    } else if (m3U8Option.isMergeFile()) {
+      if (mergeFile()) {
+        listener.onComplete();
+      } else {
+        listener.onFail(false, null);
+      }
+    } else {
+      listener.onComplete();
+    }
+    quitLooper();
+  }
 
   void updateStateCount() {
     cancelNum.set(0);

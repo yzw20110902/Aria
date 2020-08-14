@@ -7,8 +7,10 @@
     - 修复m3u8gzip的问题，https://github.com/AriaLyy/Aria/issues/639
     - 修复http表单上传，本地md5和上传的服务的的文件md5不一致的问题 https://github.com/AriaLyy/Aria/issues/730
     - 修复0kb的文件不可下载的问题 https://github.com/AriaLyy/Aria/issues/711
+    - 修复加密的m3u8下载，并且使用索引模式时，key的uri没有使用双引号的问题 https://github.com/AriaLyy/Aria/issues/731
+    - 修复删除m3u8索引文件后，下载完成回调无法触发的问题
     - 增加m3u8密钥下载地址转换器增加ts列表的url地址 https://github.com/AriaLyy/Aria/issues/718
-    - 增加现在http文件下载将使用HEAD请求获取文件大小，配置文件增加 <useHeadRequest value="true"/>
+    - 增加现在http文件下载将使用HEAD请求获取文件大小，配置文件增加 <useHeadRequest value="true"/>。慎用，并不是所有服务器都支持head请求
     - 增加允许不使用apt直接通过实现监听器来回调下载进度更新，该功能由[chenfei0928](https://github.com/chenfei0928)提交，感谢他的pr。如果注解不生效，只需要实现`DownloadListener`接口便可
     - m3u8使用`ignoreFailureTs`后将不会自动重试失败的切片 https://github.com/AriaLyy/Aria/issues/662
   + v_3.8.10 (2020/6/26)

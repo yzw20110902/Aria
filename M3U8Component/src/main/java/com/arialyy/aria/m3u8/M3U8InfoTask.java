@@ -141,7 +141,7 @@ final public class M3U8InfoTask implements IInfoTask {
         }
         fos = new FileOutputStream(indexFile);
         ALog.d(TAG, line);
-        addIndexInfo(isGenerateIndexFile, fos, line);
+        addIndexInfo(true, fos, line);
       }
       while ((line = reader.readLine()) != null) {
         if (isStop) {
