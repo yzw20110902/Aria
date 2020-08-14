@@ -80,26 +80,26 @@ public class DeleteM3u8Record implements IDeleteRecord {
     TaskRecord record = DbDataHelper.getTaskRecord(filePath, entity.getTaskType());
     if (record == null) {
       ALog.e(TAG, "删除下载记录失败，记录为空，将删除实体记录，filePath：" + entity.getFilePath());
-      deleteEntity(needRemoveEntity, filePath);
+      deleteEntity(entity.getTaskType(), needRemoveEntity, filePath);
       return;
     }
-
-    // 删除下载的线程记录和任务记录
-    DbEntity.deleteData(ThreadRecord.class, "taskKey=? AND threadType=?", filePath,
-        String.valueOf(entity.getTaskType()));
-    DbEntity.deleteData(TaskRecord.class, "filePath=? AND taskType=?", filePath,
-        String.valueOf(entity.getTaskType()));
-    DbEntity.deleteData(M3U8Entity.class, "filePath=?", filePath);
 
     if (needRemoveFile || !entity.isComplete()) {
       removeTsCache(new File(filePath), record.bandWidth);
       FileUtil.deleteFile(filePath);
     }
 
-    deleteEntity(needRemoveEntity, filePath);
+    deleteEntity(entity.getTaskType(), needRemoveEntity, filePath);
   }
 
-  private void deleteEntity(boolean needRemoveEntity, String filePath){
+  private void deleteEntity(int taskType, boolean needRemoveEntity, String filePath){
+    // 删除下载的线程记录和任务记录
+    DbEntity.deleteData(ThreadRecord.class, "taskKey=? AND threadType=?", filePath,
+        String.valueOf(taskType));
+    DbEntity.deleteData(TaskRecord.class, "filePath=? AND taskType=?", filePath,
+        String.valueOf(taskType));
+    DbEntity.deleteData(M3U8Entity.class, "filePath=?", filePath);
+
     if (needRemoveEntity) {
       DbEntity.deleteData(DownloadEntity.class, "downloadPath=?", filePath);
     }
@@ -110,6 +110,14 @@ public class DeleteM3u8Record implements IDeleteRecord {
    */
   private static void removeTsCache(File targetFile, long bandWidth) {
 
+    // 删除key
+    M3U8Entity entity = DbEntity.findFirst(M3U8Entity.class, "filePath=?", targetFile.getPath());
+    if (entity != null && !TextUtils.isEmpty(entity.keyPath)){
+      File keyFile = new File(entity.keyPath);
+      FileUtil.deleteFile(keyFile);
+    }
+
+    // 删除ts
     String cacheDir = null;
     if (!targetFile.isDirectory()) {
       cacheDir =
@@ -138,5 +146,6 @@ public class DeleteM3u8Record implements IDeleteRecord {
     if (indexFile.exists()) {
       indexFile.delete();
     }
+
   }
 }

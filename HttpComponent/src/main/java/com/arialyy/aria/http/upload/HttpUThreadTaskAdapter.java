@@ -219,6 +219,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       String msg = "response msg: " + mHttpConn.getResponseMessage() + "，code: " + status;
       ALog.e(TAG, msg);
       fail(new AriaHTTPException(msg), false);
+      response.append(status);
     }
     writer.flush();
     writer.close();

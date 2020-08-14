@@ -86,6 +86,17 @@ public abstract class AbsEntity extends DbEntity implements IEntity, Parcelable,
    */
   private long stopTime = 0;
 
+  @Ignore
+  private int netCode = 200;
+
+  public int getNetCode() {
+    return netCode;
+  }
+
+  public void setNetCode(int netCode) {
+    this.netCode = netCode;
+  }
+
   /**
    * 获取剩余时间，单位：s
    * 如果是m3u8任务，无法获取剩余时间；m2u8任务如果需要获取剩余时间，请设置文件长度{@link #setFileSize(long)}

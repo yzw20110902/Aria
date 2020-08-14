@@ -120,7 +120,7 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
       }
 
       @Override public void cancel(View v, AbsEntity entity) {
-        Aria.download(this).load(mTaskId).cancel();
+        Aria.download(this).load(mTaskId).cancel(true);
         mTaskId = -1;
       }
     });
