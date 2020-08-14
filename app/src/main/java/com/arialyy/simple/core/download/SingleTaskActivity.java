@@ -248,6 +248,7 @@ public class SingleTaskActivity extends BaseActivity<ActivitySingleBinding> {
       //ALog.d(TAG, "文件md5: 9886e90f014d462b560dcec9c327bdb7");
       ALog.d(TAG, "下载完成的文件md5: " + CommonUtil.getFileMD5(new File(task.getFilePath())));
       getBinding().pl.setInfo(task.getEntity());
+      getBinding().pl.setProgress(100);
     }
   }
 
@@ -258,6 +259,7 @@ public class SingleTaskActivity extends BaseActivity<ActivitySingleBinding> {
 
   private void startD() {
     HttpOption option = new HttpOption();
+    option.useServerFileName(true);
     option.addHeader("1", "@")
         .useServerFileName(true)
         .setFileLenAdapter(new FileLenAdapter());

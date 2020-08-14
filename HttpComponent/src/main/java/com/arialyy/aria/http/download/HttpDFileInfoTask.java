@@ -232,6 +232,11 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
         || code == HttpURLConnection.HTTP_CREATED // 201 跳转
         || code == 307) {
       handleUrlReTurn(conn, conn.getHeaderField("Location"));
+    }else if (code == 416){ // 处理0k长度的文件的情况
+      ALog.w(TAG, "文件长度为0，不支持断点");
+      mTaskWrapper.setSupportBP(false);
+      mTaskWrapper.setNewTask(true);
+      end = true;
     } else if (code >= HttpURLConnection.HTTP_BAD_REQUEST) {
       failDownload(new AriaHTTPException(
           String.format("任务下载失败，errorCode：%s, url: %s", code, mEntity.getUrl())), false);
