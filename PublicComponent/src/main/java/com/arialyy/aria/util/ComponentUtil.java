@@ -24,9 +24,11 @@ import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.task.AbsTask;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.core.wrapper.ITaskWrapper;
-import com.arialyy.aria.exception.AriaComponentException;
 import java.lang.ref.SoftReference;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -43,12 +45,9 @@ public class ComponentUtil {
 
   private String TAG = CommonUtil.getClassName(getClass());
   private static volatile ComponentUtil INSTANCE = null;
-  private AriaServiceLoader<IUtil> utilLoader;
-  private AriaServiceLoader<IEventListener> listenerLoader;
 
   private ComponentUtil() {
-    utilLoader = AriaServiceLoader.load(IUtil.class);
-    listenerLoader = AriaServiceLoader.load(IEventListener.class);
+
   }
 
   public static ComponentUtil getInstance() {
@@ -105,7 +104,8 @@ public class ComponentUtil {
    *
    * @return 返回任务工具
    */
-  public synchronized IUtil buildUtil(AbsTaskWrapper wrapper, IEventListener listener) {
+  public synchronized <T extends IUtil> T buildUtil(AbsTaskWrapper wrapper,
+      IEventListener listener) {
     int requestType = wrapper.getRequestType();
     String className = null;
     switch (requestType) {
@@ -140,11 +140,30 @@ public class ComponentUtil {
         className = "com.arialyy.aria.sftp.upload.SFtpULoaderUtil";
         break;
     }
-    IUtil util = utilLoader.getService(className);
-    if (util == null) {
-      throw new AriaComponentException("加载工具异常，请求类型：" + wrapper.getRequestType());
+    if (className == null) {
+      ALog.e(TAG, "不识别的类名：" + className);
+      return null;
     }
-    return util.setParams(wrapper, listener);
+    T util = null;
+    try {
+      Class<T> clazz = (Class<T>) getClass().getClassLoader().loadClass(className);
+      Constructor<T> con = clazz.getConstructor();
+      util = con.newInstance();
+      Method method =
+          CommonUtil.getMethod(clazz, "setParams", AbsTaskWrapper.class, IEventListener.class);
+      method.invoke(util, wrapper, listener);
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    }
+    return util;
   }
 
   /**
@@ -153,7 +172,7 @@ public class ComponentUtil {
    * @param wrapperType 任务类型{@link ITaskWrapper}
    * @return 返回事件监听，如果创建失败返回null
    */
-  public synchronized IEventListener buildListener(int wrapperType, AbsTask task,
+  public synchronized <T extends IEventListener> T buildListener(int wrapperType, AbsTask task,
       Handler outHandler) {
     String className = null, errorStr = "请添加FTP插件";
     switch (wrapperType) {
@@ -180,12 +199,26 @@ public class ComponentUtil {
     if (className == null) {
       return null;
     }
-
-    IEventListener listener = listenerLoader.getService(className);
-    if (listener == null) {
-      throw new AriaComponentException(errorStr);
+    T listener = null;
+    try {
+      Class<T> clazz = (Class<T>) getClass().getClassLoader().loadClass(className);
+      Constructor<T> con = clazz.getConstructor();
+      listener = con.newInstance();
+      Method method =
+          CommonUtil.getMethod(clazz, "setParams", AbsTask.class, Handler.class);
+      method.invoke(listener, task, outHandler);
+    } catch (ClassNotFoundException e) {
+      throw new IllegalArgumentException(errorStr);
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
     }
-    return listener.setParams(task, outHandler);
+    return listener;
   }
 
   /**

@@ -32,7 +32,7 @@ import java.util.ServiceLoader;
  * 参考{@link ServiceLoader}
  */
 public class AriaServiceLoader<S> {
-
+  private static final String TAG = "AriaServiceLoader";
   private static final String PREFIX = "META-INF/services/";
 
   // The class or interface representing the service being loaded
@@ -177,6 +177,10 @@ public class AriaServiceLoader<S> {
     }
 
     private S loadService(String serviceName) {
+      if (pending == null){
+        ALog.e(TAG, "pending为空");
+        return null;
+      }
       for (String s : pending) {
         if (s.equals(serviceName)) {
           Class<?> c = null;

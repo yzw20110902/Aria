@@ -314,7 +314,7 @@ public class M3U8VodDLoadActivity extends BaseActivity<ActivityM3u8VodBinding> {
     option.generateIndexFile();
     //option.setKeyUrlConverter(new KeyUrlConverter());
     //option.setVodTsUrlConvert(new VodTsUrlConverter());
-    //option.setBandWidthUrlConverter(new BandWidthUrlConverter());
+    option.setBandWidthUrlConverter(new BandWidthUrlConverter());
     //option.setUseDefConvert(true);
     return option;
   }

@@ -35,12 +35,14 @@ import com.arialyy.aria.core.common.AbsEntity;
 import com.arialyy.aria.core.common.HttpOption;
 import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.download.DownloadTaskListener;
+import com.arialyy.aria.core.download.target.HttpNormalTarget;
 import com.arialyy.aria.core.listener.ISchedulers;
 import com.arialyy.aria.core.processor.IHttpFileLenAdapter;
 import com.arialyy.aria.core.scheduler.NormalTaskListenerInterface;
 import com.arialyy.aria.core.task.DownloadTask;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
+import com.arialyy.aria.util.FileUtil;
 import com.arialyy.frame.util.show.T;
 import com.arialyy.simple.R;
 import com.arialyy.simple.base.BaseActivity;
@@ -120,6 +122,25 @@ public class SingleTaskActivity extends BaseActivity<ActivitySingleBinding> {
 
       @Override public void cancel(View v, AbsEntity entity) {
         Aria.download(this).load(mTaskId).cancel(false);
+      //  //1. 删除本地文件目录
+      //  File localDirFile = new File(mFilePath);
+      //  if (localDirFile.exists()) {
+      //    FileUtil.deleteDir(localDirFile.getParentFile());
+      //  }
+      //
+      //  //2. 删除记录
+      //  HttpNormalTarget target = Aria.download(SingleTaskActivity.this).load(mTaskId);
+      //  if (target != null) {
+      //    //            target.cancel();
+      //    target.removeRecord();
+      //  }
+      //
+      //  List<DownloadEntity> notCompleteTask = Aria.download(SingleTaskActivity.this).getAllNotCompleteTask();
+      //  if (notCompleteTask == null){
+      //    Log.d(TAG, "未完成的任务数：0");
+      //    return;
+      //  }
+      //  Log.d(TAG, "未完成的任务数：" + notCompleteTask.size());
       }
     });
   }
