@@ -110,7 +110,12 @@ public class CheckDEntityUtil implements ICheckEntityUtil {
     if (TextUtils.isEmpty(filePath)) {
       ALog.e(TAG, "下载失败，文件保存路径为null");
       return false;
-    } else if (!filePath.startsWith("/")) {
+    }
+    if (!FileUtil.canWrite(filePath)){
+      ALog.e(TAG, String.format("路径【%s】不可写", filePath));
+      return false;
+    }
+    if (!filePath.startsWith("/")) {
       ALog.e(TAG, String.format("下载失败，文件保存路径【%s】错误", filePath));
       return false;
     }

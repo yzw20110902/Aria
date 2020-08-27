@@ -691,7 +691,7 @@ public class FileUtil {
     return list;
   }
 
-  private static boolean canWrite(String dirPath) {
+  public static boolean canWrite(String dirPath) {
     File dir = new File(dirPath);
     if (dir.canWrite()) {
       return true;

@@ -1,4 +1,7 @@
 ## 开发日志
+  + v_3.8.13
+    - 修复spi机制的兼容问题，https://github.com/AriaLyy/Aria/issues/743
+    - 增加路径不可以写的判断，下载时，如果路径不可写，将执行失败回调 https://github.com/AriaLyy/Aria/issues/750
   + v_3.8.12 (2020/8/15)
     - 修复一个正则表达式导致的文件名保存号异常问题 https://github.com/AriaLyy/Aria/issues/715
     - 修复一个匿名内部类中的内存溢出的问题 https://github.com/AriaLyy/Aria/issues/705
