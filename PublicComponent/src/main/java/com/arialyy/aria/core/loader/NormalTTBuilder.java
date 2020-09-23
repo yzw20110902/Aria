@@ -70,12 +70,9 @@ public final class NormalTTBuilder implements IThreadTaskBuilder {
   private List<IThreadTask> handleNoSupportBP() {
     List<IThreadTask> list = new ArrayList<>();
     mStartThreadNum = 1;
-
+    mRecord.isBlock = false;
+    mRecord.update();
     IThreadTask task = createSingThreadTask(mRecord.threadRecords.get(0), 1);
-    if (task == null) {
-      ALog.e(TAG, "创建线程任务失败");
-      return null;
-    }
     list.add(task);
     return list;
   }

@@ -1,4 +1,6 @@
 ## 开发日志
+  + v_3.8.15
+    - 修复不支持断点的连接下载失败问题，https://github.com/AriaLyy/Aria/issues/771
   + v_3.8.14 (2020/9/23)
     - 修复spi机制的兼容问题，https://github.com/AriaLyy/Aria/issues/743
     - 增加路径不可以写的判断，下载时，如果路径不可写，将执行失败回调 https://github.com/AriaLyy/Aria/issues/750
