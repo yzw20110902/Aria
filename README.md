@@ -45,19 +45,19 @@ Aria有以下特点：
 
 ## 引入库
 [![license](http://img.shields.io/badge/license-Apache2.0-brightgreen.svg?style=flat)](https://github.com/AriaLyy/Aria/blob/master/LICENSE)
-[![Core](https://img.shields.io/badge/Core-3.8.12-blue)](https://github.com/AriaLyy/Aria)
-[![Compiler](https://img.shields.io/badge/Compiler-3.8.12-blue)](https://github.com/AriaLyy/Aria)
-[![FtpComponent](https://img.shields.io/badge/FtpComponent-3.8.12-orange)](https://github.com/AriaLyy/Aria)
-[![FtpComponent](https://img.shields.io/badge/SFtpComponent-3.8.12-orange)](https://github.com/AriaLyy/Aria)
-[![M3U8Component](https://img.shields.io/badge/M3U8Component-3.8.12-orange)](https://github.com/AriaLyy/Aria)
+[![Core](https://img.shields.io/badge/Core-3.8.14-blue)](https://github.com/AriaLyy/Aria)
+[![Compiler](https://img.shields.io/badge/Compiler-3.8.14-blue)](https://github.com/AriaLyy/Aria)
+[![FtpComponent](https://img.shields.io/badge/FtpComponent-3.8.14-orange)](https://github.com/AriaLyy/Aria)
+[![FtpComponent](https://img.shields.io/badge/SFtpComponent-3.8.14-orange)](https://github.com/AriaLyy/Aria)
+[![M3U8Component](https://img.shields.io/badge/M3U8Component-3.8.14-orange)](https://github.com/AriaLyy/Aria)
 
 
 ```java
-implementation 'com.arialyy.aria:core:3.8.12'
-annotationProcessor 'com.arialyy.aria:compiler:3.8.12'
-implementation 'com.arialyy.aria:ftpComponent:3.8.12' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:sftpComponent:3.8.12' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:m3u8Component:3.8.12' # 如果需要使用m3u8下载功能，请增加该组件
+implementation 'com.arialyy.aria:core:3.8.14'
+annotationProcessor 'com.arialyy.aria:compiler:3.8.14'
+implementation 'com.arialyy.aria:ftpComponent:3.8.14' # 如果需要使用ftp，请增加该组件
+implementation 'com.arialyy.aria:sftpComponent:3.8.14' # 如果需要使用ftp，请增加该组件
+implementation 'com.arialyy.aria:m3u8Component:3.8.14' # 如果需要使用m3u8下载功能，请增加该组件
 ```
 
 如果你使用的是kotlin，请使用kotlin官方提供的方法配置apt，[kotlin kapt官方配置传送门](https://www.kotlincn.net/docs/reference/kapt.html)
@@ -138,22 +138,10 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
 ### 版本日志
-  + v_3.8.12 (2020/8/15)
-    - 修复一个正则表达式导致的文件名保存号异常问题 https://github.com/AriaLyy/Aria/issues/715
-    - 修复一个匿名内部类中的内存溢出的问题 https://github.com/AriaLyy/Aria/issues/705
-    - 修复同一个url地址的任务提示路径冲突的问题
-    - 修复m3u8任务地址错误时，无法删除实体的问题 https://github.com/AriaLyy/Aria/issues/712
-    - 修复m3u8gzip的问题，https://github.com/AriaLyy/Aria/issues/639
-    - 修复http表单上传，本地md5和上传的服务的的文件md5不一致的问题 https://github.com/AriaLyy/Aria/issues/730
-    - 修复0kb的文件不可下载的问题 https://github.com/AriaLyy/Aria/issues/711
-    - 修复加密的m3u8下载，并且使用索引模式时，key的uri没有使用双引号的问题 https://github.com/AriaLyy/Aria/issues/731
-    - 修复删除m3u8索引文件后，下载完成回调无法触发的问题
-    - 修复删除加密的m3u8文件时，key没有被删除的问题 https://github.com/AriaLyy/Aria/issues/735#issuecomment-673958845
-    - 增加m3u8密钥下载地址转换器增加ts列表的url地址 https://github.com/AriaLyy/Aria/issues/718
-    - 增加现在http文件下载将使用HEAD请求获取文件大小，配置文件增加 <useHeadRequest value="true"/>。慎用，并不是所有服务器都支持head请求
-    - 增加允许不使用apt直接通过实现监听器来回调下载进度更新，该功能由[chenfei0928](https://github.com/chenfei0928)提交，感谢他的pr。如果注解不生效，只需要实现`DownloadListener`接口便可
-    - 增加m3u8使用`ignoreFailureTs`后将不会自动重试失败的切片 https://github.com/AriaLyy/Aria/issues/662
-    
+   + v_3.8.14 (2020/9/23)
+      - 修复spi机制的兼容问题，https://github.com/AriaLyy/Aria/issues/743
+      - 增加路径不可以写的判断，下载时，如果路径不可写，将执行失败回调 https://github.com/AriaLyy/Aria/issues/750
+
 [更多版本记录](https://github.com/AriaLyy/Aria/blob/master/DEV_LOG.md)
 
 ## 混淆配置
