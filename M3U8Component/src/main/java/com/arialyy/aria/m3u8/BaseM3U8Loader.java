@@ -95,9 +95,21 @@ public abstract class BaseM3U8Loader extends AbsNormalLoader<DTaskWrapper> {
           i++;
         } else if (line.startsWith("#EXT-X-KEY")) {
           M3U8Entity m3U8Entity = getEntity().getM3U8Entity();
-          String keyInfo = String.format("#EXT-X-KEY:METHOD=%s,URI=\"%s\",IV=%s\r\n", m3U8Entity.method,
-              m3U8Entity.keyPath, m3U8Entity.iv);
-          bytes = keyInfo.getBytes(Charset.forName("UTF-8"));
+          StringBuilder sb = new StringBuilder("#EXT-X-KEY:");
+          sb.append("METHOD=").append(m3U8Entity.method);
+          sb.append(",URI=\"").append(m3U8Entity.keyPath).append("\"");
+          if (!TextUtils.isEmpty(m3U8Entity.iv)) {
+            sb.append(",IV=").append(m3U8Entity.iv);
+          }
+          if (!TextUtils.isEmpty(m3U8Entity.keyFormat)) {
+            sb.append(",KEYFORMAT=\"").append(m3U8Entity.keyFormat).append("\"");
+            sb.append(",KEYFORMATVERSIONS=\"")
+                .append(TextUtils.isEmpty(m3U8Entity.keyFormatVersion) ? "1"
+                    : m3U8Entity.keyFormatVersion)
+                .append("\"");
+          }
+          sb.append("\r\n");
+          bytes = sb.toString().getBytes(Charset.forName("UTF-8"));
         } else {
           bytes = line.concat("\r\n").getBytes(Charset.forName("UTF-8"));
         }
