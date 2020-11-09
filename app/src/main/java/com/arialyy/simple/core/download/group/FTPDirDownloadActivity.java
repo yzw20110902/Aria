@@ -36,7 +36,7 @@ import com.arialyy.simple.widget.SubStateLinearLayout;
  * Created by lyy on 2017/7/6.
  */
 public class FTPDirDownloadActivity extends BaseActivity<ActivityDownloadGroupBinding> {
-  private static final String dir = "ftp://9.9.9.72:2121/upload/测试";
+  private static final String dir = "ftp://192.168.0.104:2121/aab/你好";
 
   private SubStateLinearLayout mChildList;
   private long mTaskId = -1;
@@ -51,8 +51,10 @@ public class FTPDirDownloadActivity extends BaseActivity<ActivityDownloadGroupBi
     if (entity != null) {
       mTaskId = entity.getId();
       mChildList.addData(entity.getSubEntities());
-      getBinding().pl.setInfo(entity);
+    }else {
+      entity = new DownloadGroupEntity();
     }
+    getBinding().pl.setInfo(entity);
     getBinding().pl.setBtListener(new ProgressLayout.OnProgressLayoutBtListener() {
       @Override public void create(View v, AbsEntity entity) {
         mTaskId = Aria.download(this)

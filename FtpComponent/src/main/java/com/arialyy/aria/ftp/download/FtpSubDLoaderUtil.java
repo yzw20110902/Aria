@@ -19,6 +19,7 @@ import android.os.Handler;
 import com.arialyy.aria.core.download.DTaskWrapper;
 import com.arialyy.aria.core.group.AbsSubDLoadUtil;
 import com.arialyy.aria.core.group.SubRecordHandler;
+import com.arialyy.aria.core.loader.GroupSubThreadStateManager;
 import com.arialyy.aria.core.loader.LoaderStructure;
 import com.arialyy.aria.core.loader.NormalTTBuilder;
 import com.arialyy.aria.core.loader.SubLoader;
@@ -48,6 +49,7 @@ final class FtpSubDLoaderUtil extends AbsSubDLoadUtil {
   @Override protected LoaderStructure buildLoaderStructure() {
     LoaderStructure structure = new LoaderStructure();
     structure.addComponent(new SubRecordHandler(getWrapper()))
+        .addComponent(new GroupSubThreadStateManager(getSchedulers(),getKey()))
         .addComponent(new NormalTTBuilder(getWrapper(), new FtpDTTBuilderAdapter()))
         .addComponent(new FtpDFileInfoTask(getWrapper()));
     structure.accept(getLoader());

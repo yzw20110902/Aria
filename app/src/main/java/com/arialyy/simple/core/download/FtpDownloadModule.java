@@ -33,7 +33,7 @@ public class FtpDownloadModule extends BaseViewModule {
   private final String FTP_URL_KEY = "FTP_URL_KEY";
   private final String FTP_PATH_KEY = "FTP_PATH_KEY";
 
-  private final String ftpDefUrl = "ftp://9.9.9.50:2121/Cyberduck-6.9.4.30164.zip";
+  private final String ftpDefUrl = "ftp://192.168.0.104:2121/qqqq.exe";
   private final String ftpDefPath =
       Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
 
@@ -46,12 +46,12 @@ public class FtpDownloadModule extends BaseViewModule {
   LiveData<DownloadEntity> getFtpDownloadInfo(Context context) {
     //String url = AppUtil.getConfigValue(context, FTP_URL_KEY, ftpDefUrl);
     //String filePath = AppUtil.getConfigValue(context, FTP_PATH_KEY, ftpDefPath);
-    String url = "ftp://9.9.9.72:2121/Cyberduck-6.9.4.30164.zip";
+    //String url = "ftp://9.9.9.72:2121/Cyberduck-6.9.4.30164.zip";
 
-    singDownloadInfo = Aria.download(context).getFirstDownloadEntity(url);
+    singDownloadInfo = Aria.download(context).getFirstDownloadEntity(ftpDefUrl);
     if (singDownloadInfo == null) {
       singDownloadInfo = new DownloadEntity();
-      singDownloadInfo.setUrl(url);
+      singDownloadInfo.setUrl(ftpDefUrl);
       String name = getFileName(ftpDefUrl);
       singDownloadInfo.setFileName(name);
       singDownloadInfo.setFilePath(ftpDefPath + name);

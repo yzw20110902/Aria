@@ -35,7 +35,7 @@ public class SFtpOption extends BaseOption {
 
   public SFtpOption() {
     super();
-    ComponentUtil.getInstance().checkComponentExist(ComponentUtil.COMPONENT_TYPE_M3U8);
+    ComponentUtil.getInstance().checkComponentExist(ComponentUtil.COMPONENT_TYPE_SFTP);
   }
 
   public SFtpOption charSet(String charSet) {
