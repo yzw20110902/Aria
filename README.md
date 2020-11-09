@@ -45,19 +45,19 @@ Aria有以下特点：
 
 ## 引入库
 [![license](http://img.shields.io/badge/license-Apache2.0-brightgreen.svg?style=flat)](https://github.com/AriaLyy/Aria/blob/master/LICENSE)
-[![Core](https://img.shields.io/badge/Core-3.8.14-blue)](https://github.com/AriaLyy/Aria)
-[![Compiler](https://img.shields.io/badge/Compiler-3.8.14-blue)](https://github.com/AriaLyy/Aria)
-[![FtpComponent](https://img.shields.io/badge/FtpComponent-3.8.14-orange)](https://github.com/AriaLyy/Aria)
-[![FtpComponent](https://img.shields.io/badge/SFtpComponent-3.8.14-orange)](https://github.com/AriaLyy/Aria)
-[![M3U8Component](https://img.shields.io/badge/M3U8Component-3.8.14-orange)](https://github.com/AriaLyy/Aria)
+[![Core](https://img.shields.io/badge/Core-3.8.15-blue)](https://github.com/AriaLyy/Aria)
+[![Compiler](https://img.shields.io/badge/Compiler-3.8.15-blue)](https://github.com/AriaLyy/Aria)
+[![FtpComponent](https://img.shields.io/badge/FtpComponent-3.8.15-orange)](https://github.com/AriaLyy/Aria)
+[![FtpComponent](https://img.shields.io/badge/SFtpComponent-3.8.15-orange)](https://github.com/AriaLyy/Aria)
+[![M3U8Component](https://img.shields.io/badge/M3U8Component-3.8.15-orange)](https://github.com/AriaLyy/Aria)
 
 
 ```java
-implementation 'com.arialyy.aria:core:3.8.14'
-annotationProcessor 'com.arialyy.aria:compiler:3.8.14'
-implementation 'com.arialyy.aria:ftpComponent:3.8.14' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:sftpComponent:3.8.14' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:m3u8Component:3.8.14' # 如果需要使用m3u8下载功能，请增加该组件
+implementation 'com.arialyy.aria:core:3.8.15'
+annotationProcessor 'com.arialyy.aria:compiler:3.8.15'
+implementation 'com.arialyy.aria:ftpComponent:3.8.15' # 如果需要使用ftp，请增加该组件
+implementation 'com.arialyy.aria:sftpComponent:3.8.15' # 如果需要使用ftp，请增加该组件
+implementation 'com.arialyy.aria:m3u8Component:3.8.15' # 如果需要使用m3u8下载功能，请增加该组件
 ```
 
 如果你使用的是kotlin，请使用kotlin官方提供的方法配置apt，[kotlin kapt官方配置传送门](https://www.kotlincn.net/docs/reference/kapt.html)
@@ -138,9 +138,11 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
 ### 版本日志
-   + v_3.8.14 (2020/9/23)
-      - 修复spi机制的兼容问题，https://github.com/AriaLyy/Aria/issues/743
-      - 增加路径不可以写的判断，下载时，如果路径不可写，将执行失败回调 https://github.com/AriaLyy/Aria/issues/750
+  + v_3.8.15 (2020/11/9)
+    - 修复不支持断点的连接下载失败问题，https://github.com/AriaLyy/Aria/issues/771
+    - 修复iv不存在时，索引文件异常的问题，https://github.com/AriaLyy/Aria/issues/780
+    - fix bug https://github.com/AriaLyy/Aria/issues/799
+    - fix bug https://github.com/AriaLyy/Aria/issues/798
 
 [更多版本记录](https://github.com/AriaLyy/Aria/blob/master/DEV_LOG.md)
 
