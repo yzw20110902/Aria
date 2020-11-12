@@ -76,7 +76,7 @@ public class RecordHelper {
         tr.endLocation = endL;
       }
     }
-    mWrapper.setNewTask(false);
+    //mWrapper.setNewTask(false);
   }
 
   /**
@@ -125,8 +125,8 @@ public class RecordHelper {
             continue;
           }
 
-          long realLocation =
-              tr.threadId * normalRectLen + blockFileLen; //正常情况下，该线程的startLocation的位置
+          //正常情况下，该线程的startLocation的位置
+          long realLocation = tr.threadId * normalRectLen + blockFileLen;
           /*
            * 检查记录文件
            */
@@ -147,7 +147,7 @@ public class RecordHelper {
         }
       }
     }
-    mWrapper.setNewTask(false);
+    //mWrapper.setNewTask(false);
   }
 
   /**
@@ -190,7 +190,7 @@ public class RecordHelper {
         tr.isComplete = false;
       }
     }
-    mWrapper.setNewTask(false);
+    //mWrapper.setNewTask(false);
   }
 
   /**

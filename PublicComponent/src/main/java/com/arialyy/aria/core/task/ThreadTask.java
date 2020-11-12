@@ -310,7 +310,7 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
   }
 
   @Override public synchronized void updateCompleteState() {
-    ALog.i(TAG, String.format("任务【%s】线程__%s__完成", getTaskWrapper().getKey(), mRecord.threadId));
+    ALog.i(TAG, String.format("任务【%s】线程__%s__完成, blockSize = %s", getTaskWrapper().getKey(), mRecord.threadId, mConfig.tempFile.length()));
     writeConfig(true, mRecord.endLocation);
     // 进度发送不是实时的，发送完成任务前，需要更新一次进度
     sendRunningState();

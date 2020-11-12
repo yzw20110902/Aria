@@ -35,9 +35,12 @@ final class HttpDTTBuilderAdapter extends AbsNormalTTBuilderAdapter {
     BufferedRandomAccessFile file = null;
     try {
       if (totalThreadNum > 1 && !record.isBlock) {
-        file = new BufferedRandomAccessFile(new File(getTempFile().getPath()), "rwd", 8192);
+        file = new BufferedRandomAccessFile(getTempFile().getPath(), "rwd", 8192);
         //设置文件长度
         file.setLength(getEntity().getFileSize());
+      }
+      if (getTempFile().exists()) {
+        FileUtil.deleteFile(getTempFile());
       }
       return true;
     } catch (IOException e) {

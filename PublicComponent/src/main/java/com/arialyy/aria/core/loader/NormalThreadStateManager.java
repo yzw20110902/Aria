@@ -105,16 +105,16 @@ public class NormalThreadStateManager implements IThreadStateManager {
             //  mergerSFtp();
             //  mListener.onComplete();
             //} else
-
-            if (mTaskRecord.isBlock) {
+            if (mTaskRecord.isBlock || mTaskRecord.threadNum == 1) {
               if (mergeFile()) {
                 mListener.onComplete();
               } else {
                 mListener.onFail(false, null);
               }
-            } else {
-              mListener.onComplete();
+              quitLooper();
+              break;
             }
+            mListener.onComplete();
             quitLooper();
           }
           break;
@@ -248,8 +248,13 @@ public class NormalThreadStateManager implements IThreadStateManager {
    */
   private boolean mergeFile() {
     if (mTaskRecord.threadNum == 1) {
+      File targetFile = new File(mTaskRecord.filePath);
+      if (targetFile.exists() && targetFile.length() == mTaskRecord.fileLength){
+        return true;
+      }
+      FileUtil.deleteFile(targetFile);
       File partFile = new File(String.format(IRecordHandler.SUB_PATH, mTaskRecord.filePath, 0));
-      return partFile.renameTo(new File(mTaskRecord.filePath));
+      return partFile.renameTo(targetFile);
     }
 
     List<String> partPath = new ArrayList<>();

@@ -25,6 +25,7 @@ import android.os.StatFs;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.text.TextUtils;
+import android.util.Log;
 import com.arialyy.aria.core.AriaConfig;
 import java.io.BufferedReader;
 import java.io.File;
@@ -322,6 +323,7 @@ public class FileUtil {
    * @return {@code true} 合并成功，{@code false}合并失败
    */
   public static boolean mergeFile(String targetPath, List<String> subPaths) {
+    Log.d(TAG, "开始合并文件");
     File file = new File(targetPath);
     FileOutputStream fos = null;
     FileChannel foc = null;
