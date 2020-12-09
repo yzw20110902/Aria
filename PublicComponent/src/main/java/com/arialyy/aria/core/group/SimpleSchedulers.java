@@ -182,7 +182,7 @@ final class SimpleSchedulers implements Handler.Callback {
     Log.d(TAG,
         String.format("handleComplete, size = %s, completeNum = %s, failNum = %s, stopNum = %s",
             mGState.getSubSize(), mGState.getCompleteNum(), mGState.getFailNum(),
-            mGState.getSubSize()));
+            mGState.getStopNum()));
 
     TaskRecord record = loader.getRecord();
     if (record != null && record.isBlock) {

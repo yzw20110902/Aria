@@ -38,8 +38,7 @@ public final class HttpDGLoaderUtil extends AbsGroupLoaderUtil {
 
   @Override protected LoaderStructure buildLoaderStructure() {
     LoaderStructure structure = new LoaderStructure();
-    structure.addComponent(new HttpDGInfoTask((DGTaskWrapper) getTaskWrapper(),
-        (DownloadGroupListener) getListener()));
+    structure.addComponent(new HttpDGInfoTask((DGTaskWrapper) getTaskWrapper()));
     structure.accept(getLoader());
     return structure;
   }

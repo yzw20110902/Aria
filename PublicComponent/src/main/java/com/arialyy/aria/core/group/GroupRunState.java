@@ -47,7 +47,6 @@ public final class GroupRunState {
    * 停止的任务数
    */
   private AtomicInteger mStopNum = new AtomicInteger();
-  ;
 
   /**
    * 当前进度

@@ -26,6 +26,7 @@ import com.arialyy.aria.core.listener.DownloadGroupListener;
 import com.arialyy.aria.core.loader.IInfoTask;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
 import com.arialyy.aria.exception.AriaException;
+import com.arialyy.aria.exception.AriaHTTPException;
 import java.io.File;
 
 /**
@@ -64,7 +65,17 @@ final class HttpDGLoader extends AbsGroupLoader {
 
   @Override public void addComponent(IInfoTask infoTask) {
     mInfoTask = infoTask;
-    mInfoTask.setCallback(new IInfoTask.Callback() {
+    mInfoTask.setCallback(new HttpDGInfoTask.DGInfoCallback() {
+
+      @Override
+      public void onSubFail(DownloadEntity subEntity, AriaHTTPException e, boolean needRetry) {
+        getState().countFailNum(subEntity.getKey());
+      }
+
+      @Override public void onStop(long len) {
+        getListener().onStop(len);
+      }
+
       @Override public void onSucceed(String key, CompleteInfo info) {
         startSub();
       }

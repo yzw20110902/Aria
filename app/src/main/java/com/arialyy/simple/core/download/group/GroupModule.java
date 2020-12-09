@@ -32,9 +32,9 @@ public class GroupModule extends BaseModule {
 
   public List<String> getUrls() {
     List<String> urls = new ArrayList<>();
-    urls.add("http://61.155.99.75:88/sdkdown.muzhiwan.com/openfile/2019/10/26/com.mrxz.mzw_5db3eeef782b1.apk");
-    urls.add("http://cpsdown.muzhiwan.com/2020/05/07/com.kaihei.wufan.mars_5eb3947b4341b.apk");
-    urls.add("http://113.143.35.118:88/sdkdown.muzhiwan.com/openfile/2019/11/27/com.droidhang.ad.mzw_5dde4ffe2b2e5.apk");
+    urls.add("http://storage.jd.com/apk/newchannel/jingdongdaojia-lechuang30.apk");
+    urls.add("https://appdownload.alicdn.com/publish/cainiao4android/latest/cainiao4android_1598322688221.apk");
+    urls.add("http://dl-tc.coolapkmarket.com/down/apk_file/2020/0927/Coolapk-10.5.3-2009271_sign.apk");
     return urls;
   }
   List<String> getUrls1() {
@@ -50,9 +50,9 @@ public class GroupModule extends BaseModule {
     List<String> names = new ArrayList<>();
     //String[] str = getContext().getResources().getStringArray(R.array.group_names);
     //Collections.addAll(names, str);
-    names.add("末日血战.apk");
-    names.add("开黑三国.apk");
-    names.add("放置奇兵.apk");
+    names.add("京东到家.apk");
+    names.add("菜鸟.apk");
+    names.add("酷安.apk");
     //names.add("4.png");
     //names.add("5.png");
     return names;

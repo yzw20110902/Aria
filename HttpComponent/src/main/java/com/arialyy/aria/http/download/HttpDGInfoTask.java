@@ -20,7 +20,6 @@ import com.arialyy.aria.core.common.CompleteInfo;
 import com.arialyy.aria.core.download.DGTaskWrapper;
 import com.arialyy.aria.core.download.DTaskWrapper;
 import com.arialyy.aria.core.download.DownloadEntity;
-import com.arialyy.aria.core.listener.DownloadGroupListener;
 import com.arialyy.aria.core.loader.IInfoTask;
 import com.arialyy.aria.core.loader.ILoaderVisitor;
 import com.arialyy.aria.exception.AriaException;
@@ -44,8 +43,20 @@ public final class HttpDGInfoTask implements IInfoTask {
   private boolean getLenComplete = false;
   private AtomicInteger count = new AtomicInteger();
   private AtomicInteger failCount = new AtomicInteger();
-  private DownloadGroupListener listener;
   private boolean isStop = false, isCancel = false;
+
+  public interface DGInfoCallback extends Callback {
+
+    /**
+     * 子任务失败
+     */
+    void onSubFail(DownloadEntity subEntity, AriaHTTPException e, boolean needRetry);
+
+    /**
+     * 组合任务停止
+     */
+    void onStop(long len);
+  }
 
   /**
    * 子任务回调
@@ -61,15 +72,14 @@ public final class HttpDGInfoTask implements IInfoTask {
       ALog.e(TAG, String.format("获取文件信息失败，url：%s", ((DownloadEntity) entity).getUrl()));
       count.getAndIncrement();
       failCount.getAndIncrement();
-      listener.onSubFail((DownloadEntity) entity, new AriaHTTPException(
-          String.format("子任务获取文件长度失败，url：%s", ((DownloadEntity) entity).getUrl())));
+      ((DGInfoCallback) callback).onSubFail((DownloadEntity) entity, new AriaHTTPException(
+          String.format("子任务获取文件长度失败，url：%s", ((DownloadEntity) entity).getUrl())), needRetry);
       checkGetSizeComplete(count.get(), failCount.get());
     }
   };
 
-  HttpDGInfoTask(DGTaskWrapper wrapper, DownloadGroupListener listener) {
+  HttpDGInfoTask(DGTaskWrapper wrapper) {
     this.wrapper = wrapper;
-    this.listener = listener;
   }
 
   /**
@@ -95,7 +105,7 @@ public final class HttpDGInfoTask implements IInfoTask {
     if (mPool != null && !getLenComplete) {
       ALog.d(TAG, "获取长度未完成的情况下，停止组合任务");
       mPool.shutdown();
-      listener.onStop(0);
+      ((DGInfoCallback)callback).onStop(0);
       return;
     }
     // 处理组合任务大小未知的情况
@@ -150,7 +160,7 @@ public final class HttpDGInfoTask implements IInfoTask {
    * 检查组合任务大小是否获取完成，获取完成后取消阻塞，并设置组合任务大小
    */
   private void checkGetSizeComplete(int count, int failCount) {
-    if (isStop || isCancel){
+    if (isStop || isCancel) {
       ALog.w(TAG, "任务已停止或已取消，isStop = " + isStop + ", isCancel = " + isCancel);
       notifyLock();
       return;
