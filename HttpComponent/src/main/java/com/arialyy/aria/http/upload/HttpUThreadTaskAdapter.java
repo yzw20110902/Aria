@@ -102,7 +102,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       }
 
       uploadFile(writer, mTaskOption.getAttachment(), uploadFile);
-      getEntity().setResponseStr(finish(writer));
+      finish(writer);
     } catch (Exception e) {
       e.printStackTrace();
       fail(new AriaHTTPException(
@@ -214,10 +214,12 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       }
       reader.close();
       mHttpConn.disconnect();
+      getEntity().setResponseStr(response.toString());
       complete();
     } else {
       String msg = "response msg: " + mHttpConn.getResponseMessage() + "，code: " + status;
       ALog.e(TAG, msg);
+      getEntity().setResponseStr(response.toString());
       fail(new AriaHTTPException(msg), false);
       response.append(status);
     }
