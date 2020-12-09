@@ -39,7 +39,7 @@ final class SFtpDInfoTask extends AbsSFtpInfoTask<DTaskWrapper> {
   }
 
   @Override protected void getFileInfo(Session session) throws JSchException,
-      UnsupportedEncodingException, SftpException {
+      UnsupportedEncodingException {
     SFtpTaskOption option = (SFtpTaskOption) getWrapper().getTaskOption();
     ChannelSftp channel = (ChannelSftp) session.openChannel("sftp");
     channel.connect(1000);
@@ -60,10 +60,9 @@ final class SFtpDInfoTask extends AbsSFtpInfoTask<DTaskWrapper> {
       getWrapper().getEntity().setFileSize(attr.getSize());
       CompleteInfo info = new CompleteInfo();
       info.code = 200;
-      callback.onSucceed(getWrapper().getKey(), info);
+      onSucceed(info);
     } else {
-      callback.onFail(getWrapper().getEntity(),
-          new AriaSFTPException(String.format("文件不存在，remotePath：%s", remotePath)), false);
+      handleFail(new AriaSFTPException(String.format("文件不存在，remotePath：%s", remotePath)), false);
     }
     channel.disconnect();
   }

@@ -60,7 +60,7 @@ final class FtpUFileInfoTask extends AbsFtpInfoTask<UploadEntity, UTaskWrapper> 
       return;
     }
 
-    handleFile(getRemotePath(), files.length == 0 ? null : files[0]);
+    handleFile(client, getRemotePath(), files.length == 0 ? null : files[0]);
     int reply = client.getReplyCode();
     if (!FTPReply.isPositiveCompletion(reply)) {
       //服务器上没有该文件路径，表示该任务为新的上传任务
@@ -133,8 +133,8 @@ final class FtpUFileInfoTask extends AbsFtpInfoTask<UploadEntity, UTaskWrapper> 
    * @param remotePath ftp服务器文件夹路径
    * @param ftpFile ftp服务器上对应的文件
    */
-  @Override protected void handleFile(String remotePath, FTPFile ftpFile) {
-    super.handleFile(remotePath, ftpFile);
+  @Override protected void handleFile(FTPClient client,String remotePath, FTPFile ftpFile) {
+    super.handleFile(client, remotePath, ftpFile);
     this.ftpFile = ftpFile;
     if (ftpFile != null && ftpFile.getSize() == mEntity.getFileSize()) {
       isComplete = true;
@@ -145,6 +145,6 @@ final class FtpUFileInfoTask extends AbsFtpInfoTask<UploadEntity, UTaskWrapper> 
     super.onPreComplete(code);
     CompleteInfo info = new CompleteInfo(isComplete ? CODE_COMPLETE : code, mTaskWrapper);
     info.obj = ftpFile;
-    callback.onSucceed(mEntity.getKey(), info);
+    onSucceed(info);
   }
 }

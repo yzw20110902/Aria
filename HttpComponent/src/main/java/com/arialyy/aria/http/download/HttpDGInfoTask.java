@@ -45,6 +45,7 @@ public final class HttpDGInfoTask implements IInfoTask {
   private AtomicInteger count = new AtomicInteger();
   private AtomicInteger failCount = new AtomicInteger();
   private DownloadGroupListener listener;
+  private boolean isStop = false, isCancel = false;
 
   /**
    * 子任务回调
@@ -69,6 +70,24 @@ public final class HttpDGInfoTask implements IInfoTask {
   HttpDGInfoTask(DGTaskWrapper wrapper, DownloadGroupListener listener) {
     this.wrapper = wrapper;
     this.listener = listener;
+  }
+
+  /**
+   * 停止
+   */
+  @Override
+  public void stop() {
+    isStop = true;
+    if (mPool != null) {
+      mPool.shutdown();
+    }
+  }
+
+  @Override public void cancel() {
+    isCancel = true;
+    if (mPool != null) {
+      mPool.shutdown();
+    }
   }
 
   @Override public void run() {
@@ -131,6 +150,11 @@ public final class HttpDGInfoTask implements IInfoTask {
    * 检查组合任务大小是否获取完成，获取完成后取消阻塞，并设置组合任务大小
    */
   private void checkGetSizeComplete(int count, int failCount) {
+    if (isStop || isCancel){
+      ALog.w(TAG, "任务已停止或已取消，isStop = " + isStop + ", isCancel = " + isCancel);
+      notifyLock();
+      return;
+    }
     if (failCount == wrapper.getSubTaskWrapper().size()) {
       callback.onFail(wrapper.getEntity(), new AriaHTTPException("获取子任务长度失败"), false);
       notifyLock();

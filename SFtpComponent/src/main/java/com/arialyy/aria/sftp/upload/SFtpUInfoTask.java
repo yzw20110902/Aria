@@ -64,6 +64,6 @@ final class SFtpUInfoTask extends AbsSFtpInfoTask<UTaskWrapper> {
     info.code = isComplete ? ISCOMPLETE : 200;
     info.obj = attr;
     channel.disconnect();
-    callback.onSucceed(getWrapper().getKey(), info);
+    onSucceed(info);
   }
 }

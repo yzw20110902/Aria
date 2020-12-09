@@ -27,6 +27,7 @@ import aria.apache.commons.net.ftp.FTPSClient;
 import com.arialyy.aria.core.AriaConfig;
 import com.arialyy.aria.core.FtpUrlEntity;
 import com.arialyy.aria.core.common.AbsEntity;
+import com.arialyy.aria.core.common.CompleteInfo;
 import com.arialyy.aria.core.common.FtpConnectionMode;
 import com.arialyy.aria.core.loader.IInfoTask;
 import com.arialyy.aria.core.loader.ILoaderVisitor;
@@ -55,7 +56,8 @@ public abstract class AbsFtpInfoTask<ENTITY extends AbsEntity, TASK_WRAPPER exte
   private int mConnectTimeOut;
   protected long mSize = 0;
   protected String charSet = "UTF-8";
-  protected Callback callback;
+  private Callback callback;
+  private boolean isStop = false, isCancel = false;
 
   public AbsFtpInfoTask(TASK_WRAPPER taskWrapper) {
     mTaskWrapper = taskWrapper;
@@ -81,6 +83,14 @@ public abstract class AbsFtpInfoTask<ENTITY extends AbsEntity, TASK_WRAPPER exte
   protected abstract void handelFileInfo(FTPClient client, FTPFile[] files,
       String convertedRemotePath) throws IOException;
 
+  @Override public void stop() {
+    isStop = true;
+  }
+
+  @Override public void cancel() {
+    isCancel = true;
+  }
+
   @Override public void setCallback(Callback callback) {
     this.callback = callback;
   }
@@ -101,10 +111,10 @@ public abstract class AbsFtpInfoTask<ENTITY extends AbsEntity, TASK_WRAPPER exte
       handelFileInfo(client, files, convertedRemotePath);
     } catch (IOException e) {
       e.printStackTrace();
-      failDownload(client, "FTP错误信息", e, true);
+      handleFail(client, "FTP错误信息", e, true);
     } catch (InterruptedException e) {
       e.printStackTrace();
-      failDownload(client, "FTP错误信息", e, true);
+      handleFail(client, "FTP错误信息", e, true);
     } finally {
       closeClient(client);
     }
@@ -146,7 +156,7 @@ public abstract class AbsFtpInfoTask<ENTITY extends AbsEntity, TASK_WRAPPER exte
     }
 
     if (client == null) {
-      failDownload(client, String.format("链接失败, url: %s", mTaskOption.getUrlEntity().url), null,
+      handleFail(client, String.format("链接失败, url: %s", mTaskOption.getUrlEntity().url), null,
           true);
       return null;
     }
@@ -168,14 +178,14 @@ public abstract class AbsFtpInfoTask<ENTITY extends AbsEntity, TASK_WRAPPER exte
     }
 
     if (!loginSuccess) {
-      failDownload(client, "登录失败", null, false);
+      handleFail(client, "登录失败", null, false);
       client.disconnect();
       return null;
     }
 
     int reply = client.getReplyCode();
     if (!FTPReply.isPositiveCompletion(reply)) {
-      failDownload(client, String.format("无法连接到ftp服务器，filePath: %s, url: %s", mEntity.getKey(),
+      handleFail(client, String.format("无法连接到ftp服务器，filePath: %s, url: %s", mEntity.getKey(),
           mTaskOption.getUrlEntity().url), null, true);
       client.disconnect();
       return null;
@@ -299,7 +309,7 @@ public abstract class AbsFtpInfoTask<ENTITY extends AbsEntity, TASK_WRAPPER exte
     for (FTPFile file : files) {
       if (file.isFile()) {
         size += file.getSize();
-        handleFile(path + file.getName(), file);
+        handleFile(client, path + file.getName(), file);
       } else {
         String remotePath = CommonUtil.convertFtpChar(charSet, path + file.getName());
         size += getFileSize(client.listFiles(remotePath), client, path + file.getName());
@@ -314,10 +324,13 @@ public abstract class AbsFtpInfoTask<ENTITY extends AbsEntity, TASK_WRAPPER exte
    * @param remotePath ftp服务器文件夹路径
    * @param ftpFile ftp服务器上对应的文件
    */
-  protected void handleFile(String remotePath, FTPFile ftpFile) {
+  protected void handleFile(FTPClient client, String remotePath, FTPFile ftpFile) {
   }
 
-  protected void failDownload(FTPClient client, String msg, Exception e, boolean needRetry) {
+  protected void handleFail(FTPClient client, String msg, Exception e, boolean needRetry) {
+    if (isStop || isCancel) {
+      return;
+    }
     if (callback != null) {
       if (client == null) {
         msg = "创建ftp客户端失败";
@@ -330,6 +343,10 @@ public abstract class AbsFtpInfoTask<ENTITY extends AbsEntity, TASK_WRAPPER exte
 
       callback.onFail(mEntity, new AriaFTPException(msg), needRetry);
     }
+  }
+
+  protected void onSucceed(CompleteInfo info){
+    callback.onSucceed(mEntity.getKey(), info);
   }
 
   @Override public void accept(ILoaderVisitor visitor) {

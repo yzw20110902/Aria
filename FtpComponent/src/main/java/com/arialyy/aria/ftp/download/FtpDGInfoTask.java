@@ -49,7 +49,7 @@ final class FtpDGInfoTask extends AbsFtpInfoTask<DownloadGroupEntity, DGTaskWrap
 
   @Override public void run() {
     if (mTaskWrapper.getEntity().getFileSize() > 1 && checkSubOption()) {
-      callback.onSucceed(mEntity.getKey(), new CompleteInfo(200, mTaskWrapper));
+      onSucceed(new CompleteInfo(200, mTaskWrapper));
     } else {
       super.run();
     }
@@ -80,7 +80,7 @@ final class FtpDGInfoTask extends AbsFtpInfoTask<DownloadGroupEntity, DGTaskWrap
       }
       closeClient(client);
 
-      failDownload(client,
+      handleFail(client,
           String.format("文件不存在，url: %s, remotePath：%s", mTaskOption.getUrlEntity().url,
               getRemotePath()), null, false);
       return;
@@ -98,7 +98,7 @@ final class FtpDGInfoTask extends AbsFtpInfoTask<DownloadGroupEntity, DGTaskWrap
     int reply = client.getReplyCode();
     if (!FTPReply.isPositiveCompletion(reply)) {
       closeClient(client);
-      failDownload(client, "获取文件信息错误，url: " + mTaskOption.getUrlEntity().url, null, true);
+      handleFail(client, "获取文件信息错误，url: " + mTaskOption.getUrlEntity().url, null, true);
       return;
     }
     mTaskWrapper.setCode(reply);
@@ -127,8 +127,8 @@ final class FtpDGInfoTask extends AbsFtpInfoTask<DownloadGroupEntity, DGTaskWrap
     return mTaskOption.getUrlEntity().remotePath;
   }
 
-  @Override protected void handleFile(String remotePath, FTPFile ftpFile) {
-    super.handleFile(remotePath, ftpFile);
+  @Override protected void handleFile(FTPClient client, String remotePath, FTPFile ftpFile) {
+    super.handleFile(client, remotePath, ftpFile);
     addEntity(remotePath, ftpFile);
   }
 
@@ -138,7 +138,7 @@ final class FtpDGInfoTask extends AbsFtpInfoTask<DownloadGroupEntity, DGTaskWrap
     for (DTaskWrapper wrapper : mTaskWrapper.getSubTaskWrapper()) {
       cloneInfo(wrapper);
     }
-    callback.onSucceed(mEntity.getKey(), new CompleteInfo(code, mTaskWrapper));
+    onSucceed(new CompleteInfo(code, mTaskWrapper));
   }
 
   private void cloneInfo(DTaskWrapper subWrapper) {
@@ -234,8 +234,8 @@ final class FtpDGInfoTask extends AbsFtpInfoTask<DownloadGroupEntity, DGTaskWrap
   }
 
   @Override
-  protected void failDownload(FTPClient client, String msg, Exception e, boolean needRetry) {
-    super.failDownload(client, msg, e, needRetry);
+  protected void handleFail(FTPClient client, String msg, Exception e, boolean needRetry) {
+    super.handleFail(client, msg, e, needRetry);
     DeleteDGRecord.getInstance().deleteRecord(mTaskWrapper.getEntity(), true, true);
   }
 }

@@ -115,6 +115,14 @@ final public class M3U8InfoTask implements IInfoTask {
     mCallback = callback;
   }
 
+  @Override public void stop() {
+    this.isStop = true;
+  }
+
+  @Override public void cancel() {
+    this.isStop = true;
+  }
+
   private void handleConnect(String tsListUrl, HttpURLConnection conn) throws IOException {
     int code = conn.getResponseCode();
     if (code == HttpURLConnection.HTTP_OK) {
@@ -205,8 +213,7 @@ final public class M3U8InfoTask implements IInfoTask {
       }
       CompleteInfo info = new CompleteInfo();
       info.obj = extInf;
-
-      mCallback.onSucceed(mEntity.getKey(), info);
+      onSucceed(info);
       if (fos != null) {
         fos.close();
       }
@@ -221,6 +228,13 @@ final public class M3U8InfoTask implements IInfoTask {
     } else {
       failDownload(String.format("不支持的响应，code: %s", code), true);
     }
+  }
+
+  private void onSucceed(CompleteInfo info) {
+    if (isStop) {
+      return;
+    }
+    mCallback.onSucceed(mEntity.getKey(), info);
   }
 
   /**
@@ -362,6 +376,9 @@ final public class M3U8InfoTask implements IInfoTask {
   }
 
   private void failDownload(String errorInfo, boolean needRetry) {
+    if (isStop) {
+      return;
+    }
     mCallback.onFail(mEntity, new AriaM3U8Exception(errorInfo), needRetry);
   }
 

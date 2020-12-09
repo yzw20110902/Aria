@@ -64,6 +64,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
   private int mConnectTimeOut;
   private Callback callback;
   private HttpTaskOption taskOption;
+  private boolean isStop = false, isCancel = false;
 
   HttpDFileInfoTask(DTaskWrapper taskWrapper) {
     this.mTaskWrapper = taskWrapper;
@@ -81,7 +82,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
       conn = ConnectionHelp.handleConnection(url, taskOption);
       ConnectionHelp.setConnectParam(taskOption, conn);
       conn.setRequestProperty("Range", "bytes=" + 0 + "-");
-      if (AriaConfig.getInstance().getDConfig().isUseHeadRequest()){
+      if (AriaConfig.getInstance().getDConfig().isUseHeadRequest()) {
         ALog.d(TAG, "head请求");
         conn.setRequestMethod("HEAD");
       }
@@ -109,6 +110,14 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
 
   @Override public void setCallback(Callback callback) {
     this.callback = callback;
+  }
+
+  @Override public void stop() {
+    isStop = true;
+  }
+
+  @Override public void cancel() {
+    isCancel = true;
   }
 
   private void handleConnect(HttpURLConnection conn) throws IOException {
@@ -232,7 +241,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
         || code == HttpURLConnection.HTTP_CREATED // 201 跳转
         || code == 307) {
       handleUrlReTurn(conn, conn.getHeaderField("Location"));
-    }else if (code == 416){ // 处理0k长度的文件的情况
+    } else if (code == 416) { // 处理0k长度的文件的情况
       ALog.w(TAG, "文件长度为0，不支持断点");
       mTaskWrapper.setSupportBP(false);
       mTaskWrapper.setNewTask(true);
@@ -245,12 +254,13 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
           String.format("任务下载失败，errorCode：%s, errorMsg: %s, url: %s", code,
               conn.getResponseMessage(), mEntity.getUrl())), !CheckUtil.httpIsBadRequest(code));
     }
+    if (isStop || isCancel) {
+      return;
+    }
     if (end) {
       taskOption.setChunked(isChunked);
-      if (callback != null) {
-        CompleteInfo info = new CompleteInfo(code, mTaskWrapper);
-        callback.onSucceed(mEntity.getUrl(), info);
-      }
+      CompleteInfo info = new CompleteInfo(code, mTaskWrapper);
+      callback.onSucceed(mEntity.getUrl(), info);
       mEntity.update();
     }
   }
@@ -343,7 +353,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
     ConnectionHelp.setConnectParam(taskOption, conn);
     conn.setRequestProperty("Cookie", cookies);
     conn.setRequestProperty("Range", "bytes=" + 0 + "-");
-    if (AriaConfig.getInstance().getDConfig().isUseHeadRequest()){
+    if (AriaConfig.getInstance().getDConfig().isUseHeadRequest()) {
       conn.setRequestMethod("HEAD");
     }
     conn.setConnectTimeout(mConnectTimeOut);
@@ -367,6 +377,9 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
   }
 
   private void failDownload(AriaHTTPException e, boolean needRetry) {
+    if (isStop || isCancel) {
+      return;
+    }
     if (callback != null) {
       callback.onFail(mEntity, e, needRetry);
     }

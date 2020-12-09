@@ -34,6 +34,16 @@ public interface IInfoTask extends ILoaderComponent {
    */
   void setCallback(Callback callback);
 
+  /**
+   * 任务停止
+   */
+  void stop();
+
+  /**
+   * 任务取消
+   */
+  void cancel();
+
   interface Callback {
     /**
      * 处理完成

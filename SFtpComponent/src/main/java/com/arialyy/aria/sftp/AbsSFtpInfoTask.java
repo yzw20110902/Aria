@@ -16,6 +16,7 @@
 package com.arialyy.aria.sftp;
 
 import com.arialyy.aria.core.FtpUrlEntity;
+import com.arialyy.aria.core.common.CompleteInfo;
 import com.arialyy.aria.core.loader.IInfoTask;
 import com.arialyy.aria.core.loader.ILoaderVisitor;
 import com.arialyy.aria.core.wrapper.AbsTaskWrapper;
@@ -32,9 +33,10 @@ import java.io.UnsupportedEncodingException;
  */
 public abstract class AbsSFtpInfoTask<WP extends AbsTaskWrapper> implements IInfoTask {
   protected String TAG = CommonUtil.getClassName(this);
-  protected Callback callback;
+  private Callback callback;
   private WP wrapper;
   private SFtpTaskOption option;
+  private boolean isStop = false, isCancel = false;
 
   public AbsSFtpInfoTask(WP wp) {
     this.wrapper = wp;
@@ -43,6 +45,28 @@ public abstract class AbsSFtpInfoTask<WP extends AbsTaskWrapper> implements IInf
 
   protected abstract void getFileInfo(Session session)
       throws JSchException, UnsupportedEncodingException, SftpException;
+
+  @Override public void stop() {
+    isStop = true;
+  }
+
+  @Override public void cancel() {
+    isCancel = true;
+  }
+
+  protected void handleFail(AriaException e, boolean needRetry) {
+    if (isStop || isCancel){
+      return;
+    }
+    callback.onFail(getWrapper().getEntity(), e, needRetry);
+  }
+
+  protected void onSucceed(CompleteInfo info){
+    if (isStop || isCancel){
+      return;
+    }
+    callback.onSucceed(getWrapper().getKey(), info);
+  }
 
   @Override public void run() {
     try {

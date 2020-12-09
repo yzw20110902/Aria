@@ -43,7 +43,7 @@ final class SimpleSubQueue implements ISubQueue<AbsSubDLoadUtil> {
   /**
    * 最大执行任务数
    */
-  private int mExecSize;
+  private int mMaxExecSize;
 
   /**
    * 是否停止任务任务
@@ -51,7 +51,7 @@ final class SimpleSubQueue implements ISubQueue<AbsSubDLoadUtil> {
   private boolean isStopAll = false;
 
   private SimpleSubQueue() {
-    mExecSize = Configuration.getInstance().dGroupCfg.getSubMaxTaskNum();
+    mMaxExecSize = Configuration.getInstance().dGroupCfg.getSubMaxTaskNum();
   }
 
   static SimpleSubQueue newInstance() {
@@ -73,6 +73,10 @@ final class SimpleSubQueue implements ISubQueue<AbsSubDLoadUtil> {
     return mCache.size();
   }
 
+  public int getExecSize(){
+    return mExec.size();
+  }
+
   boolean isStopAll() {
     return isStopAll;
   }
@@ -82,7 +86,7 @@ final class SimpleSubQueue implements ISubQueue<AbsSubDLoadUtil> {
   }
 
   @Override public void startTask(AbsSubDLoadUtil fileer) {
-    if (mExec.size() < mExecSize) {
+    if (mExec.size() < mMaxExecSize) {
       mCache.remove(fileer.getKey());
       mExec.put(fileer.getKey(), fileer);
       ALog.d(TAG,
@@ -102,6 +106,7 @@ final class SimpleSubQueue implements ISubQueue<AbsSubDLoadUtil> {
   @Override public void stopAllTask() {
     isStopAll = true;
     ALog.d(TAG, "停止组合任务");
+    mCache.clear();
     Set<String> keys = mExec.keySet();
     for (String key : keys) {
       AbsSubDLoadUtil loader = mExec.get(key);
@@ -117,12 +122,12 @@ final class SimpleSubQueue implements ISubQueue<AbsSubDLoadUtil> {
       ALog.e(TAG, String.format("修改组合任务子任务队列数失败，num: %s", num));
       return;
     }
-    if (num == mExecSize) {
-      ALog.i(TAG, String.format("忽略此次修改，oldSize: %s, num: %s", mExecSize, num));
+    if (num == mMaxExecSize) {
+      ALog.i(TAG, String.format("忽略此次修改，oldSize: %s, num: %s", mMaxExecSize, num));
       return;
     }
-    int oldSize = mExecSize;
-    mExecSize = num;
+    int oldSize = mMaxExecSize;
+    mMaxExecSize = num;
     int diff = Math.abs(oldSize - num);
 
     if (oldSize < num) { // 处理队列变小的情况，该情况下将停止队尾任务，并将这些任务添加到缓存队列中

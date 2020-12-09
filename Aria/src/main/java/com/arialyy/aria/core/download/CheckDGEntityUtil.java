@@ -69,7 +69,8 @@ public class CheckDGEntityUtil implements ICheckEntityUtil {
       ALog.e(TAG, "文件夹路径不能为null");
       return false;
     }
-    if (!FileUtil.canWrite(dirPath)){
+    File file = new File(dirPath);
+    if (!FileUtil.canWrite(file.getParent()) && !FileUtil.canWrite(dirPath)) {
       ALog.e(TAG, String.format("路径【%s】不可写", dirPath));
       return false;
     }
@@ -77,7 +78,7 @@ public class CheckDGEntityUtil implements ICheckEntityUtil {
       ALog.e(TAG, String.format("文件夹路径【%s】错误", dirPath));
       return false;
     }
-    File file = new File(dirPath);
+
     if (file.isFile()) {
       ALog.e(TAG, String.format("路径【%s】是文件，请设置文件夹路径", dirPath));
       return false;
@@ -131,8 +132,9 @@ public class CheckDGEntityUtil implements ICheckEntityUtil {
    * @return false 任务不再执行，true 任务继续执行
    */
   private boolean checkGroupHash(boolean isIgnoreTaskOccupy, String groupHash) {
-    DownloadGroupEntity dge = DbEntity.findFirst(DownloadGroupEntity.class, "groupHash=?", groupHash);
-    if (dge != null && dge.getGroupHash().equals(mEntity.getGroupHash())){
+    DownloadGroupEntity dge =
+        DbEntity.findFirst(DownloadGroupEntity.class, "groupHash=?", groupHash);
+    if (dge != null && dge.getGroupHash().equals(mEntity.getGroupHash())) {
       mEntity.rowID = dge.rowID;
       return true;
     }
