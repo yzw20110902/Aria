@@ -34,7 +34,7 @@ public class GroupModule extends BaseModule {
     List<String> urls = new ArrayList<>();
     urls.add("http://storage.jd.com/apk/newchannel/jingdongdaojia-lechuang30.apk");
     urls.add("https://appdownload.alicdn.com/publish/cainiao4android/latest/cainiao4android_1598322688221.apk");
-    urls.add("http://dl-tc.coolapkmarket.com/down/apk_file/2020/0927/Coolapk-10.5.3-2009271_sign.apk");
+    urls.add("https://yanxuan-dl.nosdn.127.net/yan/android/yanxuan-aos_out_3547.apk");
     return urls;
   }
   List<String> getUrls1() {
@@ -52,7 +52,7 @@ public class GroupModule extends BaseModule {
     //Collections.addAll(names, str);
     names.add("京东到家.apk");
     names.add("菜鸟.apk");
-    names.add("酷安.apk");
+    names.add("网易严选.apk");
     //names.add("4.png");
     //names.add("5.png");
     return names;

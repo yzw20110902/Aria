@@ -229,7 +229,9 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
       ALog.d(TAG, String.format("任务【%s】正在删除，删除任务失败", mTaskWrapper.getKey()));
       return;
     }
-    mInfoTask.cancel();
+    if (mInfoTask != null){
+      mInfoTask.cancel();
+    }
     closeTimer();
     isCancel = true;
     onCancel();
@@ -263,7 +265,9 @@ public abstract class AbsNormalLoader<T extends AbsTaskWrapper> implements ILoad
     if (isStop) {
       return;
     }
-    mInfoTask.stop();
+    if (mInfoTask != null){
+      mInfoTask.stop();
+    }
     closeTimer();
     isStop = true;
     onStop();

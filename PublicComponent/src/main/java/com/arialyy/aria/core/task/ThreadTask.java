@@ -225,7 +225,7 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
     File blockFile = mConfig.tempFile;
     if (!blockFile.exists() || blockFile.length() != mRecord.blockLen) {
       ALog.i(TAG,
-          String.format("分块【%s】错误，blockFileLen: %s, threadRect: %s; 即将重新下载该分块，开始位置：%s，结束位置：%s",
+          String.format("分块【%s】错误，blockFileLen: %s, threadRect: %s; 即将重新下载该分块, 开始位置：%s，结束位置：%s",
               blockFile.getName(), blockFile.length(), mRecord.blockLen, mRecord.startLocation,
               mRecord.endLocation));
       if (blockFile.exists()) {
@@ -310,7 +310,8 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
   }
 
   @Override public synchronized void updateCompleteState() {
-    ALog.i(TAG, String.format("任务【%s】线程__%s__完成, blockSize = %s", getTaskWrapper().getKey(), mRecord.threadId, mConfig.tempFile.length()));
+    ALog.i(TAG, String.format("任务【%s】线程__%s__完成, blockSize = %s", getTaskWrapper().getKey(),
+        mRecord.threadId, mConfig.tempFile.length()));
     writeConfig(true, mRecord.endLocation);
     // 进度发送不是实时的，发送完成任务前，需要更新一次进度
     sendRunningState();
@@ -420,7 +421,7 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
    * 重试ts分片
    */
   private void retryM3U8Peer(boolean needRetry) {
-    if (mConfig.ignoreFailure){
+    if (mConfig.ignoreFailure) {
       ALog.d(TAG, "忽略失败的切片");
       sendFailMsg(null, false);
       return;
@@ -431,9 +432,10 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
       sendFailMsg(null, false);
       return;
     }
-    if (mFailTimes < RETRY_NUM && needRetry && (NetUtils.isConnected(
-        AriaConfig.getInstance().getAPP())
-        || isNotNetRetry) && !isBreak()) {
+    if (mFailTimes < RETRY_NUM
+        && needRetry
+        && (NetUtils.isConnected(AriaConfig.getInstance().getAPP()) || isNotNetRetry)
+        && !isBreak()) {
       ALog.w(TAG, String.format("ts切片【%s】第%s重试", getFileName(), String.valueOf(mFailTimes)));
       mFailTimes++;
       FileUtil.deleteFile(mConfig.tempFile);
@@ -455,15 +457,19 @@ public class ThreadTask implements IThreadTask, IThreadTaskObserver {
       sendFailMsg(null, false);
       return;
     }
-    if (mFailTimes < RETRY_NUM && needRetry && (NetUtils.isConnected(
-        AriaConfig.getInstance().getAPP()) || isNotNetRetry) && !isBreak()) {
+    if (mFailTimes < RETRY_NUM
+        && needRetry
+        && (NetUtils.isConnected(AriaConfig.getInstance().getAPP()) || isNotNetRetry)
+        && !isBreak()) {
       ALog.w(TAG, String.format("分块【%s】第%s次重试", getFileName(), String.valueOf(mFailTimes)));
       mFailTimes++;
       handleBlockRecord();
       ThreadTaskManager.getInstance().retryThread(this);
       return;
     }
-    ALog.e(TAG, String.format("任务【%s】执行失败", getFileName()));
+    ALog.e(TAG,
+        String.format("重试分开【%s】失败，failTimes = %s, needRetry = %s, isBreak = %s",
+            getFileName(), mFailTimes, needRetry, isBreak()));
     sendFailMsg(null, needRetry);
   }
 

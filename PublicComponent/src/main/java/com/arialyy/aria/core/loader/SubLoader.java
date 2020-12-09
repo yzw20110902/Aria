@@ -182,6 +182,9 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
       return;
     }
     isStop = true;
+    if (infoTask != null){
+      infoTask.stop();
+    }
     for (IThreadTask iThreadTask : mTask) {
       iThreadTask.stop();
     }
@@ -203,6 +206,9 @@ public final class SubLoader implements ILoader, ILoaderVisitor {
       return;
     }
     isCancel = true;
+    if (infoTask != null){
+      infoTask.cancel();
+    }
     for (IThreadTask iThreadTask : mTask) {
       iThreadTask.cancel();
     }
