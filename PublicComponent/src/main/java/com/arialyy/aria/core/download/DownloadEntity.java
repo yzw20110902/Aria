@@ -31,7 +31,7 @@ import com.arialyy.aria.util.CommonUtil;
  * Created by lyy on 2015/12/25.
  * 下载实体
  */
-public class DownloadEntity extends AbsNormalEntity implements Parcelable {
+public class DownloadEntity extends AbsNormalEntity implements Parcelable, Cloneable {
   @Unique private String downloadPath; //保存路径
 
   /**
