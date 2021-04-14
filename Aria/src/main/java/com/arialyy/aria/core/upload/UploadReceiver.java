@@ -272,6 +272,7 @@ public class UploadReceiver extends AbsReceiver {
       return;
     }
     if (obj instanceof TaskInternalListenerInterface){
+      ProxyHelper.getInstance().checkProxyType(obj.getClass());
       if (obj instanceof UploadTaskListener){
         TaskSchedulers.getInstance().register(obj, TaskEnum.UPLOAD);
       }

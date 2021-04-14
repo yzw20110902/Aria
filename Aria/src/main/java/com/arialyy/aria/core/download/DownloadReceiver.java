@@ -175,6 +175,7 @@ public class DownloadReceiver extends AbsReceiver {
       return;
     }
     if (obj instanceof TaskInternalListenerInterface){
+      ProxyHelper.getInstance().checkProxyType(obj.getClass());
       if (obj instanceof DownloadTaskListener){
         TaskSchedulers.getInstance().register(obj, TaskEnum.DOWNLOAD);
       }

@@ -18,11 +18,10 @@ package com.arialyy.aria.core.common;
 import com.arialyy.annotations.TaskEnum;
 import com.arialyy.aria.core.download.DownloadGroupTaskListener;
 import com.arialyy.aria.core.download.DownloadTaskListener;
-import com.arialyy.aria.core.scheduler.TaskInternalListenerInterface;
 import com.arialyy.aria.core.scheduler.M3U8PeerTaskListener;
 import com.arialyy.aria.core.scheduler.SubTaskListener;
+import com.arialyy.aria.core.scheduler.TaskInternalListenerInterface;
 import com.arialyy.aria.core.upload.UploadTaskListener;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -81,7 +80,8 @@ public class ProxyHelper {
       return result;
     }
     result = checkProxyTypeByInterface(clazz);
-    if (result != null) {
+    if (result != null && !result.isEmpty()) {
+      mProxyCache.put(clazz.getName(), result);
       return result;
     }
     result = checkProxyTypeByProxyClass(clazz);
