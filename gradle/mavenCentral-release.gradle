@@ -165,6 +165,19 @@ afterEvaluate { project ->
 
         } else if (project.plugins.hasPlugin('java')) {
           from components.java
+
+          task sourcesJar(type: Jar, dependsOn: classes) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+          }
+
+          task javadocsJar(type: Jar, dependsOn: javadoc) {
+            classifier = 'javadoc'
+            from javadoc.destinationDir
+          }
+
+          artifact sourcesJar
+          artifact javadocsJar
         }
 
         pom {
