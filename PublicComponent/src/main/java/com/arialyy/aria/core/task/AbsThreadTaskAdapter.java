@@ -24,8 +24,8 @@ import com.arialyy.aria.util.BandwidthLimiter;
 import com.arialyy.aria.util.CommonUtil;
 
 /**
- * @Author lyy
- * @Date 2019-09-18
+ * @author lyy
+ * Date: 2019-09-18
  */
 public abstract class AbsThreadTaskAdapter implements IThreadTaskAdapter {
 

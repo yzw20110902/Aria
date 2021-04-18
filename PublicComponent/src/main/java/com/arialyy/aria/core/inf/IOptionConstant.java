@@ -16,8 +16,8 @@
 package com.arialyy.aria.core.inf;
 
 /**
- * @Author lyy
- * @Date 2019-09-10
+ * @author lyy
+ * Date: 2019-09-10
  */
 public interface IOptionConstant {
   // ftp 任务设置常量

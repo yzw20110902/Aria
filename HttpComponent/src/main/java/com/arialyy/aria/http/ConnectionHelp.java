@@ -48,8 +48,6 @@ public final class ConnectionHelp {
 
   /**
    * 处理url参数
-   *
-   * @throws MalformedURLException
    */
   public static URL handleUrl(String url, HttpTaskOption taskDelegate)
       throws MalformedURLException {
@@ -127,8 +125,6 @@ public final class ConnectionHelp {
 
   /**
    * 设置头部参数
-   *
-   * @throws ProtocolException
    */
   public static HttpURLConnection setConnectParam(HttpTaskOption delegate, HttpURLConnection conn) {
     if (delegate.getRequestEnum() == RequestEnum.POST) {

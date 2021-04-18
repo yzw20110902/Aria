@@ -53,11 +53,11 @@ Aria有以下特点：
 
 
 ```java
-implementation 'com.arialyy.aria:core:3.8.15'
-annotationProcessor 'com.arialyy.aria:compiler:3.8.15'
-implementation 'com.arialyy.aria:ftpComponent:3.8.15' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:sftpComponent:3.8.15' # 如果需要使用ftp，请增加该组件
-implementation 'com.arialyy.aria:m3u8Component:3.8.15' # 如果需要使用m3u8下载功能，请增加该组件
+implementation 'me.laoyuyu.aria:core:3.8.16'
+annotationProcessor 'me.laoyuyu.aria:compiler:3.8.16'
+implementation 'me.laoyuyu.aria:ftp:3.8.16' # 如果需要使用ftp，请增加该组件
+implementation 'me.laoyuyu.aria:sftp:3.8.16' # 如果需要使用ftp，请增加该组件
+implementation 'me.laoyuyu.aria:m3u8:3.8.16' # 如果需要使用m3u8下载功能，请增加该组件
 ```
 
 如果你使用的是kotlin，请使用kotlin官方提供的方法配置apt，[kotlin kapt官方配置传送门](https://www.kotlincn.net/docs/reference/kapt.html)
@@ -138,11 +138,13 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
 ### 版本日志
-  + v_3.8.15 (2020/11/9)
-    - 修复不支持断点的连接下载失败问题，https://github.com/AriaLyy/Aria/issues/771
-    - 修复iv不存在时，索引文件异常的问题，https://github.com/AriaLyy/Aria/issues/780
-    - fix bug https://github.com/AriaLyy/Aria/issues/799
-    - fix bug https://github.com/AriaLyy/Aria/issues/798
+  + v_3.8.16
+    - 修复单线程下载时，文件已经完成，重复下载回调下载失败的问题
+    - 修复一个重新下载文件时，同名路径文件没有被被删除的问题
+    - fix bug https://github.com/AriaLyy/Aria/issues/807
+    - fix bug https://github.com/AriaLyy/Aria/issues/811
+    - fix bug https://github.com/AriaLyy/Aria/issues/851
+    - 修复组合任务在获取子任务信息的过程中，手动停止或删除，没有回调的问题
 
 [更多版本记录](https://github.com/AriaLyy/Aria/blob/master/DEV_LOG.md)
 

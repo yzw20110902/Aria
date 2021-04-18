@@ -28,8 +28,8 @@ import com.arialyy.aria.core.upload.UTaskWrapper;
 import com.arialyy.aria.ftp.FtpTaskOption;
 
 /**
- * @Author lyy
- * @Date 2019-09-19
+ * @author lyy
+ * Date: 2019-09-19
  */
 public final class FtpULoaderUtil extends AbsNormalLoaderUtil {
 

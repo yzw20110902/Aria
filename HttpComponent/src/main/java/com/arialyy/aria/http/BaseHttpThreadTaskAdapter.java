@@ -20,8 +20,8 @@ import com.arialyy.aria.core.common.SubThreadConfig;
 import com.arialyy.aria.core.task.AbsThreadTaskAdapter;
 
 /**
- * @Author lyy
- * @Date 2019-09-22
+ * @author lyy
+ * Date: 2019-09-22
  */
 public abstract class BaseHttpThreadTaskAdapter extends AbsThreadTaskAdapter {
   protected HttpTaskOption mTaskOption;

@@ -31,8 +31,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * @Author lyy
- * @Date 2019-09-24
+ * @author lyy
+ * Date: 2019-09-24
  */
 final class VodRecordHandler extends RecordHandler {
   private M3U8TaskOption mOption;

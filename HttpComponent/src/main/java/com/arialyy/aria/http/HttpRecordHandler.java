@@ -28,8 +28,8 @@ import com.arialyy.aria.util.RecordUtil;
 import java.util.ArrayList;
 
 /**
- * @Author lyy
- * @Date 2019-09-23
+ * @author lyy
+ * Date: 2019-09-23
  */
 public final class HttpRecordHandler extends RecordHandler {
   public HttpRecordHandler(AbsTaskWrapper wrapper) {

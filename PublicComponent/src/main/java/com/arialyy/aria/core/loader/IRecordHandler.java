@@ -19,8 +19,8 @@ import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.ThreadRecord;
 
 /**
- * @Author lyy
- * @Date 2019-09-18
+ * @author lyy
+ * Date: 2019-09-18
  */
 public interface IRecordHandler extends ILoaderComponent {
 

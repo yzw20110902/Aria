@@ -111,8 +111,8 @@ public class DownloadReceiver extends AbsReceiver {
   /**
    * 加载组合任务，用于任务停止、删除等操作
    *
-   * @param taskId 任务id，可从{@link AbsBuilderTarget#create()}、{@link AbsBuilderTarget#add()}、{@link
-   * * AbsEntity#getId()}读取任务id
+   * @param taskId 任务id，可从{@link AbsBuilderTarget#create}、{@link AbsBuilderTarget#add}、{@link
+   * AbsEntity#getId}读取任务id
    */
 
   public GroupNormalTarget loadGroup(long taskId) {

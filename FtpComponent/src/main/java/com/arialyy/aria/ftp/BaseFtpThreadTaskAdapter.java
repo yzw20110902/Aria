@@ -34,8 +34,8 @@ import java.net.UnknownHostException;
 import javax.net.ssl.SSLContext;
 
 /**
- * @Author lyy
- * @Date 2019-09-18
+ * @author lyy
+ * Date: 2019-09-18
  */
 public abstract class BaseFtpThreadTaskAdapter extends AbsThreadTaskAdapter {
 

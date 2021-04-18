@@ -7,11 +7,8 @@ public final class IdGenerator {
    * <p>
    * 主要就是三部分： 时间戳，进程id，序列号 时间戳41，id10位，序列号12位
    *
-   * @author chiwei
-   * @param args
    * @since JDK 1.6
    */
-
   private static volatile IdGenerator INSTANCE = null;
 
   private final static long beginTs = 1483200000000L;

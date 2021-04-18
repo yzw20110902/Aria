@@ -14,6 +14,9 @@ android {
   }
 
   buildTypes {
+    debug{
+      debuggable true
+    }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -31,4 +34,8 @@ dependencies {
   implementation project(path: ':PublicComponent')
 }
 
-apply from: 'bintray-release.gradle'
+//apply from: 'bintray-release.gradle'
+ext{
+  PUBLISH_ARTIFACT_ID = 'http'
+}
+apply from: '../gradle/mavenCentral-release.gradle'

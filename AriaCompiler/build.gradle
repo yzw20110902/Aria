@@ -15,4 +15,8 @@ dependencies {
   implementation project(':AriaAnnotations')
 }
 
-apply from: 'bintray-release.gradle'
+//apply from: 'bintray-release.gradle'
+ext{
+  PUBLISH_ARTIFACT_ID = 'compiler'
+}
+apply from: '../gradle/mavenCentral-release.gradle'

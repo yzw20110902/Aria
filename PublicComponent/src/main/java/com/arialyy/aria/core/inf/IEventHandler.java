@@ -18,8 +18,8 @@ package com.arialyy.aria.core.inf;
 /**
  * 事件处理对象
  *
- * @Author lyy
- * @Date 2019-09-10
+ * @author lyy
+ * Date: 2019-09-10
  */
 public interface IEventHandler {
 }

@@ -20,8 +20,8 @@ import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.wrapper.ITaskWrapper;
 
 /**
- * @Author aria
- * @Date 2019-09-06
+ * @author aria
+ * Date: 2019-09-06
  */
 public class TcpBuilderTarget extends AbsBuilderTarget<TcpBuilderTarget> {
 

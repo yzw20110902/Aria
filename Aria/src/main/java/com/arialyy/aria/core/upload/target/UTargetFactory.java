@@ -19,8 +19,8 @@ import com.arialyy.aria.core.common.AbsBuilderTarget;
 import com.arialyy.aria.core.common.AbsNormalTarget;
 
 /**
- * @Author aria
- * @Date 2019-09-05
+ * @author aria
+ * Date: 2019-09-05
  */
 public class UTargetFactory {
 

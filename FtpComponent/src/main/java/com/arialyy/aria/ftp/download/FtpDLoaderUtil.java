@@ -25,8 +25,8 @@ import com.arialyy.aria.core.loader.NormalThreadStateManager;
 import com.arialyy.aria.ftp.FtpTaskOption;
 
 /**
- * @Author lyy
- * @Date 2019-09-19
+ * @author lyy
+ * Date: 2019-09-19
  */
 public final class FtpDLoaderUtil extends AbsNormalLoaderUtil {
 

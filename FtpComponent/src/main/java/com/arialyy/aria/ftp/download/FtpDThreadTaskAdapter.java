@@ -32,8 +32,8 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 
 /**
- * @Author lyy
- * @Date 2019-09-18
+ * @author lyy
+ * Date: 2019-09-18
  */
 final class FtpDThreadTaskAdapter extends BaseFtpThreadTaskAdapter {
 

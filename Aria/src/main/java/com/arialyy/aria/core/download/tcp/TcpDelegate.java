@@ -21,8 +21,8 @@ import com.arialyy.aria.util.ALog;
 import java.nio.charset.Charset;
 
 /**
- * @Author aria
- * @Date 2019-09-06
+ * @author aria
+ * Date: 2019-09-06
  */
 public class TcpDelegate extends BaseOption {
 

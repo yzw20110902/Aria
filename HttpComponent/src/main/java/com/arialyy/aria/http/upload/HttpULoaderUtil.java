@@ -29,8 +29,8 @@ import com.arialyy.aria.http.HttpRecordHandler;
 import com.arialyy.aria.http.HttpTaskOption;
 
 /**
- * @Author lyy
- * @Date 2019-09-19
+ * @author lyy
+ * Date: 2019-09-19
  */
 public final class HttpULoaderUtil extends AbsNormalLoaderUtil {
 

@@ -25,8 +25,8 @@ import com.arialyy.aria.core.loader.NormalTTBuilder;
 import com.arialyy.aria.core.loader.SubLoader;
 
 /**
- * @Author lyy
- * @Date 2019-09-28
+ * @author lyy
+ * Date: 2019-09-28
  */
 final class FtpSubDLoaderUtil extends AbsSubDLoadUtil {
   /**

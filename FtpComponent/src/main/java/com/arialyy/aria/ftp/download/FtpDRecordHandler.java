@@ -27,8 +27,8 @@ import com.arialyy.aria.util.RecordUtil;
 import java.util.ArrayList;
 
 /**
- * @Author lyy
- * @Date 2019-09-19
+ * @author lyy
+ * Date: 2019-09-19
  */
 final class FtpDRecordHandler extends RecordHandler {
 

@@ -34,8 +34,8 @@ import java.util.List;
 /**
  * 组件工具，用于跨组件创建对应的工具类
  *
- * @Author lyy
- * @Date 2019-09-23
+ * @author lyy
+ * Date: 2019-09-23
  */
 public class ComponentUtil {
   public static final int COMPONENT_TYPE_HTTP = 1;

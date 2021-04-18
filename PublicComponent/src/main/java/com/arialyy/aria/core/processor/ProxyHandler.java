@@ -21,8 +21,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * @Author lyy
- * @Date 2019-10-7
+ * @author lyy
+ * Date: 2019-10-7
  * 处理器的动态代理
  */
 public class ProxyHandler implements InvocationHandler {

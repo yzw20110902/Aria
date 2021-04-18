@@ -18,8 +18,8 @@ package com.arialyy.aria.core.download.tcp;
 /**
  * tcp任务配置
  *
- * @Author aria
- * @Date 2019-09-06
+ * @author aria
+ * Date: 2019-09-06
  */
 public class TcpTaskConfig {
 

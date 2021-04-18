@@ -29,8 +29,8 @@ import java.io.IOException;
 /**
  * 任务记录帮助类，用于处理统一的逻辑
  *
- * @Author lyy
- * @Date 2019-09-19
+ * @author lyy
+ * Date: 2019-09-19
  */
 public class RecordHelper {
   private String TAG = CommonUtil.getClassName(getClass());

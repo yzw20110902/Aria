@@ -18,8 +18,8 @@ package com.arialyy.aria.core.task;
 import java.util.concurrent.Callable;
 
 /**
- * @Author lyy
- * @Date 2019-09-18
+ * @author lyy
+ * Date: 2019-09-18
  */
 public interface IThreadTask extends Callable<IThreadTask> {
 
