@@ -53,11 +53,19 @@ Aria有以下特点：
 
 
 ```java
-implementation 'me.laoyuyu.aria:core:3.8.16'
-annotationProcessor 'me.laoyuyu.aria:compiler:3.8.16'
-implementation 'me.laoyuyu.aria:ftp:3.8.16' # 如果需要使用ftp，请增加该组件
-implementation 'me.laoyuyu.aria:sftp:3.8.16' # 如果需要使用ftp，请增加该组件
-implementation 'me.laoyuyu.aria:m3u8:3.8.16' # 如果需要使用m3u8下载功能，请增加该组件
+repositories {
+  google()
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'me.laoyuyu.aria:core:3.8.16'
+  annotationProcessor 'me.laoyuyu.aria:compiler:3.8.16'
+  implementation 'me.laoyuyu.aria:ftp:3.8.16' # 如果需要使用ftp，请增加该组件
+  implementation 'me.laoyuyu.aria:sftp:3.8.16' # 如果需要使用ftp，请增加该组件
+  implementation 'me.laoyuyu.aria:m3u8:3.8.16' # 如果需要使用m3u8下载功能，请增加该组件
+}
+
 ```
 
 如果你使用的是kotlin，请使用kotlin官方提供的方法配置apt，[kotlin kapt官方配置传送门](https://www.kotlincn.net/docs/reference/kapt.html)
