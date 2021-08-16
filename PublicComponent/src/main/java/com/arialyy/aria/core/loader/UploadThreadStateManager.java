@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+
 import com.arialyy.aria.core.TaskRecord;
 import com.arialyy.aria.core.inf.IThreadStateManager;
 import com.arialyy.aria.core.listener.IEventListener;
@@ -26,6 +27,7 @@ import com.arialyy.aria.exception.AriaException;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.FileUtil;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 线程任务管理器，用于处理多线程下载时任务的状态回调
  */
-public class NormalThreadStateManager implements IThreadStateManager {
+public class UploadThreadStateManager implements IThreadStateManager {
   private final String TAG = CommonUtil.getClassName(this);
 
   /**
@@ -53,7 +55,7 @@ public class NormalThreadStateManager implements IThreadStateManager {
   /**
    * @param listener 任务事件
    */
-  public NormalThreadStateManager(IEventListener listener) {
+  public UploadThreadStateManager(IEventListener listener) {
     mListener = listener;
   }
 
@@ -101,19 +103,7 @@ public class NormalThreadStateManager implements IThreadStateManager {
           mCompleteNum.getAndIncrement();
           if (isComplete()) {
             ALog.d(TAG, "isComplete, completeNum = " + mCompleteNum);
-            //if (mTaskRecord.taskType == ITaskWrapper.D_SFTP) {
-            //  mergerSFtp();
-            //  mListener.onComplete();
-            //} else
-            if (mTaskRecord.isBlock || mTaskRecord.threadNum == 1) {
-              if (mergeFile()) {
-                mListener.onComplete();
-              } else {
-                mListener.onFail(false, null);
-              }
-              quitLooper();
-              break;
-            }
+            //上传文件不需要合并文件
             mListener.onComplete();
             quitLooper();
           }
@@ -249,14 +239,8 @@ public class NormalThreadStateManager implements IThreadStateManager {
   private boolean mergeFile() {
     if (mTaskRecord.threadNum == 1) {
       File targetFile = new File(mTaskRecord.filePath);
-      if (targetFile.exists()){
-        //没有获得文件长度：不支持断点续传
-        if (mTaskRecord.fileLength == 0 && targetFile.length() != 0) {
-          return true;
-        }
-        if (targetFile.length() != 0 && targetFile.length() == mTaskRecord.fileLength) {
-          return true;
-        }
+      if (targetFile.exists() && targetFile.length() == mTaskRecord.fileLength){
+        return true;
       }
       FileUtil.deleteFile(targetFile);
       File partFile = new File(String.format(IRecordHandler.SUB_PATH, mTaskRecord.filePath, 0));

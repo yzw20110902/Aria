@@ -20,6 +20,7 @@ import com.arialyy.aria.core.loader.AbsNormalLoaderUtil;
 import com.arialyy.aria.core.loader.LoaderStructure;
 import com.arialyy.aria.core.loader.NormalTTBuilder;
 import com.arialyy.aria.core.loader.NormalThreadStateManager;
+import com.arialyy.aria.core.loader.UploadThreadStateManager;
 import com.arialyy.aria.core.upload.UTaskWrapper;
 import com.arialyy.aria.sftp.SFtpTaskOption;
 
@@ -41,7 +42,8 @@ public class SFtpULoaderUtil extends AbsNormalLoaderUtil {
   @Override public LoaderStructure BuildLoaderStructure() {
     LoaderStructure structure = new LoaderStructure();
     structure.addComponent(new SFtpURecordHandler((UTaskWrapper) getTaskWrapper()))
-        .addComponent(new NormalThreadStateManager(getListener()))
+//        .addComponent(new NormalThreadStateManager(getListener()))
+        .addComponent(new UploadThreadStateManager(getListener()))
         .addComponent(new SFtpUInfoTask((UTaskWrapper) getTaskWrapper()))
         .addComponent(new NormalTTBuilder(getTaskWrapper(), new SFtpUTTBuilderAdapter(
             (UTaskWrapper) getTaskWrapper())));
