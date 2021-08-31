@@ -157,7 +157,7 @@ public class AriaConfig {
     }
   }
 
-  private boolean isNetworkAvailable() {
+  public boolean isNetworkAvailable() {
     // 获取手机所有连接管理对象（包括对wi-fi,net等连接的管理）
     ConnectivityManager connectivityManager =
         (ConnectivityManager) getAPP().getSystemService(Context.CONNECTIVITY_SERVICE);
