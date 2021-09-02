@@ -63,14 +63,14 @@ final class SFtpURecordHandler extends RecordHandler {
             + ftpAttrs.getSize()
             + "】"
             + "尝试从位置："
-            + (ftpAttrs.getSize() - 1)
+            + ftpAttrs.getSize()
             + "开始上传");
         getWrapper().setNewTask(false);
 
         // 修改记录
         ThreadRecord threadRecord = record.threadRecords.get(0);
         //修改本地保存的停止地址为服务器上对应文件的大小
-        threadRecord.startLocation = ftpAttrs.getSize() - 1;
+        threadRecord.startLocation = ftpAttrs.getSize();
       }
     } else {
       ALog.d(TAG, "SFTP服务器上不存在该文件");
