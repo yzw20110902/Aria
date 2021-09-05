@@ -61,7 +61,7 @@ public class NetUtils {
       return true;
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      return AriaConfig.getInstance().isConnectedNet();
+      return AriaConfig.getInstance().isNetworkAvailable();
     }
     ConnectivityManager cm =
         (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
